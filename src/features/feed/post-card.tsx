@@ -1,32 +1,34 @@
-import { Heart, MessageCircle, Repeat2, Bookmark, Share2, BadgeCheck, Pin } from "lucide-react";
-import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
+import {
+  Heart,
+  MessageCircle,
+  Repeat2,
+  Bookmark,
+  Share2,
+  BadgeCheck,
+  Pin,
+  BarChart2,
+  MoreHorizontal,
+  TrendingUp,
+} from "lucide-react";
+import { toast } from "sonner";
 import type { Post } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { cn, formatCompact, formatPercent, formatRelativeTime } from "@/lib/utils";
+import { Sparkline } from "@/components/charts";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn, formatCompact, formatPercent, formatRelativeTime, timeRemaining } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
-import { toast } from "sonner";
 
-function Sparkline({ series, positive }: { series: number[]; positive: boolean }) {
-  const min = Math.min(...series);
-  const max = Math.max(...series);
-  const points = series
-    .map((v, i) => `${(i / (series.length - 1)) * 100},${40 - ((v - min) / (max - min || 1)) * 36}`)
-    .join(" ");
-  return (
-    <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="h-24 w-full" aria-hidden="true">
-      <polyline
-        points={points}
-        fill="none"
-        stroke={positive ? "var(--color-success)" : "var(--color-destructive)"}
-        strokeWidth="1.5"
-        vectorEffect="non-scaling-stroke"
-      />
-    </svg>
-  );
-}
-
-export function PostCard({ post }: { post: Post }) {
+/**
+ * Timeline post row. Borderless, full bleed and edge to edge like a native
+ * social timeline: avatar column on the left, content and actions on the right.
+ */
+export function PostCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const app = useApp();
   const liked = app.isLiked(post.id, post.liked);
   const reposted = app.isReposted(post.id, post.reposted);
@@ -35,161 +37,264 @@ export function PostCard({ post }: { post: Post }) {
   const pollTotal = post.poll?.options.reduce((sum, o) => sum + o.votes, 0) ?? 0;
   const votedOption = post.poll ? app.pollVotes[post.id] : undefined;
 
+  const stop = (fn: () => void) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    fn();
+  };
+
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -2 }}
-      className="surface-card p-5 transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]"
-    >
-      {post.pinned ? (
-        <p className="mb-3 flex items-center gap-1.5 text-xs font-medium text-cyan">
-          <Pin className="size-3.5" /> Pinned
-        </p>
-      ) : null}
-
-      <header className="flex items-start gap-3">
-        <Avatar className="size-11">
-          <AvatarImage src={post.author.avatar} alt="" />
-          <AvatarFallback>{post.author.displayName.slice(0, 2)}</AvatarFallback>
-        </Avatar>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-            <span className="truncate text-sm font-semibold">{post.author.displayName}</span>
-            {post.author.verified ? <BadgeCheck className="size-4 shrink-0 text-cyan" /> : null}
-            <span className="truncate text-sm text-muted-foreground">@{post.author.username}</span>
-            <span className="text-muted-foreground" aria-hidden="true">
-              ·
-            </span>
-            <time className="text-sm text-muted-foreground" dateTime={post.createdAt}>
-              {formatRelativeTime(post.createdAt)}
-            </time>
-          </div>
-          {post.kind === "announcement" ? (
-            <Badge className="mt-1 bg-primary/20 text-cyan">Announcement</Badge>
-          ) : null}
-        </div>
-      </header>
-
-      <p className="mt-3 text-[15px] leading-relaxed text-subtle-foreground">{post.body}</p>
-
-      {post.imageUrl ? (
-        <img
-          src={post.imageUrl}
-          alt="Post attachment"
-          loading="lazy"
-          className="mt-4 w-full rounded-[14px] border border-border"
-        />
-      ) : null}
-
-      {post.chart ? (
-        <div className="mt-4 rounded-[14px] bg-elevated/60 p-4">
-          <div className="flex items-center justify-between text-sm font-semibold">
-            <span>{post.chart.symbol}</span>
-            <span className={post.chart.change >= 0 ? "text-success" : "text-destructive"}>
-              {formatPercent(post.chart.change)}
-            </span>
-          </div>
-          <Sparkline series={post.chart.series} positive={post.chart.change >= 0} />
-        </div>
-      ) : null}
-
-      {post.poll ? (
-        <div className="mt-4 space-y-2">
-          <p className="text-sm font-semibold">{post.poll.question}</p>
-          {post.poll.options.map((option) => {
-            const share = pollTotal ? Math.round((option.votes / pollTotal) * 100) : 0;
-            const chosen = votedOption === option.id;
-            return (
-              <button
-                key={option.id}
-                type="button"
-                onClick={() => app.recordPollVote(post.id, option.id)}
-                className={cn(
-                  "relative w-full overflow-hidden rounded-[14px] bg-elevated/60 px-4 py-2.5 text-left text-sm transition-colors hover:bg-elevated",
-                  chosen && "ring-1 ring-cyan",
-                )}
-                aria-pressed={chosen}
-              >
-                <span
-                  className="gradient-fill absolute inset-y-0 left-0 opacity-25"
-                  style={{ width: `${share}%` }}
-                  aria-hidden="true"
-                />
-                <span className="relative flex justify-between">
-                  <span>{option.label}</span>
-                  <span className="tabular-nums text-muted-foreground">{share}%</span>
-                </span>
-              </button>
-            );
-          })}
-          <p className="text-xs text-muted-foreground">
-            {formatCompact(pollTotal)} votes · closes {formatRelativeTime(post.poll.endsAt)}
+    <article className="relative border-b border-border transition-colors duration-150 hover:bg-elevated/25">
+      <Link
+        to={"/app/post/$postId" as never}
+        params={{ postId: post.id } as never}
+        className="block px-4 py-3 sm:px-5"
+      >
+        {post.pinned ? (
+          <p className="mb-1.5 flex items-center gap-1.5 pl-[52px] text-xs font-medium text-muted-foreground">
+            <Pin className="size-3.5" /> Pinned
           </p>
-        </div>
-      ) : null}
+        ) : null}
 
-      {post.tags.length > 0 ? (
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
-            <li key={tag}>
-              <span className="rounded-full bg-elevated/70 px-2.5 py-1 text-xs text-muted-foreground">
-                #{tag}
+        <div className="flex gap-3">
+          <Avatar className="size-10 shrink-0">
+            <AvatarImage src={post.author.avatar} alt="" />
+            <AvatarFallback>{post.author.displayName.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1.5">
+              <span className="truncate text-[15px] font-bold">{post.author.displayName}</span>
+              {post.author.verified ? (
+                <BadgeCheck className="size-[15px] shrink-0 text-cyan" />
+              ) : null}
+              <span className="truncate text-[15px] text-muted-foreground">
+                @{post.author.username}
               </span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+              <span className="text-muted-foreground" aria-hidden="true">
+                ·
+              </span>
+              <time
+                className="shrink-0 text-[15px] text-muted-foreground"
+                dateTime={post.createdAt}
+              >
+                {formatRelativeTime(post.createdAt)}
+              </time>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  onClick={(e) => e.preventDefault()}
+                  className="ml-auto grid size-8 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+                  aria-label="Post options"
+                >
+                  <MoreHorizontal className="size-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onSelect={() => toast("Muted for this session")}>
+                    Mute @{post.author.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => toast("Report submitted")}>
+                    Report post
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => toast.success("Link copied")}>
+                    Copy link
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
 
-      <footer className="mt-4 flex items-center justify-between text-muted-foreground">
-        <button
-          type="button"
-          onClick={() => app.toggleLike(post.id, post.liked)}
-          aria-label={liked ? "Unlike post" : "Like post"}
-          aria-pressed={liked}
-          className="flex items-center gap-1.5 rounded-full px-2 py-1 text-sm transition-colors hover:text-destructive"
-        >
-          <Heart className={cn("size-4", liked && "fill-destructive text-destructive")} />
-          <span className="tabular-nums">{formatCompact(post.likes + (liked !== post.liked ? (liked ? 1 : -1) : 0))}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => toast("Reply composer opens in the post detail view")}
-          aria-label="Reply to post"
-          className="flex items-center gap-1.5 rounded-full px-2 py-1 text-sm transition-colors hover:text-cyan"
-        >
-          <MessageCircle className="size-4" />
-          <span className="tabular-nums">{formatCompact(post.replies)}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => app.toggleRepost(post.id, post.reposted)}
-          aria-label={reposted ? "Undo repost" : "Repost"}
-          aria-pressed={reposted}
-          className="flex items-center gap-1.5 rounded-full px-2 py-1 text-sm transition-colors hover:text-success"
-        >
-          <Repeat2 className={cn("size-4", reposted && "text-success")} />
-          <span className="tabular-nums">{formatCompact(post.reposts)}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => app.toggleBookmark(post.id, post.bookmarked)}
-          aria-label={bookmarked ? "Remove bookmark" : "Bookmark post"}
-          aria-pressed={bookmarked}
-          className="rounded-full px-2 py-1 transition-colors hover:text-cyan"
-        >
-          <Bookmark className={cn("size-4", bookmarked && "fill-cyan text-cyan")} />
-        </button>
-        <button
-          type="button"
-          onClick={() => toast.success("Link copied to clipboard")}
-          aria-label="Share post"
-          className="rounded-full px-2 py-1 transition-colors hover:text-foreground"
-        >
-          <Share2 className="size-4" />
-        </button>
-      </footer>
-    </motion.article>
+            <p className="mt-0.5 whitespace-pre-wrap text-[15px] leading-relaxed">{post.body}</p>
+
+            {post.tags.length > 0 ? (
+              <p className="mt-1 flex flex-wrap gap-x-2 text-[15px] text-cyan">
+                {post.tags.slice(0, 4).map((t) => (
+                  <span key={t}>#{t}</span>
+                ))}
+              </p>
+            ) : null}
+
+            {post.imageUrl && !compact ? (
+              <img
+                src={post.imageUrl}
+                alt=""
+                loading="lazy"
+                className="mt-3 w-full rounded-[16px] border border-border object-cover"
+              />
+            ) : null}
+
+            {post.chart && !compact ? (
+              <div className="mt-3 rounded-[16px] border border-border bg-surface/50 p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold">{post.chart.symbol}</span>
+                  <span
+                    className={cn(
+                      "text-sm font-semibold tabular-nums",
+                      post.chart.change >= 0 ? "text-success" : "text-destructive",
+                    )}
+                  >
+                    {formatPercent(post.chart.change)}
+                  </span>
+                </div>
+                <Sparkline
+                  series={post.chart.series}
+                  positive={post.chart.change >= 0}
+                  className="mt-2 h-20 w-full"
+                />
+              </div>
+            ) : null}
+
+            {post.poll && !compact ? (
+              <div className="mt-3 space-y-2">
+                <p className="text-sm font-medium">{post.poll.question}</p>
+                {post.poll.options.map((o) => {
+                  const pct = pollTotal ? Math.round((o.votes / pollTotal) * 100) : 0;
+                  const chosen = votedOption === o.id;
+                  return (
+                    <button
+                      key={o.id}
+                      onClick={stop(() => {
+                        app.recordPollVote(post.id, o.id);
+                        toast.success(`Voted: ${o.label}`);
+                      })}
+                      className={cn(
+                        "relative w-full overflow-hidden rounded-full border border-border px-4 py-2 text-left text-sm transition-colors hover:border-cyan/60",
+                        chosen && "border-cyan",
+                      )}
+                    >
+                      <span
+                        className="absolute inset-y-0 left-0 bg-primary/25 transition-[width] duration-200"
+                        style={{ width: `${pct}%` }}
+                        aria-hidden="true"
+                      />
+                      <span className="relative flex justify-between">
+                        <span>{o.label}</span>
+                        <span className="tabular-nums text-muted-foreground">{pct}%</span>
+                      </span>
+                    </button>
+                  );
+                })}
+                <p className="text-xs text-muted-foreground">
+                  {formatCompact(pollTotal)} votes · {timeRemaining(post.poll.endsAt)}
+                </p>
+              </div>
+            ) : null}
+
+            {post.predictionId && !compact ? (
+              <Link
+                to={"/app/predictions/$predictionId" as never}
+                params={{ predictionId: post.predictionId } as never}
+                onClick={(e) => e.stopPropagation()}
+                className="mt-3 flex items-center gap-3 rounded-[16px] border border-border bg-surface/50 px-4 py-3 transition-colors hover:border-cyan/50"
+              >
+                <TrendingUp className="size-4 shrink-0 text-cyan" />
+                <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                  Open the linked market
+                </span>
+                <span className="text-xs text-muted-foreground">View</span>
+              </Link>
+            ) : null}
+
+            <div className="-ml-2 mt-2.5 flex max-w-[440px] items-center justify-between text-muted-foreground">
+              <Action
+                icon={MessageCircle}
+                label="Reply"
+                value={post.replies}
+                hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
+                onClick={stop(() => toast("Reply composer opens on the post page"))}
+              />
+              <Action
+                icon={Repeat2}
+                label="Repost"
+                value={post.reposts + (reposted !== post.reposted ? (reposted ? 1 : -1) : 0)}
+                active={reposted}
+                activeClass="text-success"
+                hoverClass="group-hover:bg-success/10 group-hover:text-success"
+                onClick={stop(() => {
+                  app.toggleRepost(post.id, post.reposted);
+                  toast.success(reposted ? "Repost removed" : "Reposted");
+                })}
+              />
+              <Action
+                icon={Heart}
+                label="Like"
+                value={post.likes + (liked !== post.liked ? (liked ? 1 : -1) : 0)}
+                active={liked}
+                activeClass="text-destructive"
+                fill={liked}
+                hoverClass="group-hover:bg-destructive/10 group-hover:text-destructive"
+                onClick={stop(() => app.toggleLike(post.id, post.liked))}
+              />
+              <Action
+                icon={BarChart2}
+                label="Views"
+                value={post.views}
+                hoverClass="group-hover:bg-primary/10 group-hover:text-primary"
+                onClick={stop(() => toast("Analytics are mocked"))}
+              />
+              <div className="flex items-center">
+                <Action
+                  icon={Bookmark}
+                  label="Bookmark"
+                  active={bookmarked}
+                  fill={bookmarked}
+                  activeClass="text-cyan"
+                  hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
+                  onClick={stop(() => {
+                    app.toggleBookmark(post.id, post.bookmarked);
+                    toast.success(bookmarked ? "Removed from bookmarks" : "Saved to bookmarks");
+                  })}
+                />
+                <Action
+                  icon={Share2}
+                  label="Share"
+                  hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
+                  onClick={stop(() => toast.success("Link copied"))}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function Action({
+  icon: Icon,
+  label,
+  value,
+  onClick,
+  active,
+  activeClass,
+  hoverClass,
+  fill,
+}: {
+  icon: typeof Heart;
+  label: string;
+  value?: number;
+  onClick: (e: React.MouseEvent) => void;
+  active?: boolean;
+  activeClass?: string;
+  hoverClass?: string;
+  fill?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={cn("group flex items-center gap-1 text-[13px]", active && activeClass)}
+    >
+      <span
+        className={cn(
+          "grid size-8 place-items-center rounded-full transition-colors duration-150",
+          hoverClass,
+        )}
+      >
+        <Icon className={cn("size-[17px]", fill && "fill-current")} />
+      </span>
+      {typeof value === "number" ? (
+        <span className="tabular-nums">{value > 0 ? formatCompact(value) : ""}</span>
+      ) : null}
+    </button>
   );
 }
