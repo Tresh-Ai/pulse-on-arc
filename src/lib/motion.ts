@@ -57,3 +57,14 @@ export const motionClass = {
   fade: "transition-colors duration-150",
   shimmer: "animate-[shimmer_1.6s_ease-in-out_infinite]",
 } as const;
+
+/** Section entrance used by marketing surfaces. */
+export const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: transition.slow },
+};
+
+export const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+};

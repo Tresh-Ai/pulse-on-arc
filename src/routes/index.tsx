@@ -15,7 +15,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -219,6 +219,8 @@ function LandingPage() {
                   {token.data ? (
                     <AreaTrend
                       data={token.data.series.map((p) => ({ label: p.t, value: p.price }))}
+                      xKey="label"
+                      yKey="value"
                     />
                   ) : null}
                 </div>
