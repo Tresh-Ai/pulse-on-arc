@@ -55,11 +55,11 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
       <div className="mx-auto flex w-full max-w-[1400px] gap-6 px-3 sm:px-5 lg:px-8">
         <aside className="sticky top-0 hidden h-screen shrink-0 flex-col justify-between py-6 md:flex md:w-[76px] xl:w-[248px]">
           <div className="flex flex-col gap-8">
-            <Link to="/" className="flex items-center gap-3 px-2" aria-label="ARC Social home">
+            <Link to="/" className="flex items-center gap-3 px-2" aria-label="Pulse Social home">
               <span className="gradient-fill flex size-10 items-center justify-center rounded-2xl text-base font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
-                A
+                P
               </span>
-              <span className="hidden text-lg font-bold tracking-tight xl:inline">ARC Social</span>
+              <span className="hidden text-lg font-bold tracking-tight xl:inline">Pulse Social</span>
             </Link>
 
             <nav className="flex flex-col gap-1" aria-label="Primary">

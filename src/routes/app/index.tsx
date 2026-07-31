@@ -11,10 +11,10 @@ import type { FeedFilter } from "@/types";
 export const Route = createFileRoute("/app/")({
   head: () => ({
     meta: [
-      { title: "Home | ARC" },
-      { name: "description", content: "Your ARC timeline: market takes, charts, polls and live prediction markets." },
-      { property: "og:title", content: "Home | ARC" },
-      { property: "og:description", content: "Your ARC timeline: market takes, charts, polls and live prediction markets." },
+      { title: "Home | Pulse" },
+      { name: "description", content: "Your Pulse timeline: market takes, charts, polls and live prediction markets." },
+      { property: "og:title", content: "Home | Pulse" },
+      { property: "og:description", content: "Your Pulse timeline: market takes, charts, polls and live prediction markets." },
     ],
   }),
   component: HomeFeed,
@@ -24,7 +24,7 @@ const TABS: { id: FeedFilter; label: string }[] = [
   { id: "following", label: "Following" },
   { id: "trending", label: "For you" },
   { id: "latest", label: "Latest" },
-  { id: "arc", label: "ARC" },
+  { id: "arc", label: "Ecosystem" },
 ];
 
 function HomeFeed() {
