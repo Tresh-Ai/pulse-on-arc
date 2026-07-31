@@ -227,6 +227,7 @@ export const predictionCategories: PredictionCategory[] = [
   "Culture",
   "Tech",
   "Gaming",
+  "AI",
 ];
 
 /** Aggregate stats for the current account, shown on prediction history. */
