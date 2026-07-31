@@ -78,7 +78,7 @@ export const notifications: AppNotification[] = [
     id: "n_8",
     kind: "prediction",
     title: "Market resolved YES",
-    body: "ARC testnet validator count passed 250. Your position returned 640 USDC.",
+    body: "Pulse testnet validator count passed 250. Your position returned 640 USDC.",
     at: agoMinutes(1400),
     read: true,
     href: "/predictions/p_7",
@@ -136,7 +136,7 @@ const THREADS: { participantIndex: number; messages: [string, string][] }[] = [
   {
     participantIndex: 4,
     messages: [
-      ["them", "Rotation poll is at 41 percent for ARC ecosystem."],
+      ["them", "Rotation poll is at 41 percent for Pulse ecosystem."],
       ["me", "That tracks with the bridge volume."],
     ],
   },

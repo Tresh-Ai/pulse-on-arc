@@ -31,11 +31,18 @@ import {
   walletSummary,
 } from "@/mock-data/finance";
 import { delay, MockApiError } from "./client";
+import {
+  findLocalPost,
+  localMessagesFor,
+  localPosts,
+  localRepliesFor,
+  localTimeline,
+} from "@/store/local-data";
 
 /* ---------------------------------- feed ---------------------------------- */
 
 export async function getFeed(filter: FeedFilter): Promise<Post[]> {
-  const pool = [...myPosts, ...posts];
+  const pool = [...localTimeline(), ...myPosts, ...posts];
   let result = pool;
   switch (filter) {
     case "following":
@@ -65,13 +72,14 @@ export async function getFeed(filter: FeedFilter): Promise<Post[]> {
 }
 
 export async function getPost(id: string): Promise<{ post: Post; replies: Post[] }> {
-  const post = findPost(id);
+  const post = findLocalPost(id) ?? findPost(id);
   if (!post) throw new MockApiError("That post could not be found.");
-  return delay({ post, replies: repliesFor(id) });
+  const replies = [...localRepliesFor(id), ...repliesFor(id)];
+  return delay({ post, replies });
 }
 
 export async function getBookmarks(): Promise<Post[]> {
-  return delay(allPosts.filter((p) => p.bookmarked));
+  return delay([...localPosts(), ...allPosts].filter((p) => p.bookmarked));
 }
 
 /* --------------------------------- people --------------------------------- */
@@ -82,7 +90,9 @@ export async function getProfile(
   const user = findUser(handle);
   if (!user) throw new MockApiError("That account does not exist.");
   const authored =
-    user.id === currentUser.id ? myPosts : allPosts.filter((p) => p.author.id === user.id);
+    user.id === currentUser.id
+      ? [...localTimeline(), ...myPosts]
+      : allPosts.filter((p) => p.author.id === user.id);
   const userPredictions = predictions.filter((p) => p.creator.id === user.id);
   return delay({ user, posts: authored, predictions: userPredictions, activity: activityFeed });
 }
@@ -117,7 +127,7 @@ export async function getCommunity(slug: string): Promise<{
   if (!community) throw new MockApiError("That community could not be found.");
   return delay({
     community,
-    posts: allPosts.filter((p) => p.communityId === community.id),
+    posts: [...localPosts(), ...allPosts].filter((p) => p.communityId === community.id),
     moderators: allUsers.filter((u) => community.moderatorIds.includes(u.id)),
     members: users.slice(0, 12),
     leaderboard: buildLeaderboard("reputation", "weekly").slice(0, 8),
@@ -207,7 +217,10 @@ export async function getConversations(): Promise<Conversation[]> {
 }
 
 export async function getMessages(conversationId: string): Promise<Message[]> {
-  const thread = messages.filter((m) => m.conversationId === conversationId);
+  const thread = [
+    ...messages.filter((m) => m.conversationId === conversationId),
+    ...localMessagesFor(conversationId),
+  ].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
   if (thread.length === 0) throw new MockApiError("That conversation could not be loaded.");
   return delay(thread);
 }

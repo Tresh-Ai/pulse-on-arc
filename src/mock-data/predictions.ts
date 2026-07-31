@@ -17,12 +17,12 @@ interface Seed {
 
 const SEEDS: Seed[] = [
   {
-    title: "Will ARC mainnet settle more than 5M USDC in a single day before September?",
+    title: "Will Pulse mainnet settle more than 5M USDC in a single day before September?",
     description:
-      "Daily settled volume on ARC has climbed steadily since the payments corridor pilots opened. This market resolves on the first calendar day where public explorer data shows settled USDC volume above 5 million.",
+      "Daily settled volume on Pulse has climbed steadily since the payments corridor pilots opened. This market resolves on the first calendar day where public explorer data shows settled USDC volume above 5 million.",
     rules:
       "Resolves YES if any single UTC day before September 1 records settled volume above 5,000,000 USDC on the public explorer. Resolution uses the explorer daily aggregate at 00:15 UTC the following day. Reorgs beyond one hour are ignored.",
-    category: "ARC Ecosystem",
+    category: "Pulse Ecosystem",
     status: "open",
     endsInDays: 24,
     yes: 68,
@@ -42,12 +42,12 @@ const SEEDS: Seed[] = [
     communityId: "c_3",
   },
   {
-    title: "Will stablecoin supply on ARC double by the end of the season?",
+    title: "Will stablecoin supply on Pulse double by the end of the season?",
     description:
-      "Tracking total issued stablecoin supply bridged to or natively minted on ARC. Doubling from the season open snapshot is the bar.",
+      "Tracking total issued stablecoin supply bridged to or natively minted on Pulse. Doubling from the season open snapshot is the bar.",
     rules:
       "Resolves YES if total stablecoin supply is at least 200 percent of the season open snapshot at any point before the end date. Snapshot values come from the public indexer.",
-    category: "ARC Ecosystem",
+    category: "Pulse Ecosystem",
     status: "closing-soon",
     endsInDays: 2,
     yes: 57,
@@ -89,11 +89,11 @@ const SEEDS: Seed[] = [
     communityId: "c_6",
   },
   {
-    title: "ARC testnet validator count passes 250",
+    title: "Pulse testnet validator count passes 250",
     description:
       "Validator growth has tracked the incentive program closely. Public dashboard is the source of truth.",
     rules: "Resolves YES if the public validator dashboard reports 250 or more active validators before the end date.",
-    category: "ARC Ecosystem",
+    category: "Pulse Ecosystem",
     status: "resolved",
     endsInDays: -6,
     yes: 82,
@@ -125,7 +125,7 @@ const SEEDS: Seed[] = [
     communityId: "c_4",
   },
   {
-    title: "Bridge volume to ARC beats last month by 30 percent",
+    title: "Bridge volume to Pulse beats last month by 30 percent",
     description: "Cross chain routing has consolidated into two dominant paths. Both report public volume.",
     rules: "Resolves YES if combined reported bridge volume exceeds last month by 30 percent or more.",
     category: "Crypto",
@@ -135,7 +135,7 @@ const SEEDS: Seed[] = [
     outcome: "no",
   },
   {
-    title: "A major payment processor announces ARC support this quarter",
+    title: "A major payment processor announces Pulse support this quarter",
     description: "Two processors have hinted at pilots. An announcement must be public and first party.",
     rules: "Resolves YES on a first party public announcement from a processor handling over 1B USD annually.",
     category: "Tech",
@@ -222,7 +222,7 @@ export function findPrediction(id: string): Prediction | undefined {
 
 export const predictionCategories: PredictionCategory[] = [
   "Crypto",
-  "ARC Ecosystem",
+  "Pulse Ecosystem",
   "Macro",
   "Culture",
   "Tech",

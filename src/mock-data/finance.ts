@@ -6,7 +6,7 @@ const rng = createRng("wallet");
 
 const TX_SEEDS: Pick<WalletTransaction, "kind" | "asset" | "amount" | "counterparty">[] = [
   { kind: "deposit", asset: "USDC", amount: 5000, counterparty: "Bank transfer" },
-  { kind: "prediction", asset: "USDC", amount: -250, counterparty: "ARC settlement market" },
+  { kind: "prediction", asset: "USDC", amount: -250, counterparty: "Pulse settlement market" },
   { kind: "reward", asset: "ARCS", amount: 1840, counterparty: "Season one rewards" },
   { kind: "send", asset: "USDC", amount: -420, counterparty: "@settlement_sam" },
   { kind: "receive", asset: "USDC", amount: 1200, counterparty: "@riskrachel" },
@@ -34,7 +34,7 @@ export const walletSummary: WalletSummary = {
     },
     {
       symbol: "ARC",
-      name: "ARC Network",
+      name: "Pulse Network",
       balance: 4_820.5,
       usdValue: 16_785.98,
       change24h: 6.42,
@@ -42,7 +42,7 @@ export const walletSummary: WalletSummary = {
     },
     {
       symbol: "ARCS",
-      name: "ARC Social",
+      name: "Pulse Social",
       balance: 14_240,
       usdValue: 6_006.43,
       change24h: 12.84,
@@ -69,7 +69,7 @@ export const walletSummary: WalletSummary = {
 
 export const tokenInfo: TokenInfo = {
   symbol: "ARCS",
-  name: "ARC Social",
+  name: "Pulse Social",
   price: 0.4218,
   change24h: 12.84,
   marketCap: 168_720_000,
@@ -84,15 +84,15 @@ export const tokenInfo: TokenInfo = {
   utility: [
     {
       title: "Prediction collateral",
-      detail: "Post ARCS alongside USDC to open markets and earn a share of resolution fees.",
+      detail: "Post PulseS alongside USDC to open markets and earn a share of resolution fees.",
     },
     {
       title: "Reputation weighting",
-      detail: "Staked ARCS increases the weight of your calls in the accuracy leaderboards.",
+      detail: "Staked PulseS increases the weight of your calls in the accuracy leaderboards.",
     },
     {
       title: "Creator subscriptions",
-      detail: "Communities can price paid rooms and research feeds directly in ARCS.",
+      detail: "Communities can price paid rooms and research feeds directly in PulseS.",
     },
     {
       title: "Governance",
@@ -100,8 +100,8 @@ export const tokenInfo: TokenInfo = {
     },
   ],
   activity: [
-    { id: "ta_1", label: "Season two reward pool funded", detail: "1.2M ARCS moved to the reward contract", at: agoMinutes(120) },
-    { id: "ta_2", label: "New market collateral record", detail: "184k ARCS posted as collateral in one day", at: agoMinutes(640) },
+    { id: "ta_1", label: "Season two reward pool funded", detail: "1.2M PulseS moved to the reward contract", at: agoMinutes(120) },
+    { id: "ta_2", label: "New market collateral record", detail: "184k PulseS posted as collateral in one day", at: agoMinutes(640) },
     { id: "ta_3", label: "Creator payouts settled", detail: "2,410 creators received subscription revenue", at: agoDays(2) },
     { id: "ta_4", label: "Staking tier update", detail: "Reputation weighting curve adjusted after governance signal", at: agoDays(5) },
   ],
@@ -162,7 +162,7 @@ export const activityFeed = Array.from({ length: 8 }, (_, i) => ({
   ),
   detail: pick(
     [
-      "ARC settlement volume market, YES side",
+      "Pulse settlement volume market, YES side",
       "Funding flip into the Asia session",
       "DeFi Desk",
       "Validator count market settled YES",
