@@ -71,13 +71,13 @@ export interface Post {
   reposted: boolean;
   bookmarked: boolean;
   tags: string[];
-  communityId?: string;
-  imageUrl?: string;
-  chart?: { symbol: string; change: number; series: number[] };
-  predictionId?: string;
-  poll?: { question: string; options: PollOption[]; endsAt: string; votedOptionId?: string };
-  pinned?: boolean;
-  replyToId?: string;
+  communityId?: string | undefined;
+  imageUrl?: string | undefined;
+  chart?: { symbol: string; change: number; series: number[] } | undefined;
+  predictionId?: string | undefined;
+  poll?: { question: string; options: PollOption[]; endsAt: string; votedOptionId?: string } | undefined;
+  pinned?: boolean | undefined;
+  replyToId?: string | undefined;
 }
 
 export type FeedFilter =
@@ -111,7 +111,8 @@ export type PredictionCategory =
   | "Macro"
   | "Culture"
   | "Tech"
-  | "Gaming";
+  | "Gaming"
+  | "AI";
 
 export interface PredictionParticipant {
   user: User;
@@ -141,11 +142,11 @@ export interface Prediction {
   pool: number;
   yesPercent: number;
   volumeSeries: { t: string; yes: number }[];
-  outcome?: "yes" | "no";
-  communityId?: string;
+  outcome?: "yes" | "no" | undefined;
+  communityId?: string | undefined;
   topParticipants: PredictionParticipant[];
   timeline: PredictionTimelineEvent[];
-  myPosition?: { side: "yes" | "no"; stake: number };
+  myPosition?: { side: "yes" | "no"; stake: number } | undefined;
 }
 
 export type LeaderboardBoard =
@@ -178,12 +179,12 @@ export type NotificationKind =
 export interface AppNotification {
   id: string;
   kind: NotificationKind;
-  actor?: User;
+  actor?: User | undefined;
   title: string;
   body: string;
   at: string;
   read: boolean;
-  href?: string;
+  href?: string | undefined;
 }
 
 export interface Message {
@@ -192,7 +193,7 @@ export interface Message {
   senderId: string;
   body: string;
   at: string;
-  attachment?: { type: "image" | "chart"; url: string; caption?: string };
+  attachment?: { type: "image" | "chart"; url: string; caption?: string } | undefined;
   read: boolean;
 }
 
