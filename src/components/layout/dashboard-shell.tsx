@@ -1,22 +1,22 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Search, Feather, Bell, Command as CommandIcon } from "lucide-react";
+import { Menu, Search, Feather, Bell, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { ShellContext } from "./shell-context";
-import { bottomNav, primaryNav, designSystemNav } from "./nav-items";
-import { CommandPalette } from "./command-palette";
+import { bottomNav, moreNav, primaryNav, type NavItem } from "./nav-items";
 import { SearchOverlay } from "./search-overlay";
 import { NotificationsDrawer } from "./notifications-drawer";
 import { ComposerDialog } from "@/features/feed/composer";
 import { RightRail } from "./right-rail";
+import { BrandMark } from "@/components/brand";
 
 function useBadges() {
-  const { unreadCount } = useApp();
-  return { notifications: unreadCount, messages: 3 } as const;
+  const { unreadCount, unreadMessages } = useApp();
+  return { notifications: unreadCount, messages: unreadMessages } as const;
 }
 
 function isActive(pathname: string, to: string) {
@@ -24,21 +24,48 @@ function isActive(pathname: string, to: string) {
 }
 
 export function DashboardShell({ children }: { children: ReactNode }) {
-  const [commandOpen, setCommandOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [composerOpen, setComposerOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useApp();
   const badges = useBadges();
 
+  const sidebarLink = (item: NavItem, onNavigate?: () => void) => {
+    const active = isActive(pathname, item.to);
+    const badge = item.badgeKey ? badges[item.badgeKey] : 0;
+    return (
+      <Link
+        key={item.to}
+        to={item.to as never}
+        onClick={onNavigate}
+        className={cn(
+          "group relative flex items-center gap-4 self-start rounded-full px-3 py-2.5 transition-colors duration-150 hover:bg-elevated/70 xl:pr-6",
+          active && "font-bold",
+        )}
+      >
+        <span className="relative">
+          <item.icon
+            className={cn("size-[24px] shrink-0", active && "text-cyan")}
+            strokeWidth={active ? 2.4 : 1.9}
+          />
+          {badge ? (
+            <span className="absolute -right-1 -top-1 grid min-w-[16px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+              {badge}
+            </span>
+          ) : null}
+        </span>
+        <span className="hidden text-[17px] xl:inline">{item.label}</span>
+      </Link>
+    );
+  };
+
   return (
     <ShellContext.Provider
       value={{
-        commandOpen,
-        setCommandOpen,
         searchOpen,
         setSearchOpen,
         notificationsOpen,
@@ -63,9 +90,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <Menu className="size-5" />
           </button>
           <Link to="/app" className="mx-auto flex items-center gap-2" aria-label="Pulse home">
-            <span className="gradient-fill grid size-8 place-items-center rounded-xl text-sm font-bold text-primary-foreground">
-              P
-            </span>
+            <BrandMark className="size-8" />
           </Link>
           <button
             onClick={() => setSearchOpen(true)}
@@ -77,65 +102,41 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         </header>
 
         <div className="mx-auto flex w-full max-w-[1320px] justify-center gap-0 px-0 sm:px-4 lg:gap-8">
-          {/* Desktop sidebar */}
-          <aside className="sticky top-0 hidden h-screen shrink-0 flex-col justify-between py-3 md:flex md:w-[84px] xl:w-[268px]">
-            <div className="flex flex-col gap-1">
+          {/* Desktop sidebar: scrollable, calm by default */}
+          <aside className="sticky top-0 hidden h-screen shrink-0 flex-col md:flex md:w-[84px] xl:w-[268px]">
+            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto py-3 no-scrollbar">
               <Link
                 to="/app"
                 className="mb-2 flex items-center gap-3 rounded-full px-3 py-2"
                 aria-label="Pulse home"
               >
-                <span className="gradient-fill grid size-10 shrink-0 place-items-center rounded-2xl text-base font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
-                  P
-                </span>
+                <BrandMark className="size-10 shrink-0" />
                 <span className="hidden text-lg font-bold tracking-tight xl:inline">Pulse</span>
               </Link>
 
               <nav className="flex flex-col gap-0.5" aria-label="Primary">
-                {primaryNav.map((item) => {
-                  const active = isActive(pathname, item.to);
-                  const badge = item.badgeKey ? badges[item.badgeKey] : 0;
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to as never}
-                      className={cn(
-                        "group relative flex items-center gap-4 self-start rounded-full px-3 py-2.5 transition-colors duration-150 hover:bg-elevated/70 xl:pr-6",
-                        active && "font-bold",
-                      )}
-                    >
-                      <span className="relative">
-                        <item.icon
-                          className={cn("size-[24px] shrink-0", active && "text-cyan")}
-                          strokeWidth={active ? 2.4 : 1.9}
-                        />
-                        {badge ? (
-                          <span className="absolute -right-1 -top-1 grid min-w-[16px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-                            {badge}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="hidden text-[17px] xl:inline">{item.label}</span>
-                    </Link>
-                  );
-                })}
+                {primaryNav.map((item) => sidebarLink(item))}
+
                 <button
-                  onClick={() => setCommandOpen(true)}
+                  onClick={() => setMoreOpen((v) => !v)}
+                  aria-expanded={moreOpen}
                   className="group flex items-center gap-4 self-start rounded-full px-3 py-2.5 text-muted-foreground transition-colors hover:bg-elevated/70 hover:text-foreground xl:pr-6"
                 >
-                  <CommandIcon className="size-[24px] shrink-0" strokeWidth={1.9} />
-                  <span className="hidden text-[17px] xl:inline">Command</span>
-                  <kbd className="ml-2 hidden rounded border border-border px-1.5 py-0.5 text-[11px] xl:inline">
-                    ⌘K
-                  </kbd>
+                  <ChevronDown
+                    className={cn(
+                      "size-[24px] shrink-0 transition-transform duration-200",
+                      moreOpen && "rotate-180",
+                    )}
+                    strokeWidth={1.9}
+                  />
+                  <span className="hidden text-[17px] xl:inline">{moreOpen ? "Less" : "More"}</span>
                 </button>
-                <Link
-                  to={designSystemNav.to as never}
-                  className="group flex items-center gap-4 self-start rounded-full px-3 py-2.5 text-muted-foreground transition-colors hover:bg-elevated/70 hover:text-foreground xl:pr-6"
-                >
-                  <designSystemNav.icon className="size-[24px] shrink-0" strokeWidth={1.9} />
-                  <span className="hidden text-[17px] xl:inline">{designSystemNav.label}</span>
-                </Link>
+
+                {moreOpen ? (
+                  <div className="flex flex-col gap-0.5">
+                    {moreNav.map((item) => sidebarLink(item))}
+                  </div>
+                ) : null}
               </nav>
 
               <Button
@@ -158,7 +159,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
             <Link
               to={"/app/profile" as never}
-              className="mb-2 flex items-center gap-3 rounded-full p-2 transition-colors hover:bg-elevated/70"
+              className="mb-3 flex shrink-0 items-center gap-3 rounded-full p-2 transition-colors hover:bg-elevated/70"
             >
               <Avatar className="size-10 shrink-0">
                 <AvatarImage src={user.avatar} alt="" />
@@ -219,67 +220,37 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           aria-label="New post"
           className="gradient-fill fixed bottom-20 right-4 z-45 grid size-14 place-items-center rounded-full text-primary-foreground shadow-[var(--shadow-glow)] transition-transform duration-150 active:scale-[0.96] md:hidden"
         >
-          <Feather className="size-6" />
+          <Feather className="size-5" />
         </button>
 
-        {/* Mobile slide-out sidebar */}
+        {/* Mobile navigation drawer */}
         <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-          <SheetContent
-            side="left"
-            className="w-[290px] border-border bg-surface/95 p-0 backdrop-blur-2xl"
-          >
-            <SheetTitle className="sr-only">Menu</SheetTitle>
+          <SheetContent side="left" className="w-[300px] border-border bg-background p-0">
+            <SheetTitle className="sr-only">Navigation</SheetTitle>
             <div className="flex h-full flex-col">
-              <div className="border-b border-border p-5">
-                <Link
-                  to={"/app/profile" as never}
-                  onClick={() => setMobileNavOpen(false)}
-                  className="flex items-center gap-3"
-                >
-                  <Avatar className="size-11">
-                    <AvatarImage src={user.avatar} alt="" />
-                    <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{user.displayName}</p>
-                    <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
-                  </div>
-                </Link>
-                <div className="mt-3 flex gap-4 text-xs">
-                  <span>
-                    <strong>{user.following}</strong>{" "}
-                    <span className="text-muted-foreground">Following</span>
-                  </span>
-                  <span>
-                    <strong>{user.followers.toLocaleString()}</strong>{" "}
-                    <span className="text-muted-foreground">Followers</span>
-                  </span>
+              <div className="flex items-center gap-3 border-b border-border p-4">
+                <BrandMark className="size-10" />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold">{user.displayName}</p>
+                  <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
                 </div>
               </div>
 
-              <nav className="flex-1 overflow-y-auto p-2" aria-label="Mobile menu">
-                {primaryNav.map((item) => (
+              <nav className="flex-1 overflow-y-auto p-2" aria-label="Mobile">
+                {[...primaryNav, ...moreNav].map((item) => (
                   <Link
                     key={item.to}
                     to={item.to as never}
                     onClick={() => setMobileNavOpen(false)}
                     className={cn(
-                      "flex items-center gap-4 rounded-[14px] px-3 py-3 text-[15px] transition-colors hover:bg-elevated/70",
-                      isActive(pathname, item.to) && "font-bold text-foreground",
+                      "flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] transition-colors hover:bg-elevated/70",
+                      isActive(pathname, item.to) && "font-bold text-cyan",
                     )}
                   >
                     <item.icon className="size-5 shrink-0" />
                     {item.label}
                   </Link>
                 ))}
-                <Link
-                  to={designSystemNav.to as never}
-                  onClick={() => setMobileNavOpen(false)}
-                  className="flex items-center gap-4 rounded-[14px] px-3 py-3 text-[15px] text-muted-foreground hover:bg-elevated/70"
-                >
-                  <designSystemNav.icon className="size-5 shrink-0" />
-                  {designSystemNav.label}
-                </Link>
               </nav>
 
               <div className="border-t border-border p-4">
@@ -298,7 +269,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </SheetContent>
         </Sheet>
 
-        <CommandPalette />
         <SearchOverlay />
         <NotificationsDrawer />
         <ComposerDialog open={composerOpen} onOpenChange={setComposerOpen} />
