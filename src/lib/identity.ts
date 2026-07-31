@@ -24,8 +24,8 @@ export function hashSeed(seed: string): number {
 }
 
 export function paletteFor(seed: string): [string, string] {
-  const p = PALETTES[hashSeed(seed) % PALETTES.length];
-  return [p[0], p[1]];
+  const p = PALETTES[hashSeed(seed) % PALETTES.length] ?? ["4F46E5", "06B6D4"];
+  return [p[0] ?? "4F46E5", p[1] ?? "06B6D4"];
 }
 
 export function avatarUrl(seed: string): string {
