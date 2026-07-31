@@ -108,7 +108,7 @@ function MarketsPage() {
 
       {stats.data ? (
         <div className="grid grid-cols-3 gap-2 border-b border-border p-4 sm:px-5">
-          <StatBlock label="Open positions" value={String(stats.data.openPositions)} />
+          <StatBlock label="Open positions" value={String(stats.data.open)} />
           <StatBlock label="Accuracy" value={`${stats.data.accuracy}%`} tone="positive" />
           <StatBlock
             label="Net P&L"
