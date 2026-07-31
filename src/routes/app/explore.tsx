@@ -136,7 +136,7 @@ function ExplorePage() {
                 <p className="truncate text-xs text-muted-foreground">{t.name}</p>
               </div>
               <Sparkline
-                series={t.series ?? [1, 2, 1.6, 2.4, 2.1, 2.8]}
+                series={[1, 1.4, 1.2, 1.8, 1.6, 2.1, t.change24h >= 0 ? 2.4 : 1.1]}
                 positive={t.change24h >= 0}
                 className="h-8 w-20 shrink-0"
               />
