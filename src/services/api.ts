@@ -49,9 +49,9 @@ export async function getFeed(filter: FeedFilter): Promise<Post[]> {
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       break;
-    case "arc":
+    case "ecosystem":
       result = pool.filter((p) =>
-        p.tags.some((t) => ["ARC", "settlement", "validators", "infra"].includes(t)),
+        p.tags.some((t) => ["ecosystem", "settlement", "validators", "infra"].includes(t)),
       );
       break;
     case "markets":

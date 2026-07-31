@@ -15,10 +15,10 @@ import { tokenList } from "@/mock-data/discovery";
 export const Route = createFileRoute("/app/explore")({
   head: () => ({
     meta: [
-      { title: "Explore | ARC" },
-      { name: "description", content: "Trending topics, hot markets, rising creators and token movers on ARC." },
-      { property: "og:title", content: "Explore | ARC" },
-      { property: "og:description", content: "Trending topics, hot markets, rising creators and token movers on ARC." },
+      { title: "Explore | Pulse" },
+      { name: "description", content: "Trending topics, hot markets, rising creators and token movers on Pulse." },
+      { property: "og:title", content: "Explore | Pulse" },
+      { property: "og:description", content: "Trending topics, hot markets, rising creators and token movers on Pulse." },
     ],
   }),
   component: ExplorePage,

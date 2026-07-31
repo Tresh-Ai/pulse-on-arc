@@ -25,12 +25,12 @@ export function RightRail() {
         className="flex w-full items-center gap-3 rounded-full border border-transparent bg-elevated/70 px-4 py-3 text-left text-sm text-muted-foreground transition-colors hover:border-cyan/40"
       >
         <Search className="size-4" />
-        Search ARC
+        Search Pulse
         <kbd className="ml-auto rounded border border-border px-1.5 py-0.5 text-[11px]">/</kbd>
       </button>
 
       <section className="mt-4 rounded-[20px] border border-border bg-surface/50">
-        <h2 className="px-4 pt-4 text-[17px] font-bold">ARC token</h2>
+        <h2 className="px-4 pt-4 text-[17px] font-bold">Pulse token</h2>
         {token.isPending ? (
           <div className="space-y-2 p-4">
             <Skeleton className="h-4 w-24 bg-elevated" />
@@ -159,7 +159,7 @@ export function RightRail() {
         <Link to="/">Landing</Link>
         <Link to={"/design-system" as never}>Design system</Link>
         <Link to={"/app/settings" as never}>Settings</Link>
-        <span>© 2026 ARC</span>
+        <span>© 2026 Pulse</span>
       </nav>
     </aside>
   );

@@ -22,11 +22,11 @@ const SEEDS: Seed[] = [
   {
     authorIndex: 0,
     kind: "chart",
-    body: "Settled volume on ARC printed a new weekly high without a single fee spike. That is the part people keep missing: throughput went up and cost per settlement stayed flat. Chart is daily settled USDC, seven day average overlaid.",
+    body: "Settled volume on the ecosystem printed a new weekly high without a single fee spike. That is the part people keep missing: throughput went up and cost per settlement stayed flat. Chart is daily settled USDC, seven day average overlaid.",
     minutesAgo: 24,
-    tags: ["ARC", "settlement"],
+    tags: ["ecosystem", "settlement"],
     communityId: "c_1",
-    symbol: "ARC-VOL",
+    symbol: "PULSE-VOL",
   },
   {
     authorIndex: 1,
@@ -49,7 +49,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Spent the morning reading blocks. Two observations: median settlement finality is holding under two seconds, and the long tail of failed transactions is almost entirely one misconfigured relayer. Filed a note with the team.",
     minutesAgo: 92,
-    tags: ["ARC", "infra"],
+    tags: ["ecosystem", "infra"],
     communityId: "c_1",
   },
   {
@@ -58,7 +58,7 @@ const SEEDS: Seed[] = [
     body: "Genuine question for the rotation crowd, because my timeline is split down the middle right now.",
     minutesAgo: 118,
     pollQuestion: "Where does the next rotation land?",
-    pollOptions: ["ARC ecosystem", "AI agents", "Gaming", "Nothing, cash is fine"],
+    pollOptions: ["Pulse ecosystem", "AI agents", "Gaming", "Nothing, cash is fine"],
     tags: ["memecoins"],
     communityId: "c_4",
   },
@@ -133,7 +133,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Payment corridor update: two more remittance partners moved test traffic onto USDC settlement this week. Fees are not the headline, reconciliation time is. Their ops team cut a three day close to same day.",
     minutesAgo: 540,
-    tags: ["payments", "ARC"],
+    tags: ["payments", "ecosystem"],
   },
   {
     authorIndex: 15,
@@ -180,7 +180,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Validator uptime report is up. Ninety nine point nine seven percent across the quarter, one planned maintenance window, zero missed proposals in the last three weeks.",
     minutesAgo: 1180,
-    tags: ["ARC", "validators"],
+    tags: ["ecosystem", "validators"],
     communityId: "c_1",
   },
 ];
@@ -211,7 +211,7 @@ function buildPost(seed: Seed, index: number): Post {
   }
   if (seed.kind === "chart") {
     post.chart = {
-      symbol: seed.symbol ?? "ARC",
+      symbol: seed.symbol ?? "PULSE",
       change: Number(((rng() - 0.4) * 18).toFixed(2)),
       series: series(28, 100, 0.08, rng),
     };
@@ -299,7 +299,7 @@ export const myPosts: Post[] = [
     liked: false,
     reposted: false,
     bookmarked: false,
-    tags: ["trading", "ARC"],
+    tags: ["trading", "ecosystem"],
     chart: { symbol: "BASKET", change: 8.42, series: series(28, 100, 0.06, createRng("me-chart")) },
   },
 ];

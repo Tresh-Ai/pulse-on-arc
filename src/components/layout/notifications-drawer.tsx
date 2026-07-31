@@ -107,7 +107,7 @@ export function NotificationsDrawer() {
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="text-sm">
-                        <span className="font-semibold">{n.actor?.displayName ?? "ARC"}</span>{" "}
+                        <span className="font-semibold">{n.actor?.displayName ?? "Pulse"}</span>{" "}
                         <span className="text-muted-foreground">{n.title}</span>
                       </p>
                       <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{n.body}</p>

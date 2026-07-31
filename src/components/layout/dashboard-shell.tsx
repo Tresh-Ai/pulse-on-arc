@@ -62,9 +62,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           >
             <Menu className="size-5" />
           </button>
-          <Link to="/app" className="mx-auto flex items-center gap-2" aria-label="ARC home">
+          <Link to="/app" className="mx-auto flex items-center gap-2" aria-label="Pulse home">
             <span className="gradient-fill grid size-8 place-items-center rounded-xl text-sm font-bold text-primary-foreground">
-              A
+              P
             </span>
           </Link>
           <button
@@ -83,12 +83,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               <Link
                 to="/app"
                 className="mb-2 flex items-center gap-3 rounded-full px-3 py-2"
-                aria-label="ARC home"
+                aria-label="Pulse home"
               >
                 <span className="gradient-fill grid size-10 shrink-0 place-items-center rounded-2xl text-base font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
-                  A
+                  P
                 </span>
-                <span className="hidden text-lg font-bold tracking-tight xl:inline">ARC</span>
+                <span className="hidden text-lg font-bold tracking-tight xl:inline">Pulse</span>
               </Link>
 
               <nav className="flex flex-col gap-0.5" aria-label="Primary">
