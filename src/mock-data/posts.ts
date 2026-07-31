@@ -22,11 +22,11 @@ const SEEDS: Seed[] = [
   {
     authorIndex: 0,
     kind: "chart",
-    body: "Settled volume on ARC printed a new weekly high without a single fee spike. That is the part people keep missing: throughput went up and cost per settlement stayed flat. Chart is daily settled USDC, seven day average overlaid.",
+    body: "Settled volume on the ecosystem printed a new weekly high without a single fee spike. That is the part people keep missing: throughput went up and cost per settlement stayed flat. Chart is daily settled USDC, seven day average overlaid.",
     minutesAgo: 24,
-    tags: ["ARC", "settlement"],
+    tags: ["ecosystem", "settlement"],
     communityId: "c_1",
-    symbol: "ARC-VOL",
+    symbol: "PULSE-VOL",
   },
   {
     authorIndex: 1,
@@ -49,7 +49,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Spent the morning reading blocks. Two observations: median settlement finality is holding under two seconds, and the long tail of failed transactions is almost entirely one misconfigured relayer. Filed a note with the team.",
     minutesAgo: 92,
-    tags: ["ARC", "infra"],
+    tags: ["ecosystem", "infra"],
     communityId: "c_1",
   },
   {
@@ -58,7 +58,7 @@ const SEEDS: Seed[] = [
     body: "Genuine question for the rotation crowd, because my timeline is split down the middle right now.",
     minutesAgo: 118,
     pollQuestion: "Where does the next rotation land?",
-    pollOptions: ["ARC ecosystem", "AI agents", "Gaming", "Nothing, cash is fine"],
+    pollOptions: ["Pulse ecosystem", "AI agents", "Gaming", "Nothing, cash is fine"],
     tags: ["memecoins"],
     communityId: "c_4",
   },
