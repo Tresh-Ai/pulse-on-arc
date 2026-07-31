@@ -7,15 +7,15 @@ const rng = createRng("wallet");
 const TX_SEEDS: Pick<WalletTransaction, "kind" | "asset" | "amount" | "counterparty">[] = [
   { kind: "deposit", asset: "USDC", amount: 5000, counterparty: "Bank transfer" },
   { kind: "prediction", asset: "USDC", amount: -250, counterparty: "Pulse settlement market" },
-  { kind: "reward", asset: "ARCS", amount: 1840, counterparty: "Season one rewards" },
+  { kind: "reward", asset: "PLSX", amount: 1840, counterparty: "Season one rewards" },
   { kind: "send", asset: "USDC", amount: -420, counterparty: "@settlement_sam" },
   { kind: "receive", asset: "USDC", amount: 1200, counterparty: "@riskrachel" },
   { kind: "prediction", asset: "USDC", amount: 640, counterparty: "Validator count market" },
   { kind: "withdraw", asset: "USDC", amount: -2200, counterparty: "External wallet" },
-  { kind: "send", asset: "ARC", amount: -32, counterparty: "@zkfarmer" },
-  { kind: "receive", asset: "ARC", amount: 118, counterparty: "Creator payout" },
+  { kind: "send", asset: "PLS", amount: -32, counterparty: "@zkfarmer" },
+  { kind: "receive", asset: "PLS", amount: 118, counterparty: "Creator payout" },
   { kind: "prediction", asset: "USDC", amount: -120, counterparty: "Stablecoin supply market" },
-  { kind: "reward", asset: "ARCS", amount: 320, counterparty: "Referral bonus" },
+  { kind: "reward", asset: "PLSX", amount: 320, counterparty: "Referral bonus" },
   { kind: "deposit", asset: "USDC", amount: 3200, counterparty: "Bank transfer" },
 ];
 
@@ -33,7 +33,7 @@ export const walletSummary: WalletSummary = {
       logoTint: "cyan",
     },
     {
-      symbol: "ARC",
+      symbol: "PLS",
       name: "Pulse Network",
       balance: 4_820.5,
       usdValue: 16_785.98,
@@ -41,7 +41,7 @@ export const walletSummary: WalletSummary = {
       logoTint: "primary",
     },
     {
-      symbol: "ARCS",
+      symbol: "PLSX",
       name: "Pulse Social",
       balance: 14_240,
       usdValue: 6_006.43,
@@ -60,7 +60,7 @@ export const walletSummary: WalletSummary = {
   transactions: TX_SEEDS.map((seed, i) => ({
     ...seed,
     id: `tx_${i + 1}`,
-    usdValue: Math.abs(seed.amount) * (seed.asset === "USDC" ? 1 : seed.asset === "ARC" ? 3.48 : 0.42),
+    usdValue: Math.abs(seed.amount) * (seed.asset === "USDC" ? 1 : seed.asset === "PLS" ? 3.48 : 0.42),
     at: agoMinutes(intBetween(20, 40_000, rng)),
     status: i === 1 ? "pending" : i === 7 ? "failed" : "confirmed",
     hash: `0x${createRng(`tx-${i}`)().toString(16).slice(2, 12)}${i}a4f`,
@@ -68,7 +68,7 @@ export const walletSummary: WalletSummary = {
 };
 
 export const tokenInfo: TokenInfo = {
-  symbol: "ARCS",
+  symbol: "PLSX",
   name: "Pulse Social",
   price: 0.4218,
   change24h: 12.84,
