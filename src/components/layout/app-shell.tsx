@@ -68,7 +68,7 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
                 return (
                   <Link
                     key={item.to}
-                    to={item.to}
+                    to={item.to as never}
                     className={cn(
                       "group relative flex items-center gap-3 rounded-[14px] px-3 py-2.5 text-sm font-medium transition-all duration-200",
                       active
@@ -90,8 +90,7 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
           </div>
 
           <Link
-            to="/u/$handle"
-            params={{ handle: user.username }}
+            to="/"
             className="flex items-center gap-3 rounded-[14px] p-2 transition-colors hover:bg-elevated/60"
           >
             <Avatar className="size-9">
@@ -124,7 +123,7 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
             return (
               <Link
                 key={item.to}
-                to={item.to}
+                to={item.to as never}
                 aria-label={item.label}
                 className={cn(
                   "flex flex-col items-center gap-1 rounded-[14px] px-3 py-1.5 text-[11px] font-medium transition-colors",
@@ -137,7 +136,7 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
             );
           })}
           <Link
-            to="/search"
+            to={"/search" as never}
             aria-label="Search"
             className="flex flex-col items-center gap-1 rounded-[14px] px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
           >
