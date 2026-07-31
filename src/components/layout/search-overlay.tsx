@@ -28,14 +28,14 @@ export function SearchOverlay() {
   return (
     <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
       <DialogContent className="max-h-[86vh] overflow-hidden border-border bg-popover/95 p-0 backdrop-blur-2xl sm:max-w-[680px]">
-        <DialogTitle className="sr-only">Search ARC</DialogTitle>
+        <DialogTitle className="sr-only">Search Pulse</DialogTitle>
         <div className="flex items-center gap-3 border-b border-border px-4 py-3">
           <Search className="size-4 shrink-0 text-muted-foreground" />
           <Input
             autoFocus
             value={term}
             onChange={(e) => setTerm(e.target.value)}
-            placeholder="Search ARC"
+            placeholder="Search Pulse"
             className="h-9 border-0 bg-transparent px-0 text-base focus-visible:ring-0"
           />
         </div>

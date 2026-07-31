@@ -24,7 +24,7 @@ const TABS: { id: FeedFilter; label: string }[] = [
   { id: "following", label: "Following" },
   { id: "trending", label: "For you" },
   { id: "latest", label: "Latest" },
-  { id: "arc", label: "Ecosystem" },
+  { id: "ecosystem", label: "Ecosystem" },
 ];
 
 function HomeFeed() {

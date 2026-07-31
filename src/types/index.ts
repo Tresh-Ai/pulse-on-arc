@@ -1,5 +1,5 @@
 /**
- * Domain types for the ARC Social Trading Network prototype.
+ * Domain types for the Pulse Social Markets prototype.
  * These mirror the shapes the future API layer is expected to return.
  */
 
@@ -84,7 +84,7 @@ export type FeedFilter =
   | "following"
   | "trending"
   | "latest"
-  | "arc"
+  | "ecosystem"
   | "markets"
   | "predictions";
 
