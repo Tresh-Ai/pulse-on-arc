@@ -27,17 +27,17 @@ import { fadeUp, stagger } from "@/lib/motion";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ARC | Social markets and market intelligence" },
+      { title: "Pulse | Social markets and market intelligence" },
       {
         name: "description",
         content:
-          "ARC is the social network for market intelligence: live discussion, prediction markets, creator communities and reputation scoring in one place.",
+          "Pulse is the social network for market intelligence: live discussion, prediction markets, creator communities and reputation scoring in one place.",
       },
-      { property: "og:title", content: "ARC | Social markets and market intelligence" },
+      { property: "og:title", content: "Pulse | Social markets and market intelligence" },
       {
         property: "og:description",
         content:
-          "Live discussion, prediction markets, creator communities and reputation scoring for the ARC ecosystem.",
+          "Live discussion, prediction markets, creator communities and reputation scoring for the Pulse network.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "ARC",
+          name: "Pulse",
           description: "Social markets and market intelligence network.",
         }),
       },
@@ -83,7 +83,7 @@ const FEATURES = [
   {
     icon: Coins,
     title: "Wallet and token",
-    body: "Balances, transfers and ARC token utility live next to the conversation.",
+    body: "Balances, transfers and Pulse token utility live next to the conversation.",
   },
   {
     icon: BarChart3,
@@ -110,11 +110,11 @@ function LandingPage() {
 
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center gap-4 px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="ARC home">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="Pulse home">
             <span className="gradient-fill grid size-9 place-items-center rounded-2xl text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
-              A
+              P
             </span>
-            <span className="text-lg font-bold tracking-tight">ARC</span>
+            <span className="text-lg font-bold tracking-tight">Pulse</span>
           </Link>
           <nav className="ml-6 hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#product" className="transition-colors hover:text-foreground">
@@ -201,7 +201,7 @@ function LandingPage() {
               <div className="surface-card overflow-hidden p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">ARC token</p>
+                    <p className="text-sm text-muted-foreground">Pulse token</p>
                     <p className="text-3xl font-bold tabular-nums">
                       {token.data ? formatUsd(token.data.price) : "—"}
                     </p>
@@ -279,7 +279,7 @@ function LandingPage() {
             <div>
               <h2 className="text-3xl font-bold tracking-tight">Price the conversation</h2>
               <p className="mt-4 text-muted-foreground">
-                Every thesis on ARC can become a market. Pools are transparent, positions are
+                Every thesis on Pulse can become a market. Pools are transparent, positions are
                 public, and resolution rules are written before the first stake is placed.
               </p>
               <ul className="mt-6 space-y-3">
@@ -395,9 +395,9 @@ function LandingPage() {
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center gap-x-6 gap-y-3 px-4 text-sm text-muted-foreground sm:px-6">
           <span className="flex items-center gap-2 font-semibold text-foreground">
             <span className="gradient-fill grid size-7 place-items-center rounded-xl text-xs text-primary-foreground">
-              A
+              P
             </span>
-            ARC
+            Pulse
           </span>
           <Link to={"/app/explore" as never} className="flex items-center gap-1.5">
             <Compass className="size-4" /> Explore
@@ -408,7 +408,7 @@ function LandingPage() {
           <Link to={"/app/token" as never} className="flex items-center gap-1.5">
             <LineChart className="size-4" /> Token
           </Link>
-          <span className="ml-auto">© 2026 ARC. Prototype with demo data.</span>
+          <span className="ml-auto">© 2026 Pulse. Prototype with demo data.</span>
         </div>
       </footer>
     </div>
