@@ -10,7 +10,7 @@ export type Interest =
   | "AI"
   | "Memecoins"
   | "Gaming"
-  | "ARC Ecosystem";
+  | "Pulse Ecosystem";
 
 export interface User {
   id: string;
@@ -107,7 +107,7 @@ export interface Community {
 export type PredictionStatus = "open" | "closing-soon" | "resolved" | "cancelled";
 export type PredictionCategory =
   | "Crypto"
-  | "ARC Ecosystem"
+  | "Pulse Ecosystem"
   | "Macro"
   | "Culture"
   | "Tech"

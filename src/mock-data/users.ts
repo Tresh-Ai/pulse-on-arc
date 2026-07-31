@@ -9,14 +9,14 @@ const INTERESTS: Interest[] = [
   "AI",
   "Memecoins",
   "Gaming",
-  "ARC Ecosystem",
+  "Pulse Ecosystem",
 ];
 
 const ACHIEVEMENT_POOL: Omit<Achievement, "id" | "earnedAt">[] = [
   { label: "Top 100 Predictor", description: "Finished a season inside the top 100 predictors.", icon: "trophy" },
   { label: "30 Day Streak", description: "Posted market analysis every day for a month.", icon: "flame" },
   { label: "Sharp Caller", description: "Resolved ten predictions above 70 percent accuracy.", icon: "target" },
-  { label: "Early ARC", description: "Joined during the ARC testnet season.", icon: "sparkles" },
+  { label: "Early Pulse", description: "Joined during the Pulse testnet season.", icon: "sparkles" },
   { label: "Community Guardian", description: "Moderated a community with over 10k members.", icon: "shield" },
   { label: "Creator of the Month", description: "Highest engagement across the network.", icon: "crown" },
 ];
@@ -33,7 +33,7 @@ const SEEDS: Seed[] = [
   {
     username: "arcmaxi",
     displayName: "Nadia Okafor",
-    bio: "Liquidity research on ARC. Publishing settlement flow breakdowns every Tuesday.",
+    bio: "Liquidity research on Pulse. Publishing settlement flow breakdowns every Tuesday.",
     creator: true,
     verified: true,
   },
@@ -53,7 +53,7 @@ const SEEDS: Seed[] = [
   {
     username: "onchain_ops",
     displayName: "Marcus Feld",
-    bio: "Reading blocks so you do not have to. Indexer diaries and ARC validator notes.",
+    bio: "Reading blocks so you do not have to. Indexer diaries and Pulse validator notes.",
     verified: true,
   },
   { username: "memecoin_mira", displayName: "Mira Sol", bio: "Rotations, narratives, and exit liquidity. Not financial advice, obviously." },
@@ -135,7 +135,7 @@ export const currentUser: User = {
     {
       username: "you",
       displayName: "Alex Rivera",
-      bio: "Building on ARC. Trading majors, writing about settlement design, and running a small prediction desk.",
+      bio: "Building on Pulse. Trading majors, writing about settlement design, and running a small prediction desk.",
       creator: true,
       verified: true,
     },
@@ -150,7 +150,7 @@ export const currentUser: User = {
   tradingPnl30d: 18.6,
   isFollowing: false,
   online: true,
-  interests: ["Trading", "DeFi", "ARC Ecosystem"],
+  interests: ["Trading", "DeFi", "Pulse Ecosystem"],
 };
 
 export const allUsers: User[] = [currentUser, ...users];

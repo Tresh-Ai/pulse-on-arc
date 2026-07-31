@@ -1,8 +1,6 @@
 import { createContext, useContext } from "react";
 
 export interface ShellState {
-  commandOpen: boolean;
-  setCommandOpen: (open: boolean) => void;
   searchOpen: boolean;
   setSearchOpen: (open: boolean) => void;
   notificationsOpen: boolean;

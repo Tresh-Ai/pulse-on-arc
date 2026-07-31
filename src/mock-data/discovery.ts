@@ -66,7 +66,7 @@ export function buildLeaderboard(
 }
 
 export const trendingTopics: TrendingTopic[] = [
-  { id: "tt_1", tag: "ARCSettlement", category: "ARC Ecosystem", posts: 18240, change: 42.6 },
+  { id: "tt_1", tag: "PulseSettlement", category: "Pulse Ecosystem", posts: 18240, change: 42.6 },
   { id: "tt_2", tag: "StakeWeighted", category: "Predictions", posts: 9620, change: 128.4 },
   { id: "tt_3", tag: "FundingFlip", category: "Trading", posts: 7410, change: -12.2 },
   { id: "tt_4", tag: "RealYield", category: "DeFi", posts: 6180, change: 18.9 },
@@ -77,9 +77,9 @@ export const trendingTopics: TrendingTopic[] = [
 ];
 
 export const tokenList = [
-  { symbol: "ARC", name: "ARC Network", price: 3.482, change24h: 6.42 },
+  { symbol: "PLS", name: "Pulse Network", price: 3.482, change24h: 6.42 },
   { symbol: "USDC", name: "USD Coin", price: 1.0, change24h: 0.01 },
-  { symbol: "ARCS", name: "ARC Social", price: 0.4218, change24h: 12.84 },
+  { symbol: "PLSX", name: "Pulse Social", price: 0.4218, change24h: 12.84 },
   { symbol: "BTC", name: "Bitcoin", price: 118420.5, change24h: 1.86 },
   { symbol: "ETH", name: "Ethereum", price: 4218.24, change24h: -0.94 },
   { symbol: "SETL", name: "Settle Protocol", price: 0.0842, change24h: 24.6 },

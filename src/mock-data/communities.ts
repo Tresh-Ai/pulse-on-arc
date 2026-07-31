@@ -15,11 +15,11 @@ interface Seed {
 const SEEDS: Seed[] = [
   {
     slug: "arc-builders",
-    name: "ARC Builders",
-    tagline: "Shipping on the ARC network",
+    name: "Pulse Builders",
+    tagline: "Shipping on the Pulse network",
     description:
-      "The working room for teams building on ARC. Contract patterns, settlement design, testnet incidents, and release notes. Keep it technical and keep it kind.",
-    category: "ARC Ecosystem",
+      "The working room for teams building on Pulse. Contract patterns, settlement design, testnet incidents, and release notes. Keep it technical and keep it kind.",
+    category: "Pulse Ecosystem",
     joined: true,
   },
   {
