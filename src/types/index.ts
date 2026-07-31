@@ -75,7 +75,7 @@ export interface Post {
   imageUrl?: string | undefined;
   chart?: { symbol: string; change: number; series: number[] } | undefined;
   predictionId?: string | undefined;
-  poll?: { question: string; options: PollOption[]; endsAt: string; votedOptionId?: string } | undefined;
+  poll?: { question: string; options: PollOption[]; endsAt: string; votedOptionId?: string | undefined } | undefined;
   pinned?: boolean | undefined;
   replyToId?: string | undefined;
 }
@@ -193,7 +193,7 @@ export interface Message {
   senderId: string;
   body: string;
   at: string;
-  attachment?: { type: "image" | "chart"; url: string; caption?: string } | undefined;
+  attachment?: { type: "image" | "chart"; url: string; caption?: string | undefined } | undefined;
   read: boolean;
 }
 
