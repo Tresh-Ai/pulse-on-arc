@@ -26,7 +26,6 @@ export function RightRail() {
       >
         <Search className="size-4" />
         Search Pulse
-        <kbd className="ml-auto rounded border border-border px-1.5 py-0.5 text-[11px]">/</kbd>
       </button>
 
       <section className="mt-4 rounded-[20px] border border-border bg-surface/50">
@@ -157,7 +156,6 @@ export function RightRail() {
 
       <nav className="flex flex-wrap gap-x-3 gap-y-1 px-4 py-5 text-xs text-muted-foreground">
         <Link to="/">Landing</Link>
-        <Link to={"/design-system" as never}>Design system</Link>
         <Link to={"/app/settings" as never}>Settings</Link>
         <span>© 2026 Pulse</span>
       </nav>

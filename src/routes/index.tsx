@@ -5,7 +5,6 @@ import {
   BarChart3,
   Bell,
   Coins,
-  Command,
   Compass,
   LineChart,
   MessageSquare,
@@ -126,16 +125,13 @@ function LandingPage() {
             <a href="#creators" className="transition-colors hover:text-foreground">
               Creators
             </a>
-            <Link to={"/design-system" as never} className="transition-colors hover:text-foreground">
-              Design system
-            </Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link to={"/auth/sign-in" as never}>Sign in</Link>
             </Button>
             <Button variant="gradient" size="sm" asChild>
-              <Link to={"/app" as never}>Open demo</Link>
+              <Link to={"/app" as never}>Open Pulse</Link>
             </Button>
           </div>
         </div>
@@ -173,7 +169,7 @@ function LandingPage() {
               <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
                 <Button variant="gradient" size="xl" asChild>
                   <Link to={"/app" as never}>
-                    Explore the demo <ArrowRight className="size-4" />
+                    Open Pulse <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="xl" asChild>
@@ -240,10 +236,10 @@ function LandingPage() {
               </div>
               <div className="surface-card absolute -bottom-6 -left-6 hidden w-[230px] p-4 sm:block">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Command palette
+                  Median accuracy
                 </p>
                 <p className="mt-2 flex items-center gap-2 text-sm">
-                  <Command className="size-4 text-cyan" /> ⌘K anywhere
+                  <ShieldCheck className="size-4 text-cyan" /> 71% across 2.4k markets
                 </p>
               </div>
             </motion.div>
@@ -377,14 +373,14 @@ function LandingPage() {
               Your track record is the product
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              This prototype runs on curated demo data. Walk the entire product without an account.
+              Post the thesis, back it in a market, and let the record compound. Your accuracy is public, permanent and portable.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button variant="gradient" size="xl" asChild>
-                <Link to={"/app" as never}>Open the demo</Link>
+                <Link to={"/app" as never}>Open Pulse</Link>
               </Button>
               <Button variant="outline" size="xl" asChild>
-                <Link to={"/onboarding" as never}>Try onboarding</Link>
+                <Link to={"/app/predictions" as never}>See open markets</Link>
               </Button>
             </div>
           </div>
@@ -408,7 +404,7 @@ function LandingPage() {
           <Link to={"/app/token" as never} className="flex items-center gap-1.5">
             <LineChart className="size-4" /> Token
           </Link>
-          <span className="ml-auto">© 2026 Pulse. Prototype with demo data.</span>
+          <span className="ml-auto">© 2026 Pulse Social Markets.</span>
         </div>
       </footer>
     </div>
