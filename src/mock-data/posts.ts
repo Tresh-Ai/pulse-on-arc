@@ -133,7 +133,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Payment corridor update: two more remittance partners moved test traffic onto USDC settlement this week. Fees are not the headline, reconciliation time is. Their ops team cut a three day close to same day.",
     minutesAgo: 540,
-    tags: ["payments", "ARC"],
+    tags: ["payments", "ecosystem"],
   },
   {
     authorIndex: 15,
@@ -180,7 +180,7 @@ const SEEDS: Seed[] = [
     kind: "standard",
     body: "Validator uptime report is up. Ninety nine point nine seven percent across the quarter, one planned maintenance window, zero missed proposals in the last three weeks.",
     minutesAgo: 1180,
-    tags: ["ARC", "validators"],
+    tags: ["ecosystem", "validators"],
     communityId: "c_1",
   },
 ];
@@ -211,7 +211,7 @@ function buildPost(seed: Seed, index: number): Post {
   }
   if (seed.kind === "chart") {
     post.chart = {
-      symbol: seed.symbol ?? "ARC",
+      symbol: seed.symbol ?? "PULSE",
       change: Number(((rng() - 0.4) * 18).toFixed(2)),
       series: series(28, 100, 0.08, rng),
     };
@@ -299,7 +299,7 @@ export const myPosts: Post[] = [
     liked: false,
     reposted: false,
     bookmarked: false,
-    tags: ["trading", "ARC"],
+    tags: ["trading", "ecosystem"],
     chart: { symbol: "BASKET", change: 8.42, series: series(28, 100, 0.06, createRng("me-chart")) },
   },
 ];
