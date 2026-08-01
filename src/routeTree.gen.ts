@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
+import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
 import { Route as AppPredictionsPredictionIdRouteImport } from './routes/app/predictions/$predictionId'
 
@@ -36,6 +37,11 @@ const AppExploreRoute = AppExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
+  id: '/communities/',
+  path: '/communities/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPredictionsIndexRoute = AppPredictionsIndexRouteImport.update({
   id: '/predictions/',
   path: '/predictions/',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/app/explore': typeof AppExploreRoute
   '/app/': typeof AppIndexRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/app/explore': typeof AppExploreRoute
   '/app': typeof AppIndexRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/communities': typeof AppCommunitiesIndexRoute
   '/app/predictions': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/app/explore': typeof AppExploreRoute
   '/app/': typeof AppIndexRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/'
     | '/app/predictions/$predictionId'
+    | '/app/communities/'
     | '/app/predictions/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app'
     | '/app/predictions/$predictionId'
+    | '/app/communities'
     | '/app/predictions'
   id:
     | '__root__'
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/'
     | '/app/predictions/$predictionId'
+    | '/app/communities/'
     | '/app/predictions/'
   fileRoutesById: FileRoutesById
 }
@@ -133,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExploreRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/communities/': {
+      id: '/app/communities/'
+      path: '/communities'
+      fullPath: '/app/communities/'
+      preLoaderRoute: typeof AppCommunitiesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/predictions/': {
       id: '/app/predictions/'
       path: '/predictions'
@@ -154,6 +173,7 @@ interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
   AppIndexRoute: typeof AppIndexRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
+  AppCommunitiesIndexRoute: typeof AppCommunitiesIndexRoute
   AppPredictionsIndexRoute: typeof AppPredictionsIndexRoute
 }
 
@@ -161,6 +181,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
   AppIndexRoute: AppIndexRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
+  AppCommunitiesIndexRoute: AppCommunitiesIndexRoute,
   AppPredictionsIndexRoute: AppPredictionsIndexRoute,
 }
 
@@ -173,13 +194,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
