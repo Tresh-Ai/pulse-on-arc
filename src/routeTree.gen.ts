@@ -15,6 +15,7 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
+import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppMessagesIndexRouteImport } from './routes/app/messages/index'
@@ -50,6 +51,11 @@ const AppLeaderboardsRoute = AppLeaderboardsRouteImport.update({
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWalletRoute = AppWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/wallet': typeof AppWalletRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/wallet'
     | '/app'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/wallet': {
+      id: '/app/wallet'
+      path: '/wallet'
+      fullPath: '/app/wallet'
+      preLoaderRoute: typeof AppWalletRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/communities/': {
       id: '/app/communities/'
       path: '/communities'
@@ -269,6 +288,7 @@ interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppWalletRoute: typeof AppWalletRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
   AppMessagesConversationIdRoute: typeof AppMessagesConversationIdRoute
@@ -282,6 +302,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
   AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppWalletRoute: AppWalletRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
   AppMessagesConversationIdRoute: AppMessagesConversationIdRoute,
