@@ -18,6 +18,7 @@ import { Route as AppNotificationsRouteImport } from './routes/app/notifications
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppMessagesIndexRouteImport } from './routes/app/messages/index'
+import { Route as AppMessagesConversationIdRouteImport } from './routes/app/messages/$conversationId'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
 import { Route as AppPredictionsPredictionIdRouteImport } from './routes/app/predictions/$predictionId'
 
@@ -66,6 +67,12 @@ const AppMessagesIndexRoute = AppMessagesIndexRouteImport.update({
   path: '/messages/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMessagesConversationIdRoute =
+  AppMessagesConversationIdRouteImport.update({
+    id: '/messages/$conversationId',
+    path: '/messages/$conversationId',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppPredictionsIndexRoute = AppPredictionsIndexRouteImport.update({
   id: '/predictions/',
   path: '/predictions/',
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/app/notifications': typeof AppNotificationsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
+  '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/messages/': typeof AppMessagesIndexRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
   '/app/notifications': typeof AppNotificationsRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
+  '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities': typeof AppCommunitiesIndexRoute
   '/app/messages': typeof AppMessagesIndexRoute
@@ -112,6 +121,7 @@ export interface FileRoutesById {
   '/app/notifications': typeof AppNotificationsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
+  '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/messages/': typeof AppMessagesIndexRoute
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/app/notifications'
     | '/app/'
     | '/app/communities/$slug'
+    | '/app/messages/$conversationId'
     | '/app/predictions/$predictionId'
     | '/app/communities/'
     | '/app/messages/'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/app/notifications'
     | '/app'
     | '/app/communities/$slug'
+    | '/app/messages/$conversationId'
     | '/app/predictions/$predictionId'
     | '/app/communities'
     | '/app/messages'
@@ -152,6 +164,7 @@ export interface FileRouteTypes {
     | '/app/notifications'
     | '/app/'
     | '/app/communities/$slug'
+    | '/app/messages/$conversationId'
     | '/app/predictions/$predictionId'
     | '/app/communities/'
     | '/app/messages/'
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMessagesIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/messages/$conversationId': {
+      id: '/app/messages/$conversationId'
+      path: '/messages/$conversationId'
+      fullPath: '/app/messages/$conversationId'
+      preLoaderRoute: typeof AppMessagesConversationIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/predictions/': {
       id: '/app/predictions/'
       path: '/predictions'
@@ -251,6 +271,7 @@ interface AppRouteChildren {
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
+  AppMessagesConversationIdRoute: typeof AppMessagesConversationIdRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
   AppCommunitiesIndexRoute: typeof AppCommunitiesIndexRoute
   AppMessagesIndexRoute: typeof AppMessagesIndexRoute
@@ -263,6 +284,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppNotificationsRoute: AppNotificationsRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
+  AppMessagesConversationIdRoute: AppMessagesConversationIdRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
   AppCommunitiesIndexRoute: AppCommunitiesIndexRoute,
   AppMessagesIndexRoute: AppMessagesIndexRoute,
