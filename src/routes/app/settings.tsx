@@ -61,7 +61,9 @@ function SettingsPage() {
             <Input
               id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase())}
+              onChange={(e) =>
+                setUsername(e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase())
+              }
             />
           </div>
           <div className="space-y-1.5">

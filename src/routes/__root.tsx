@@ -80,10 +80,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Pulse Social Markets" },
-      { name: "description", content: "Social trading, creator communities, and prediction markets for the Pulse network." },
+      {
+        name: "description",
+        content:
+          "Social trading, creator communities, and prediction markets for the Pulse network.",
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Pulse Social Markets" },
-      { property: "og:description", content: "Social trading, creator communities, and prediction markets for the Pulse network." },
+      {
+        property: "og:description",
+        content:
+          "Social trading, creator communities, and prediction markets for the Pulse network.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

@@ -1,12 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
-import {
-  ColumnHeader,
-  EmptyState,
-  ErrorState,
-  ListSkeleton,
-} from "@/components/common/states";
+import { ColumnHeader, EmptyState, ErrorState, ListSkeleton } from "@/components/common/states";
 import { PostCard } from "@/features/feed/post-card";
 import { queries } from "@/services/queries";
 

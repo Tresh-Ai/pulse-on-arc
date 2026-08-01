@@ -10,7 +10,13 @@ import { PostCard } from "@/features/feed/post-card";
 import { PredictionCard } from "@/features/cards";
 import { queries } from "@/services/queries";
 import { useApp } from "@/store/app-store";
-import { formatCompact, formatDate, formatRelativeTime, formatUsd, truncateAddress } from "@/lib/utils";
+import {
+  formatCompact,
+  formatDate,
+  formatRelativeTime,
+  formatUsd,
+  truncateAddress,
+} from "@/lib/utils";
 import type { User } from "@/types";
 
 export const Route = createFileRoute("/app/profile")({
@@ -97,9 +103,7 @@ function ProfilePage() {
             <div key={a.id} className="surface-card p-4">
               <p className="text-sm font-bold">{a.label}</p>
               <p className="mt-1 text-sm text-muted-foreground">{a.description}</p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Earned {formatDate(a.earnedAt)}
-              </p>
+              <p className="mt-2 text-xs text-muted-foreground">Earned {formatDate(a.earnedAt)}</p>
             </div>
           ))}
         </div>

@@ -2,12 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { MessageSquare } from "lucide-react";
-import {
-  ColumnHeader,
-  EmptyState,
-  ErrorState,
-  ListSkeleton,
-} from "@/components/common/states";
+import { ColumnHeader, EmptyState, ErrorState, ListSkeleton } from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { queries } from "@/services/queries";

@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ColumnHeader, ErrorState, ListSkeleton, SectionTitle, TabStrip } from "@/components/common/states";
+import {
+  ColumnHeader,
+  ErrorState,
+  ListSkeleton,
+  SectionTitle,
+  TabStrip,
+} from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/features/feed/post-card";

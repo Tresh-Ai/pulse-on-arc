@@ -17,7 +17,14 @@ import {
 import { AreaTrend, Sparkline } from "@/components/charts";
 import { queries } from "@/services/queries";
 import { submitTransfer } from "@/services/api";
-import { cn, formatCompact, formatPercent, formatRelativeTime, formatUsd, truncateAddress } from "@/lib/utils";
+import {
+  cn,
+  formatCompact,
+  formatPercent,
+  formatRelativeTime,
+  formatUsd,
+  truncateAddress,
+} from "@/lib/utils";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({
@@ -158,7 +165,10 @@ function WalletPage() {
         <SectionTitle>Transactions</SectionTitle>
       </div>
       {data.transactions.map((t) => (
-        <div key={t.id} className="flex items-center gap-3 border-b border-border px-4 py-3 sm:px-5">
+        <div
+          key={t.id}
+          className="flex items-center gap-3 border-b border-border px-4 py-3 sm:px-5"
+        >
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold capitalize">
               {t.kind} · {t.asset}

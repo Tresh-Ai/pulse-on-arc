@@ -11,7 +11,10 @@ export const Route = createFileRoute("/auth/sign-in")({
   head: () => ({
     meta: [
       { title: "Sign in | Pulse" },
-      { name: "description", content: "Sign in to Pulse to follow desks, markets and communities." },
+      {
+        name: "description",
+        content: "Sign in to Pulse to follow desks, markets and communities.",
+      },
       { property: "og:title", content: "Sign in | Pulse" },
       { property: "og:description", content: "Sign in to Pulse." },
     ],

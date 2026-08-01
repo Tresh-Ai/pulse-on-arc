@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ColumnHeader, ErrorState, ListSkeleton, SectionTitle, StatBlock } from "@/components/common/states";
+import {
+  ColumnHeader,
+  ErrorState,
+  ListSkeleton,
+  SectionTitle,
+  StatBlock,
+} from "@/components/common/states";
 import { AreaTrend } from "@/components/charts";
 import { queries } from "@/services/queries";
 import { cn, formatCompact, formatPercent, formatRelativeTime, formatUsd } from "@/lib/utils";

@@ -1,6 +1,14 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Search, Feather, ChevronDown, LogOut, Settings, User as UserIcon } from "lucide-react";
+import {
+  Menu,
+  Search,
+  Feather,
+  ChevronDown,
+  LogOut,
+  Settings,
+  User as UserIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -191,7 +199,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 </Link>
               </PopoverContent>
             </Popover>
-
           </aside>
 
           {/* Main column */}
@@ -275,7 +282,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 ))}
               </nav>
             </div>
-
           </SheetContent>
         </Sheet>
 

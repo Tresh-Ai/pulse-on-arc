@@ -76,10 +76,7 @@ function CommunitiesPage() {
         </div>
       ) : null}
       {communities.isError ? (
-        <ErrorState
-          description="Communities did not load."
-          onRetry={() => communities.refetch()}
-        />
+        <ErrorState description="Communities did not load." onRetry={() => communities.refetch()} />
       ) : null}
       {communities.data && list.length === 0 ? (
         <EmptyState

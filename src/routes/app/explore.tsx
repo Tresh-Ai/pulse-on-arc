@@ -2,7 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Compass } from "lucide-react";
-import { ColumnHeader, EmptyState, GridSkeleton, ListSkeleton, TabStrip } from "@/components/common/states";
+import {
+  ColumnHeader,
+  EmptyState,
+  GridSkeleton,
+  ListSkeleton,
+  TabStrip,
+} from "@/components/common/states";
 import { PostCard } from "@/features/feed/post-card";
 import { PredictionCard, UserRow, CommunityCard } from "@/features/cards";
 import { queries } from "@/services/queries";
@@ -16,9 +22,15 @@ export const Route = createFileRoute("/app/explore")({
   head: () => ({
     meta: [
       { title: "Explore | Pulse" },
-      { name: "description", content: "Trending topics, hot markets, rising creators and token movers on Pulse." },
+      {
+        name: "description",
+        content: "Trending topics, hot markets, rising creators and token movers on Pulse.",
+      },
       { property: "og:title", content: "Explore | Pulse" },
-      { property: "og:description", content: "Trending topics, hot markets, rising creators and token movers on Pulse." },
+      {
+        property: "og:description",
+        content: "Trending topics, hot markets, rising creators and token movers on Pulse.",
+      },
     ],
   }),
   component: ExplorePage,
@@ -61,7 +73,10 @@ function ExplorePage() {
           <div className="border-b border-border">
             {topics.isPending
               ? Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-16 animate-pulse border-b border-border bg-elevated/30" />
+                  <div
+                    key={i}
+                    className="h-16 animate-pulse border-b border-border bg-elevated/30"
+                  />
                 ))
               : topics.data?.map((t, i) => (
                   <div
@@ -90,7 +105,9 @@ function ExplorePage() {
                 ))}
           </div>
           {feed.isPending ? <ListSkeleton count={3} /> : null}
-          {feed.data?.slice(0, 8).map((p) => <PostCard key={p.id} post={p} />)}
+          {feed.data?.slice(0, 8).map((p) => (
+            <PostCard key={p.id} post={p} />
+          ))}
         </>
       ) : null}
 
@@ -118,7 +135,9 @@ function ExplorePage() {
             <GridSkeleton count={4} />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
-              {rooms.data?.map((c) => <CommunityCard key={c.id} community={c} />)}
+              {rooms.data?.map((c) => (
+                <CommunityCard key={c.id} community={c} />
+              ))}
             </div>
           )}
         </div>

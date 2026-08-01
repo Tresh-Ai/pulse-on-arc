@@ -94,8 +94,14 @@ const FEATURES = [
 
 const STEPS = [
   { label: "Create your handle", detail: "Pick a name, add interests, follow a starting roster." },
-  { label: "Read the signal", detail: "Follow desks, communities and markets that match your edge." },
-  { label: "Take a position", detail: "Post the thesis, back it in a market, and let the record speak." },
+  {
+    label: "Read the signal",
+    detail: "Follow desks, communities and markets that match your edge.",
+  },
+  {
+    label: "Take a position",
+    detail: "Post the thesis, back it in a market, and let the record speak.",
+  },
 ];
 
 function LandingPage() {
@@ -145,8 +151,7 @@ function LandingPage() {
                 variants={fadeUp}
                 className="mt-5 text-[40px] font-extrabold leading-[1.05] tracking-tight sm:text-[56px]"
               >
-                The social network for{" "}
-                <span className="gradient-text">market intelligence</span>
+                The social network for <span className="gradient-text">market intelligence</span>
               </motion.h1>
               <motion.p
                 variants={fadeUp}
@@ -204,7 +209,6 @@ function LandingPage() {
                 </Link>
               ))}
             </motion.div>
-
           </motion.div>
         </section>
 
@@ -330,9 +334,7 @@ function LandingPage() {
         {/* CTA */}
         <section className="py-20">
           <div className="mx-auto w-full max-w-[900px] px-4 text-center sm:px-6">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Join the conversation
-            </h2>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Join the conversation</h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
               Follow the desks you trust, price the questions that matter, and post where people
               actually read the charts.
@@ -347,7 +349,6 @@ function LandingPage() {
             </div>
           </div>
         </section>
-
       </main>
 
       <footer className="border-t border-border py-10">

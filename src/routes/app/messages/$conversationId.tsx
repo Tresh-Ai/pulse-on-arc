@@ -61,9 +61,7 @@ function ThreadPage() {
             >
               <Avatar className="size-8">
                 <AvatarImage src={conversation.participant.avatar} alt="" />
-                <AvatarFallback>
-                  {conversation.participant.displayName.slice(0, 2)}
-                </AvatarFallback>
+                <AvatarFallback>{conversation.participant.displayName.slice(0, 2)}</AvatarFallback>
               </Avatar>
             </Link>
           ) : null
@@ -82,9 +80,7 @@ function ThreadPage() {
               <div
                 className={cn(
                   "max-w-[78%] rounded-3xl px-4 py-2.5 text-sm",
-                  mine
-                    ? "gradient-fill text-primary-foreground"
-                    : "bg-elevated text-foreground",
+                  mine ? "gradient-fill text-primary-foreground" : "bg-elevated text-foreground",
                 )}
               >
                 {m.attachment ? (
