@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
+import { Route as AppPredictionsPredictionIdRouteImport } from './routes/app/predictions/$predictionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,18 +41,26 @@ const AppPredictionsIndexRoute = AppPredictionsIndexRouteImport.update({
   path: '/predictions/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPredictionsPredictionIdRoute =
+  AppPredictionsPredictionIdRouteImport.update({
+    id: '/predictions/$predictionId',
+    path: '/predictions/$predictionId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
   '/app/': typeof AppIndexRoute
+  '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/explore': typeof AppExploreRoute
   '/app': typeof AppIndexRoute
+  '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/predictions': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesById {
@@ -60,14 +69,33 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
   '/app/': typeof AppIndexRoute
+  '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/explore' | '/app/' | '/app/predictions/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/explore'
+    | '/app/'
+    | '/app/predictions/$predictionId'
+    | '/app/predictions/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/explore' | '/app' | '/app/predictions'
-  id: '__root__' | '/' | '/app' | '/app/explore' | '/app/' | '/app/predictions/'
+  to:
+    | '/'
+    | '/app/explore'
+    | '/app'
+    | '/app/predictions/$predictionId'
+    | '/app/predictions'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/explore'
+    | '/app/'
+    | '/app/predictions/$predictionId'
+    | '/app/predictions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -112,18 +140,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPredictionsIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/predictions/$predictionId': {
+      id: '/app/predictions/$predictionId'
+      path: '/predictions/$predictionId'
+      fullPath: '/app/predictions/$predictionId'
+      preLoaderRoute: typeof AppPredictionsPredictionIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
   AppPredictionsIndexRoute: typeof AppPredictionsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
   AppIndexRoute: AppIndexRoute,
+  AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
   AppPredictionsIndexRoute: AppPredictionsIndexRoute,
 }
 
