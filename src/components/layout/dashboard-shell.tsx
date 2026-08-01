@@ -1,11 +1,13 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Search, Feather, Bell, ChevronDown } from "lucide-react";
+import { Menu, Search, Feather, ChevronDown, LogOut, Settings, User as UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
 import { ShellContext } from "./shell-context";
 import { bottomNav, moreNav, primaryNav, type NavItem } from "./nav-items";
 import { SearchOverlay } from "./search-overlay";
@@ -157,19 +159,39 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               </Button>
             </div>
 
-            <Link
-              to={"/app/profile" as never}
-              className="mb-3 flex shrink-0 items-center gap-3 rounded-full p-2 transition-colors hover:bg-elevated/70"
-            >
-              <Avatar className="size-10 shrink-0">
-                <AvatarImage src={user.avatar} alt="" />
-                <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
-              </Avatar>
-              <span className="hidden min-w-0 flex-col xl:flex">
-                <span className="truncate text-sm font-bold">{user.displayName}</span>
-                <span className="truncate text-xs text-muted-foreground">@{user.username}</span>
-              </span>
-            </Link>
+            <Popover>
+              <PopoverTrigger className="mb-3 flex shrink-0 items-center gap-3 rounded-full p-2 text-left transition-colors hover:bg-elevated/70">
+                <Avatar className="size-10 shrink-0">
+                  <AvatarImage src={user.avatar} alt="" />
+                  <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
+                </Avatar>
+                <span className="hidden min-w-0 flex-col xl:flex">
+                  <span className="truncate text-sm font-bold">{user.displayName}</span>
+                  <span className="truncate text-xs text-muted-foreground">@{user.username}</span>
+                </span>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-[240px] p-1.5">
+                <Link
+                  to={"/app/profile" as never}
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
+                >
+                  <UserIcon className="size-4" /> View profile
+                </Link>
+                <Link
+                  to={"/app/settings" as never}
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
+                >
+                  <Settings className="size-4" /> Settings
+                </Link>
+                <Link
+                  to={"/auth/sign-in" as never}
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-elevated"
+                >
+                  <LogOut className="size-4" /> Sign out
+                </Link>
+              </PopoverContent>
+            </Popover>
+
           </aside>
 
           {/* Main column */}
@@ -252,20 +274,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   </Link>
                 ))}
               </nav>
-
-              <div className="border-t border-border p-4">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => {
-                    setMobileNavOpen(false);
-                    setNotificationsOpen(true);
-                  }}
-                >
-                  <Bell className="size-4" /> Notifications
-                </Button>
-              </div>
             </div>
+
           </SheetContent>
         </Sheet>
 
