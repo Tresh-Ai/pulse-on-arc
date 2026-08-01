@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { queries } from "@/services/queries";
+import { BrandMark } from "@/components/brand";
 import { AreaTrend } from "@/components/charts";
 import { cn, formatCompact, formatPercent, formatUsd } from "@/lib/utils";
 import { fadeUp, stagger } from "@/lib/motion";
