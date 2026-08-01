@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppCreatorRouteImport } from './routes/app/creator'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
@@ -37,6 +38,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCreatorRoute = AppCreatorRouteImport.update({
+  id: '/creator',
+  path: '/creator',
   getParentRoute: () => AppRoute,
 } as any)
 const AppExploreRoute = AppExploreRouteImport.update({
@@ -100,6 +106,7 @@ const AppPredictionsPredictionIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
@@ -221,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/creator': {
+      id: '/app/creator'
+      path: '/creator'
+      fullPath: '/app/creator'
+      preLoaderRoute: typeof AppCreatorRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/explore': {
@@ -304,6 +323,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppCreatorRoute: typeof AppCreatorRoute
   AppExploreRoute: typeof AppExploreRoute
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
@@ -319,6 +339,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCreatorRoute: AppCreatorRoute,
   AppExploreRoute: AppExploreRoute,
   AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
