@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
+import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
@@ -36,6 +37,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppExploreRoute = AppExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeaderboardsRoute = AppLeaderboardsRouteImport.update({
+  id: '/leaderboards',
+  path: '/leaderboards',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
+  '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
+  '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/explore'
+    | '/app/leaderboards'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/app/explore'
+    | '/app/leaderboards'
     | '/app'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/explore'
+    | '/app/leaderboards'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -157,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExploreRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/leaderboards': {
+      id: '/app/leaderboards'
+      path: '/leaderboards'
+      fullPath: '/app/leaderboards'
+      preLoaderRoute: typeof AppLeaderboardsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/communities/': {
       id: '/app/communities/'
       path: '/communities'
@@ -190,6 +209,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
+  AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
@@ -199,6 +219,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
+  AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
