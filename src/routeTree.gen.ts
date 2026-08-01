@@ -12,18 +12,22 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppBookmarksRouteImport } from './routes/app/bookmarks'
 import { Route as AppCreatorRouteImport } from './routes/app/creator'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
+import { Route as AppProfileRouteImport } from './routes/app/profile'
 import { Route as AppTokenRouteImport } from './routes/app/token'
 import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppMessagesIndexRouteImport } from './routes/app/messages/index'
 import { Route as AppMessagesConversationIdRouteImport } from './routes/app/messages/$conversationId'
+import { Route as AppPostPostIdRouteImport } from './routes/app/post/$postId'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
 import { Route as AppPredictionsPredictionIdRouteImport } from './routes/app/predictions/$predictionId'
+import { Route as AppUHandleRouteImport } from './routes/app/u/$handle'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -38,6 +42,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBookmarksRoute = AppBookmarksRouteImport.update({
+  id: '/bookmarks',
+  path: '/bookmarks',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCreatorRoute = AppCreatorRouteImport.update({
@@ -58,6 +67,11 @@ const AppLeaderboardsRoute = AppLeaderboardsRouteImport.update({
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTokenRoute = AppTokenRouteImport.update({
@@ -91,6 +105,11 @@ const AppMessagesConversationIdRoute =
     path: '/messages/$conversationId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppPostPostIdRoute = AppPostPostIdRouteImport.update({
+  id: '/post/$postId',
+  path: '/post/$postId',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPredictionsIndexRoute = AppPredictionsIndexRouteImport.update({
   id: '/predictions/',
   path: '/predictions/',
@@ -102,36 +121,49 @@ const AppPredictionsPredictionIdRoute =
     path: '/predictions/$predictionId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppUHandleRoute = AppUHandleRouteImport.update({
+  id: '/u/$handle',
+  path: '/u/$handle',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/bookmarks': typeof AppBookmarksRoute
   '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/app/post/$postId': typeof AppPostPostIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/u/$handle': typeof AppUHandleRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/messages/': typeof AppMessagesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/bookmarks': typeof AppBookmarksRoute
   '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/app/post/$postId': typeof AppPostPostIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/u/$handle': typeof AppUHandleRoute
   '/app/communities': typeof AppCommunitiesIndexRoute
   '/app/messages': typeof AppMessagesIndexRoute
   '/app/predictions': typeof AppPredictionsIndexRoute
@@ -140,16 +172,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/bookmarks': typeof AppBookmarksRoute
   '/app/creator': typeof AppCreatorRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/app/post/$postId': typeof AppPostPostIdRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
+  '/app/u/$handle': typeof AppUHandleRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
   '/app/messages/': typeof AppMessagesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
@@ -159,32 +195,40 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/app/bookmarks'
     | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/profile'
     | '/app/token'
     | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
+    | '/app/post/$postId'
     | '/app/predictions/$predictionId'
+    | '/app/u/$handle'
     | '/app/communities/'
     | '/app/messages/'
     | '/app/predictions/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app/bookmarks'
     | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/profile'
     | '/app/token'
     | '/app/wallet'
     | '/app'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
+    | '/app/post/$postId'
     | '/app/predictions/$predictionId'
+    | '/app/u/$handle'
     | '/app/communities'
     | '/app/messages'
     | '/app/predictions'
@@ -192,16 +236,20 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/app/bookmarks'
     | '/app/creator'
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/profile'
     | '/app/token'
     | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
+    | '/app/post/$postId'
     | '/app/predictions/$predictionId'
+    | '/app/u/$handle'
     | '/app/communities/'
     | '/app/messages/'
     | '/app/predictions/'
@@ -235,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/bookmarks': {
+      id: '/app/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/app/bookmarks'
+      preLoaderRoute: typeof AppBookmarksRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/creator': {
       id: '/app/creator'
       path: '/creator'
@@ -261,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/app/notifications'
       preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/token': {
@@ -305,6 +367,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMessagesConversationIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/post/$postId': {
+      id: '/app/post/$postId'
+      path: '/post/$postId'
+      fullPath: '/app/post/$postId'
+      preLoaderRoute: typeof AppPostPostIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/predictions/': {
       id: '/app/predictions/'
       path: '/predictions'
@@ -319,36 +388,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPredictionsPredictionIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/u/$handle': {
+      id: '/app/u/$handle'
+      path: '/u/$handle'
+      fullPath: '/app/u/$handle'
+      preLoaderRoute: typeof AppUHandleRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppBookmarksRoute: typeof AppBookmarksRoute
   AppCreatorRoute: typeof AppCreatorRoute
   AppExploreRoute: typeof AppExploreRoute
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppTokenRoute: typeof AppTokenRoute
   AppWalletRoute: typeof AppWalletRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
   AppMessagesConversationIdRoute: typeof AppMessagesConversationIdRoute
+  AppPostPostIdRoute: typeof AppPostPostIdRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
+  AppUHandleRoute: typeof AppUHandleRoute
   AppCommunitiesIndexRoute: typeof AppCommunitiesIndexRoute
   AppMessagesIndexRoute: typeof AppMessagesIndexRoute
   AppPredictionsIndexRoute: typeof AppPredictionsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppBookmarksRoute: AppBookmarksRoute,
   AppCreatorRoute: AppCreatorRoute,
   AppExploreRoute: AppExploreRoute,
   AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppProfileRoute: AppProfileRoute,
   AppTokenRoute: AppTokenRoute,
   AppWalletRoute: AppWalletRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
   AppMessagesConversationIdRoute: AppMessagesConversationIdRoute,
+  AppPostPostIdRoute: AppPostPostIdRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
+  AppUHandleRoute: AppUHandleRoute,
   AppCommunitiesIndexRoute: AppCommunitiesIndexRoute,
   AppMessagesIndexRoute: AppMessagesIndexRoute,
   AppPredictionsIndexRoute: AppPredictionsIndexRoute,
