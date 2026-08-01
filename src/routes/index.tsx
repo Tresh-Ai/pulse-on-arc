@@ -110,22 +110,10 @@ function LandingPage() {
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2.5" aria-label="Pulse home">
-            <span className="gradient-fill grid size-9 place-items-center rounded-2xl text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
-              P
-            </span>
+            <BrandMark className="size-9" />
             <span className="text-lg font-bold tracking-tight">Pulse</span>
           </Link>
-          <nav className="ml-6 hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-            <a href="#product" className="transition-colors hover:text-foreground">
-              Product
-            </a>
-            <a href="#markets" className="transition-colors hover:text-foreground">
-              Markets
-            </a>
-            <a href="#creators" className="transition-colors hover:text-foreground">
-              Creators
-            </a>
-          </nav>
+
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link to={"/auth/sign-in" as never}>Sign in</Link>
@@ -193,56 +181,29 @@ function LandingPage() {
               </motion.dl>
             </div>
 
-            <motion.div variants={fadeUp} className="relative">
-              <div className="surface-card overflow-hidden p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Pulse token</p>
-                    <p className="text-3xl font-bold tabular-nums">
-                      {token.data ? formatUsd(token.data.price) : "—"}
-                    </p>
-                  </div>
-                  <span
-                    className={cn(
-                      "rounded-full bg-elevated px-3 py-1 text-sm font-semibold tabular-nums",
-                      (token.data?.change24h ?? 0) >= 0 ? "text-success" : "text-destructive",
-                    )}
-                  >
-                    {token.data ? formatPercent(token.data.change24h) : "—"}
-                  </span>
-                </div>
-                <div className="mt-4 h-[180px]">
-                  {token.data ? (
-                    <AreaTrend
-                      data={token.data.series.map((p) => ({ label: p.t, value: p.price }))}
-                      xKey="label"
-                      yKey="value"
-                    />
-                  ) : null}
-                </div>
-                <div className="mt-4 space-y-2">
-                  {predictions.data?.slice(0, 3).map((p) => (
+            <motion.div variants={fadeUp} className="space-y-3">
+              {predictions.data?.slice(0, 5).map((p) => (
+                <Link
+                  key={p.id}
+                  to={"/app/predictions/$predictionId" as never}
+                  params={{ predictionId: p.id } as never}
+                  className="surface-card block p-4 transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <p className="font-semibold">{p.title}</p>
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-elevated">
                     <div
-                      key={p.id}
-                      className="flex items-center gap-3 rounded-[14px] bg-elevated/60 px-3 py-2.5"
-                    >
-                      <span className="line-clamp-1 flex-1 text-sm">{p.title}</span>
-                      <span className="shrink-0 text-xs font-semibold text-success tabular-nums">
-                        {p.yesPercent}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="surface-card absolute -bottom-6 -left-6 hidden w-[230px] p-4 sm:block">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Median accuracy
-                </p>
-                <p className="mt-2 flex items-center gap-2 text-sm">
-                  <ShieldCheck className="size-4 text-cyan" /> 71% across 2.4k markets
-                </p>
-              </div>
+                      className="h-full rounded-full bg-success"
+                      style={{ width: `${p.yesPercent}%` }}
+                    />
+                  </div>
+                  <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                    <span className="text-success">YES {p.yesPercent}%</span>
+                    <span>{formatCompact(p.participants)} participants</span>
+                  </div>
+                </Link>
+              ))}
             </motion.div>
+
           </motion.div>
         </section>
 
@@ -368,16 +329,16 @@ function LandingPage() {
         {/* CTA */}
         <section className="py-20">
           <div className="mx-auto w-full max-w-[900px] px-4 text-center sm:px-6">
-            <ShieldCheck className="mx-auto size-10 text-cyan" />
-            <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
-              Your track record is the product
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Join the conversation
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Post the thesis, back it in a market, and let the record compound. Your accuracy is public, permanent and portable.
+              Follow the desks you trust, price the questions that matter, and post where people
+              actually read the charts.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button variant="gradient" size="xl" asChild>
-                <Link to={"/app" as never}>Open Pulse</Link>
+                <Link to={"/auth/sign-up" as never}>Create an account</Link>
               </Button>
               <Button variant="outline" size="xl" asChild>
                 <Link to={"/app/predictions" as never}>See open markets</Link>
@@ -385,6 +346,7 @@ function LandingPage() {
             </div>
           </div>
         </section>
+
       </main>
 
       <footer className="border-t border-border py-10">
