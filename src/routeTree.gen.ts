@@ -18,8 +18,11 @@ import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
 import { Route as AppProfileRouteImport } from './routes/app/profile'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as AppTokenRouteImport } from './routes/app/token'
 import { Route as AppWalletRouteImport } from './routes/app/wallet'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppMessagesIndexRouteImport } from './routes/app/messages/index'
@@ -74,6 +77,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppTokenRoute = AppTokenRouteImport.update({
   id: '/token',
   path: '/token',
@@ -83,6 +91,16 @@ const AppWalletRoute = AppWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
   getParentRoute: () => AppRoute,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/auth/sign-in',
+  path: '/auth/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
   id: '/communities/',
@@ -136,8 +154,11 @@ export interface FileRoutesByFullPath {
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -156,8 +177,11 @@ export interface FileRoutesByTo {
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -178,8 +202,11 @@ export interface FileRoutesById {
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -201,8 +228,11 @@ export interface FileRouteTypes {
     | '/app/leaderboards'
     | '/app/notifications'
     | '/app/profile'
+    | '/app/settings'
     | '/app/token'
     | '/app/wallet'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -221,8 +251,11 @@ export interface FileRouteTypes {
     | '/app/leaderboards'
     | '/app/notifications'
     | '/app/profile'
+    | '/app/settings'
     | '/app/token'
     | '/app/wallet'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/app'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -242,8 +275,11 @@ export interface FileRouteTypes {
     | '/app/leaderboards'
     | '/app/notifications'
     | '/app/profile'
+    | '/app/settings'
     | '/app/token'
     | '/app/wallet'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/messages/$conversationId'
@@ -258,6 +294,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -325,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/token': {
       id: '/app/token'
       path: '/token'
@@ -338,6 +383,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/wallet'
       preLoaderRoute: typeof AppWalletRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/app/communities/': {
       id: '/app/communities/'
@@ -405,6 +464,7 @@ interface AppRouteChildren {
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppTokenRoute: typeof AppTokenRoute
   AppWalletRoute: typeof AppWalletRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -425,6 +485,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppProfileRoute: AppProfileRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppTokenRoute: AppTokenRoute,
   AppWalletRoute: AppWalletRoute,
   AppIndexRoute: AppIndexRoute,
@@ -443,6 +504,8 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
