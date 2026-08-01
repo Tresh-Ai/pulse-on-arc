@@ -15,6 +15,7 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
+import { Route as AppTokenRouteImport } from './routes/app/token'
 import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
@@ -51,6 +52,11 @@ const AppLeaderboardsRoute = AppLeaderboardsRouteImport.update({
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTokenRoute = AppTokenRouteImport.update({
+  id: '/token',
+  path: '/token',
   getParentRoute: () => AppRoute,
 } as any)
 const AppWalletRoute = AppWalletRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/token': typeof AppTokenRoute
   '/app/wallet': typeof AppWalletRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/token'
     | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/token'
     | '/app/wallet'
     | '/app'
     | '/app/communities/$slug'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/app/explore'
     | '/app/leaderboards'
     | '/app/notifications'
+    | '/app/token'
     | '/app/wallet'
     | '/app/'
     | '/app/communities/$slug'
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/token': {
+      id: '/app/token'
+      path: '/token'
+      fullPath: '/app/token'
+      preLoaderRoute: typeof AppTokenRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/wallet': {
       id: '/app/wallet'
       path: '/wallet'
@@ -288,6 +307,7 @@ interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppTokenRoute: typeof AppTokenRoute
   AppWalletRoute: typeof AppWalletRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
@@ -302,6 +322,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
   AppLeaderboardsRoute: AppLeaderboardsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppTokenRoute: AppTokenRoute,
   AppWalletRoute: AppWalletRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
