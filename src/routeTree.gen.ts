@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
+import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
@@ -44,6 +45,11 @@ const AppLeaderboardsRoute = AppLeaderboardsRouteImport.update({
   path: '/leaderboards',
   getParentRoute: () => AppRoute,
 } as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCommunitiesIndexRoute = AppCommunitiesIndexRouteImport.update({
   id: '/communities/',
   path: '/communities/',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/explore': typeof AppExploreRoute
   '/app/leaderboards': typeof AppLeaderboardsRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/': typeof AppIndexRoute
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/explore'
     | '/app/leaderboards'
+    | '/app/notifications'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app/explore'
     | '/app/leaderboards'
+    | '/app/notifications'
     | '/app'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/explore'
     | '/app/leaderboards'
+    | '/app/notifications'
     | '/app/'
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
@@ -176,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeaderboardsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/communities/': {
       id: '/app/communities/'
       path: '/communities'
@@ -210,6 +229,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
   AppLeaderboardsRoute: typeof AppLeaderboardsRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
@@ -220,6 +240,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppExploreRoute: AppExploreRoute,
   AppLeaderboardsRoute: AppLeaderboardsRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
   AppIndexRoute: AppIndexRoute,
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
