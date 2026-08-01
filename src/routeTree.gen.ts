@@ -17,6 +17,7 @@ import { Route as AppLeaderboardsRouteImport } from './routes/app/leaderboards'
 import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
 import { Route as AppCommunitiesIndexRouteImport } from './routes/app/communities/index'
 import { Route as AppCommunitiesSlugRouteImport } from './routes/app/communities/$slug'
+import { Route as AppMessagesIndexRouteImport } from './routes/app/messages/index'
 import { Route as AppPredictionsIndexRouteImport } from './routes/app/predictions/index'
 import { Route as AppPredictionsPredictionIdRouteImport } from './routes/app/predictions/$predictionId'
 
@@ -60,6 +61,11 @@ const AppCommunitiesSlugRoute = AppCommunitiesSlugRouteImport.update({
   path: '/communities/$slug',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMessagesIndexRoute = AppMessagesIndexRouteImport.update({
+  id: '/messages/',
+  path: '/messages/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPredictionsIndexRoute = AppPredictionsIndexRouteImport.update({
   id: '/predictions/',
   path: '/predictions/',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
+  '/app/messages/': typeof AppMessagesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities': typeof AppCommunitiesIndexRoute
+  '/app/messages': typeof AppMessagesIndexRoute
   '/app/predictions': typeof AppPredictionsIndexRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/app/communities/$slug': typeof AppCommunitiesSlugRoute
   '/app/predictions/$predictionId': typeof AppPredictionsPredictionIdRoute
   '/app/communities/': typeof AppCommunitiesIndexRoute
+  '/app/messages/': typeof AppMessagesIndexRoute
   '/app/predictions/': typeof AppPredictionsIndexRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
     | '/app/communities/'
+    | '/app/messages/'
     | '/app/predictions/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
     | '/app/communities'
+    | '/app/messages'
     | '/app/predictions'
   id:
     | '__root__'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/app/communities/$slug'
     | '/app/predictions/$predictionId'
     | '/app/communities/'
+    | '/app/messages/'
     | '/app/predictions/'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCommunitiesSlugRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/messages/': {
+      id: '/app/messages/'
+      path: '/messages'
+      fullPath: '/app/messages/'
+      preLoaderRoute: typeof AppMessagesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/predictions/': {
       id: '/app/predictions/'
       path: '/predictions'
@@ -234,6 +253,7 @@ interface AppRouteChildren {
   AppCommunitiesSlugRoute: typeof AppCommunitiesSlugRoute
   AppPredictionsPredictionIdRoute: typeof AppPredictionsPredictionIdRoute
   AppCommunitiesIndexRoute: typeof AppCommunitiesIndexRoute
+  AppMessagesIndexRoute: typeof AppMessagesIndexRoute
   AppPredictionsIndexRoute: typeof AppPredictionsIndexRoute
 }
 
@@ -245,6 +265,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCommunitiesSlugRoute: AppCommunitiesSlugRoute,
   AppPredictionsPredictionIdRoute: AppPredictionsPredictionIdRoute,
   AppCommunitiesIndexRoute: AppCommunitiesIndexRoute,
+  AppMessagesIndexRoute: AppMessagesIndexRoute,
   AppPredictionsIndexRoute: AppPredictionsIndexRoute,
 }
 
