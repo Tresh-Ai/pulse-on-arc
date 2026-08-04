@@ -21,6 +21,7 @@ export const Route = createFileRoute("/auth/sign-up")({
 
 function SignUpPage() {
   const navigate = useNavigate();
+  const { signUpWithPassword, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [handle, setHandle] = useState("");
   const [password, setPassword] = useState("");
@@ -30,14 +31,32 @@ function SignUpPage() {
     e.preventDefault();
     setPending(true);
     try {
-      await mockSignUp({ email });
-      void navigate({ to: "/app" as never });
+      const { needsConfirmation } = await signUpWithPassword({
+        email,
+        password,
+        handle,
+        displayName: handle,
+      });
+      if (needsConfirmation) {
+        toast.success("Check your email to confirm your account.");
+      } else {
+        void navigate({ to: "/app" as never });
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not create that account.");
     } finally {
       setPending(false);
     }
   };
+
+  const google = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Google sign-in failed.");
+    }
+  };
+
 
   return (
     <div className="relative grid min-h-screen place-items-center px-4">
