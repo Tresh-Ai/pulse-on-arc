@@ -256,7 +256,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }
