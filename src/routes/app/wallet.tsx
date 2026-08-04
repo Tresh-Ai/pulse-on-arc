@@ -68,6 +68,9 @@ function WalletPage() {
     <div>
       <ColumnHeader title="Wallet" />
 
+      <ArcWalletCard />
+
+
       <div className="border-b border-border px-4 py-5 sm:px-5">
         <p className="text-sm text-muted-foreground">Total balance</p>
         <p className="mt-1 text-3xl font-bold tabular-nums">{formatUsd(data.totalUsd)}</p>
