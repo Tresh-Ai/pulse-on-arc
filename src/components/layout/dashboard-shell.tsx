@@ -177,13 +177,14 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <Popover>
               <PopoverTrigger className="mb-3 flex shrink-0 items-center gap-3 rounded-full p-2 text-left transition-colors hover:bg-elevated/70">
                 <Avatar className="size-10 shrink-0">
-                  <AvatarImage src={user.avatar} alt="" />
-                  <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
+                  <AvatarImage src={avatarUrl} alt="" />
+                  <AvatarFallback>{displayName.slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <span className="hidden min-w-0 flex-col xl:flex">
-                  <span className="truncate text-sm font-bold">{user.displayName}</span>
-                  <span className="truncate text-xs text-muted-foreground">@{user.username}</span>
+                  <span className="truncate text-sm font-bold">{displayName}</span>
+                  <span className="truncate text-xs text-muted-foreground">@{handle}</span>
                 </span>
+
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
                 <Link
