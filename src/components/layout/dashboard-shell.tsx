@@ -1,5 +1,7 @@
 import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Menu,
   Search,
@@ -42,6 +44,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useApp();
+  const { session, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const displayName = profile?.display_name ?? user.displayName;
+  const handle = profile?.handle ?? user.username;
+  const avatarUrl = profile?.avatar_url ?? user.avatar;
   const badges = useBadges();
 
   const sidebarLink = (item: NavItem, onNavigate?: () => void) => {
@@ -170,12 +177,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <Popover>
               <PopoverTrigger className="mb-3 flex shrink-0 items-center gap-3 rounded-full p-2 text-left transition-colors hover:bg-elevated/70">
                 <Avatar className="size-10 shrink-0">
-                  <AvatarImage src={user.avatar} alt="" />
-                  <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
+                  <AvatarImage src={avatarUrl} alt="" />
+                  <AvatarFallback>{displayName.slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <span className="hidden min-w-0 flex-col xl:flex">
-                  <span className="truncate text-sm font-bold">{user.displayName}</span>
-                  <span className="truncate text-xs text-muted-foreground">@{user.username}</span>
+                  <span className="truncate text-sm font-bold">{displayName}</span>
+                  <span className="truncate text-xs text-muted-foreground">@{handle}</span>
                 </span>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
@@ -191,12 +198,26 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 >
                   <Settings className="size-4" /> Settings
                 </Link>
-                <Link
-                  to={"/auth/sign-in" as never}
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-elevated"
-                >
-                  <LogOut className="size-4" /> Sign out
-                </Link>
+                {session ? (
+                  <button
+                    onClick={() => {
+                      void signOut().then(() => {
+                        toast.success("Signed out");
+                        void navigate({ to: "/" as never });
+                      });
+                    }}
+                    className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm text-destructive transition-colors hover:bg-elevated"
+                  >
+                    <LogOut className="size-4" /> Sign out
+                  </button>
+                ) : (
+                  <Link
+                    to={"/auth/sign-in" as never}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-cyan transition-colors hover:bg-elevated"
+                  >
+                    <LogOut className="size-4" /> Sign in
+                  </Link>
+                )}
               </PopoverContent>
             </Popover>
           </aside>

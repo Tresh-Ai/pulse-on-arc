@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BrandMark } from "@/components/brand";
-import { mockSignIn } from "@/services/api";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/sign-in")({
   head: () => ({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth/sign-in")({
 
 function SignInPage() {
   const navigate = useNavigate();
+  const { signInWithPassword, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
@@ -32,12 +33,21 @@ function SignInPage() {
     e.preventDefault();
     setPending(true);
     try {
-      await mockSignIn({ email, password });
+      await signInWithPassword(email, password);
+      toast.success("Welcome back");
       void navigate({ to: "/app" as never });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not sign in.");
     } finally {
       setPending(false);
+    }
+  };
+
+  const google = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Google sign-in failed.");
     }
   };
 
@@ -75,6 +85,13 @@ function SignInPage() {
             {pending ? "Signing in" : "Sign in"}
           </Button>
         </form>
+        <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+        </div>
+        <Button variant="secondary" className="w-full" onClick={google}>
+          Continue with Google
+        </Button>
+
         <p className="mt-4 text-sm text-muted-foreground">
           New here?{" "}
           <Link to={"/auth/sign-up" as never} className="text-cyan">

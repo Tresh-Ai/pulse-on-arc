@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AreaTrend, Sparkline } from "@/components/charts";
+import { ArcWalletCard } from "@/features/wallet/arc-wallet-card";
 import { queries } from "@/services/queries";
 import { submitTransfer } from "@/services/api";
 import {
@@ -67,6 +68,8 @@ function WalletPage() {
   return (
     <div>
       <ColumnHeader title="Wallet" />
+
+      <ArcWalletCard />
 
       <div className="border-b border-border px-4 py-5 sm:px-5">
         <p className="text-sm text-muted-foreground">Total balance</p>
