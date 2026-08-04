@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth/sign-in")({
 
 function SignInPage() {
   const navigate = useNavigate();
+  const { signInWithPassword, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
@@ -32,7 +33,8 @@ function SignInPage() {
     e.preventDefault();
     setPending(true);
     try {
-      await mockSignIn({ email, password });
+      await signInWithPassword(email, password);
+      toast.success("Welcome back");
       void navigate({ to: "/app" as never });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not sign in.");
@@ -40,6 +42,15 @@ function SignInPage() {
       setPending(false);
     }
   };
+
+  const google = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Google sign-in failed.");
+    }
+  };
+
 
   return (
     <div className="relative grid min-h-screen place-items-center px-4">
