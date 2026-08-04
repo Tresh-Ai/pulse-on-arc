@@ -86,6 +86,13 @@ function SignInPage() {
             {pending ? "Signing in" : "Sign in"}
           </Button>
         </form>
+        <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+        </div>
+        <Button variant="secondary" className="w-full" onClick={google}>
+          Continue with Google
+        </Button>
+
         <p className="mt-4 text-sm text-muted-foreground">
           New here?{" "}
           <Link to={"/auth/sign-up" as never} className="text-cyan">
