@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   Heart,
   MessageCircle,
@@ -30,6 +30,7 @@ import { useApp } from "@/store/app-store";
  */
 export function PostCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const app = useApp();
+  const router = useRouter();
   const liked = app.isLiked(post.id, post.liked);
   const reposted = app.isReposted(post.id, post.reposted);
   const bookmarked = app.isBookmarked(post.id, post.bookmarked);
@@ -231,7 +232,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 label="Views"
                 value={post.views}
                 hoverClass="group-hover:bg-primary/10 group-hover:text-primary"
-                onClick={stop(() => toast("Analytics are mocked"))}
+                onClick={stop(() => toast(`${formatCompact(post.views)} views on this post`))}
               />
               <div className="flex items-center">
                 <Action
