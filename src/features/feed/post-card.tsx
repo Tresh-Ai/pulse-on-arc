@@ -202,7 +202,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 label="Reply"
                 value={post.replies}
                 hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
-                onClick={stop(() => toast("Reply composer opens on the post page"))}
+                onClick={stop(() => router.navigate({ to: `/app/post/${post.id}` as never }))}
               />
               <Action
                 icon={Repeat2}
