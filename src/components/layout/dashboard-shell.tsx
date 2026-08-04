@@ -191,12 +191,27 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 >
                   <Settings className="size-4" /> Settings
                 </Link>
-                <Link
-                  to={"/auth/sign-in" as never}
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-destructive transition-colors hover:bg-elevated"
-                >
-                  <LogOut className="size-4" /> Sign out
-                </Link>
+                {session ? (
+                  <button
+                    onClick={() => {
+                      void signOut().then(() => {
+                        toast.success("Signed out");
+                        void navigate({ to: "/" as never });
+                      });
+                    }}
+                    className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm text-destructive transition-colors hover:bg-elevated"
+                  >
+                    <LogOut className="size-4" /> Sign out
+                  </button>
+                ) : (
+                  <Link
+                    to={"/auth/sign-in" as never}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-cyan transition-colors hover:bg-elevated"
+                  >
+                    <LogOut className="size-4" /> Sign in
+                  </Link>
+                )}
+
               </PopoverContent>
             </Popover>
           </aside>
