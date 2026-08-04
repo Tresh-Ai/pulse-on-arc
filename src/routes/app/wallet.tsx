@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AreaTrend, Sparkline } from "@/components/charts";
+import { ArcWalletCard } from "@/features/wallet/arc-wallet-card";
 import { queries } from "@/services/queries";
 import { submitTransfer } from "@/services/api";
 import {
