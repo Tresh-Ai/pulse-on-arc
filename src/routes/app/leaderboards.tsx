@@ -70,6 +70,14 @@ function LeaderboardsPage() {
       {list.isError ? (
         <ErrorState description="Rankings did not load." onRetry={() => list.refetch()} />
       ) : null}
+      {list.data && list.data.length === 0 ? (
+        <EmptyState
+          icon={Trophy}
+          title="No rankings yet"
+          description="Nobody has qualified for this board in the selected range."
+        />
+      ) : null}
+
 
       {list.data?.map((entry) => (
         <Link
