@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BrandMark } from "@/components/brand";
-import { mockSignUp } from "@/services/api";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/sign-up")({
   head: () => ({
