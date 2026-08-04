@@ -44,6 +44,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useApp();
+  const { session, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const displayName = profile?.display_name ?? user.displayName;
+  const handle = profile?.handle ?? user.username;
+  const avatarUrl = profile?.avatar_url ?? user.avatar;
   const badges = useBadges();
 
   const sidebarLink = (item: NavItem, onNavigate?: () => void) => {
