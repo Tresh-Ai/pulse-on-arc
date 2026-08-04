@@ -1,7 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ColumnHeader, ErrorState, ListSkeleton, TabStrip } from "@/components/common/states";
+import { Trophy } from "lucide-react";
+import {
+  ColumnHeader,
+  EmptyState,
+  ErrorState,
+  ListSkeleton,
+  TabStrip,
+} from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { queries } from "@/services/queries";
 import { cn } from "@/lib/utils";
@@ -70,6 +77,14 @@ function LeaderboardsPage() {
       {list.isError ? (
         <ErrorState description="Rankings did not load." onRetry={() => list.refetch()} />
       ) : null}
+      {list.data && list.data.length === 0 ? (
+        <EmptyState
+          icon={Trophy}
+          title="No rankings yet"
+          description="Nobody has qualified for this board in the selected range."
+        />
+      ) : null}
+
 
       {list.data?.map((entry) => (
         <Link

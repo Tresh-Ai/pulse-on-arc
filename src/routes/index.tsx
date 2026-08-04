@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ArrowRight,
   BarChart3,
@@ -188,7 +189,16 @@ function LandingPage() {
             </div>
 
             <motion.div variants={fadeUp} className="space-y-3">
-              {predictions.data?.slice(0, 5).map((p) => (
+              {predictions.isPending
+                ? Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="surface-card space-y-3 p-4">
+                      <Skeleton className="h-4 w-3/4 bg-elevated" />
+                      <Skeleton className="h-1.5 w-full bg-elevated" />
+                      <Skeleton className="h-3 w-1/2 bg-elevated" />
+                    </div>
+                  ))
+                : null}
+              {predictions.data?.slice(0, 3).map((p) => (
                 <Link
                   key={p.id}
                   to={"/app/predictions/$predictionId" as never}
@@ -209,6 +219,7 @@ function LandingPage() {
                 </Link>
               ))}
             </motion.div>
+
           </motion.div>
         </section>
 

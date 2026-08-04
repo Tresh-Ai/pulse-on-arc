@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   Heart,
   MessageCircle,
@@ -30,6 +30,7 @@ import { useApp } from "@/store/app-store";
  */
 export function PostCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const app = useApp();
+  const router = useRouter();
   const liked = app.isLiked(post.id, post.liked);
   const reposted = app.isReposted(post.id, post.reposted);
   const bookmarked = app.isBookmarked(post.id, post.bookmarked);
@@ -48,8 +49,11 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
       <Link
         to={"/app/post/$postId" as never}
         params={{ postId: post.id } as never}
-        className="block px-4 py-3 sm:px-5"
-      >
+        aria-label="Open post"
+        className="absolute inset-0 z-0"
+      />
+      <div className="relative z-10 px-4 py-3 sm:px-5 [&_a]:relative [&_button]:relative">
+
         {post.pinned ? (
           <p className="mb-1.5 flex items-center gap-1.5 pl-[52px] text-xs font-medium text-muted-foreground">
             <Pin className="size-3.5" /> Pinned
@@ -199,7 +203,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 label="Reply"
                 value={post.replies}
                 hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
-                onClick={stop(() => toast("Reply composer opens on the post page"))}
+                onClick={stop(() => router.navigate({ to: `/app/post/${post.id}` as never }))}
               />
               <Action
                 icon={Repeat2}
@@ -228,7 +232,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 label="Views"
                 value={post.views}
                 hoverClass="group-hover:bg-primary/10 group-hover:text-primary"
-                onClick={stop(() => toast("Analytics are mocked"))}
+                onClick={stop(() => toast(`${formatCompact(post.views)} views on this post`))}
               />
               <div className="flex items-center">
                 <Action
@@ -253,7 +257,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }
