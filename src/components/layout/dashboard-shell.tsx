@@ -184,7 +184,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   <span className="truncate text-sm font-bold">{displayName}</span>
                   <span className="truncate text-xs text-muted-foreground">@{handle}</span>
                 </span>
-
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
                 <Link
@@ -219,7 +218,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                     <LogOut className="size-4" /> Sign in
                   </Link>
                 )}
-
               </PopoverContent>
             </Popover>
           </aside>

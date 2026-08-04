@@ -51,7 +51,6 @@ function SignInPage() {
     }
   };
 
-
   return (
     <div className="relative grid min-h-screen place-items-center px-4">
       <div className="app-gradient" aria-hidden="true" />
