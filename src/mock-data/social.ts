@@ -111,7 +111,10 @@ const THREADS: { participantIndex: number; messages: [string, string][] }[] = [
     messages: [
       ["them", "Did you see the settled volume print this morning?"],
       ["me", "Yes, and fees stayed flat which is the actual story."],
-      ["them", "Exactly what I put in the post. Want to co-author the follow up with the corridor data?"],
+      [
+        "them",
+        "Exactly what I put in the post. Want to co-author the follow up with the corridor data?",
+      ],
       ["me", "Send me the raw series and I will run the normalisation."],
       ["them", "Uploading now. It is one CSV per corridor, seven days each."],
     ],

@@ -1,17 +1,9 @@
-import type {
-  LeaderboardBoard,
-  LeaderboardEntry,
-  LeaderboardRange,
-  TrendingTopic,
-} from "@/types";
+import type { LeaderboardBoard, LeaderboardEntry, LeaderboardRange, TrendingTopic } from "@/types";
 import { formatCompact, formatPercent, formatUsd } from "@/lib/utils";
 import { users } from "./users";
 import { createRng, floatBetween, intBetween } from "./random";
 
-const BOARD_META: Record<
-  LeaderboardBoard,
-  { primaryLabel: string; secondaryLabel: string }
-> = {
+const BOARD_META: Record<LeaderboardBoard, { primaryLabel: string; secondaryLabel: string }> = {
   traders: { primaryLabel: "30d return", secondaryLabel: "Volume" },
   predictors: { primaryLabel: "Accuracy", secondaryLabel: "Markets" },
   creators: { primaryLabel: "Engagement", secondaryLabel: "Followers" },

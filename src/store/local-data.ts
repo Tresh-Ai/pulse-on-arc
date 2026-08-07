@@ -71,8 +71,7 @@ export interface DraftPost {
 export function addLocalPost(draft: DraftPost): Post {
   const id = `local_${Date.now().toString(36)}`;
   const tags =
-    draft.tags ??
-    (draft.body.match(/#[\w-]+/g) ?? []).map((t) => t.slice(1).toLowerCase());
+    draft.tags ?? (draft.body.match(/#[\w-]+/g) ?? []).map((t) => t.slice(1).toLowerCase());
 
   const poll = draft.poll
     ? {

@@ -85,12 +85,11 @@ function LeaderboardsPage() {
         />
       ) : null}
 
-
       {list.data?.map((entry) => (
         <Link
           key={entry.user.id}
-          to={"/app/u/$handle" as never}
-          params={{ handle: entry.user.username } as never}
+          to="/app/u/$handle"
+          params={{ handle: entry.user.username }}
           className="flex items-center gap-3 border-b border-border px-4 py-3.5 transition-colors hover:bg-elevated/25 sm:px-5"
         >
           <span

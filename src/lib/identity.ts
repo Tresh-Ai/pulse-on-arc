@@ -49,6 +49,8 @@ export function mediaUrl(seed: string, label: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#${a}"/><stop offset="100%" stop-color="#${b}"/></linearGradient></defs><rect width="1000" height="620" fill="#111827"/><rect width="1000" height="620" fill="url(#g)" opacity=".55"/><g fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2">${Array.from(
     { length: 7 },
     (_, i) => `<line x1="0" y1="${80 * (i + 1)}" x2="1000" y2="${80 * (i + 1)}"/>`,
-  ).join("")}</g><text x="50" y="560" fill="#ffffff" fill-opacity=".9" font-family="Inter,sans-serif" font-size="42" font-weight="700">${label}</text></svg>`;
+  ).join(
+    "",
+  )}</g><text x="50" y="560" fill="#ffffff" fill-opacity=".9" font-family="Inter,sans-serif" font-size="42" font-weight="700">${label}</text></svg>`;
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }

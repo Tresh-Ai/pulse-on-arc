@@ -166,11 +166,7 @@ export function CardSkeleton({ lines = 3 }: { lines?: number }) {
       </div>
       <div className="space-y-2">
         {Array.from({ length: lines }).map((_, i) => (
-          <Skeleton
-            key={i}
-            className="h-3 bg-elevated"
-            style={{ width: `${96 - i * 12}%` }}
-          />
+          <Skeleton key={i} className="h-3 bg-elevated" style={{ width: `${96 - i * 12}%` }} />
         ))}
       </div>
     </div>

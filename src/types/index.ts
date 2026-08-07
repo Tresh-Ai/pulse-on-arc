@@ -4,13 +4,7 @@
  */
 
 export type Interest =
-  | "Trading"
-  | "DeFi"
-  | "NFTs"
-  | "AI"
-  | "Memecoins"
-  | "Gaming"
-  | "Pulse Ecosystem";
+  "Trading" | "DeFi" | "NFTs" | "AI" | "Memecoins" | "Gaming" | "Pulse Ecosystem";
 
 export interface User {
   id: string;
@@ -43,13 +37,7 @@ export interface Achievement {
   earnedAt: string;
 }
 
-export type PostKind =
-  | "standard"
-  | "image"
-  | "chart"
-  | "prediction"
-  | "poll"
-  | "announcement";
+export type PostKind = "standard" | "image" | "chart" | "prediction" | "poll" | "announcement";
 
 export interface PollOption {
   id: string;
@@ -75,18 +63,20 @@ export interface Post {
   imageUrl?: string | undefined;
   chart?: { symbol: string; change: number; series: number[] } | undefined;
   predictionId?: string | undefined;
-  poll?: { question: string; options: PollOption[]; endsAt: string; votedOptionId?: string | undefined } | undefined;
+  poll?:
+    | {
+        question: string;
+        options: PollOption[];
+        endsAt: string;
+        votedOptionId?: string | undefined;
+      }
+    | undefined;
   pinned?: boolean | undefined;
   replyToId?: string | undefined;
 }
 
 export type FeedFilter =
-  | "following"
-  | "trending"
-  | "latest"
-  | "ecosystem"
-  | "markets"
-  | "predictions";
+  "following" | "trending" | "latest" | "ecosystem" | "markets" | "predictions";
 
 export interface Community {
   id: string;
@@ -106,13 +96,7 @@ export interface Community {
 
 export type PredictionStatus = "open" | "closing-soon" | "resolved" | "cancelled";
 export type PredictionCategory =
-  | "Crypto"
-  | "Pulse Ecosystem"
-  | "Macro"
-  | "Culture"
-  | "Tech"
-  | "Gaming"
-  | "AI";
+  "Crypto" | "Pulse Ecosystem" | "Macro" | "Culture" | "Tech" | "Gaming" | "AI";
 
 export interface PredictionParticipant {
   user: User;
@@ -149,12 +133,7 @@ export interface Prediction {
   myPosition?: { side: "yes" | "no"; stake: number } | undefined;
 }
 
-export type LeaderboardBoard =
-  | "traders"
-  | "predictors"
-  | "creators"
-  | "reputation"
-  | "active";
+export type LeaderboardBoard = "traders" | "predictors" | "creators" | "reputation" | "active";
 export type LeaderboardRange = "daily" | "weekly" | "monthly" | "all";
 
 export interface LeaderboardEntry {
@@ -168,13 +147,7 @@ export interface LeaderboardEntry {
 }
 
 export type NotificationKind =
-  | "like"
-  | "reply"
-  | "mention"
-  | "follow"
-  | "prediction"
-  | "community"
-  | "announcement";
+  "like" | "reply" | "mention" | "follow" | "prediction" | "community" | "announcement";
 
 export interface AppNotification {
   id: string;
@@ -265,7 +238,13 @@ export interface CreatorStats {
   predictionAccuracy: number;
   resolvedPredictions: number;
   audienceSeries: { t: string; followers: number; revenue: number }[];
-  topContent: { id: string; title: string; kind: PostKind; impressions: number; engagement: number }[];
+  topContent: {
+    id: string;
+    title: string;
+    kind: PostKind;
+    impressions: number;
+    engagement: number;
+  }[];
 }
 
 export interface TrendingTopic {

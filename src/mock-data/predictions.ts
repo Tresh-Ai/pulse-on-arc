@@ -92,7 +92,8 @@ const SEEDS: Seed[] = [
     title: "Pulse testnet validator count passes 250",
     description:
       "Validator growth has tracked the incentive program closely. Public dashboard is the source of truth.",
-    rules: "Resolves YES if the public validator dashboard reports 250 or more active validators before the end date.",
+    rules:
+      "Resolves YES if the public validator dashboard reports 250 or more active validators before the end date.",
     category: "Pulse Ecosystem",
     status: "resolved",
     endsInDays: -6,
@@ -117,7 +118,8 @@ const SEEDS: Seed[] = [
     title: "Memecoin sector market cap ends the month lower",
     description:
       "Rotation fatigue is visible in volumes. Sector aggregate measured on the public index.",
-    rules: "Resolves YES if the sector index market cap on the final day of the month is below the first day value.",
+    rules:
+      "Resolves YES if the sector index market cap on the final day of the month is below the first day value.",
     category: "Culture",
     status: "open",
     endsInDays: 9,
@@ -126,8 +128,10 @@ const SEEDS: Seed[] = [
   },
   {
     title: "Bridge volume to Pulse beats last month by 30 percent",
-    description: "Cross chain routing has consolidated into two dominant paths. Both report public volume.",
-    rules: "Resolves YES if combined reported bridge volume exceeds last month by 30 percent or more.",
+    description:
+      "Cross chain routing has consolidated into two dominant paths. Both report public volume.",
+    rules:
+      "Resolves YES if combined reported bridge volume exceeds last month by 30 percent or more.",
     category: "Crypto",
     status: "resolved",
     endsInDays: -14,
@@ -136,8 +140,10 @@ const SEEDS: Seed[] = [
   },
   {
     title: "A major payment processor announces Pulse support this quarter",
-    description: "Two processors have hinted at pilots. An announcement must be public and first party.",
-    rules: "Resolves YES on a first party public announcement from a processor handling over 1B USD annually.",
+    description:
+      "Two processors have hinted at pilots. An announcement must be public and first party.",
+    rules:
+      "Resolves YES on a first party public announcement from a processor handling over 1B USD annually.",
     category: "Tech",
     status: "open",
     endsInDays: 52,
@@ -145,8 +151,10 @@ const SEEDS: Seed[] = [
   },
   {
     title: "Network reputation leader changes before the season ends",
-    description: "The current reputation leader has held the top slot for six weeks. Challengers are close.",
-    rules: "Resolves YES if the all time reputation leaderboard shows a different account at rank one at season end.",
+    description:
+      "The current reputation leader has held the top slot for six weeks. Challengers are close.",
+    rules:
+      "Resolves YES if the all time reputation leaderboard shows a different account at rank one at season end.",
     category: "Culture",
     status: "closing-soon",
     endsInDays: 1,
@@ -179,9 +187,24 @@ export const predictions: Prediction[] = SEEDS.map((seed, index) => {
   });
 
   const timeline = [
-    { id: `t${index}-1`, label: "Market created", detail: `Opened by @${creator.username}`, at: agoDays(intBetween(12, 40, rng)) },
-    { id: `t${index}-2`, label: "Liquidity milestone", detail: `Pool crossed ${Math.round(pool / 2).toLocaleString()} USDC`, at: agoDays(intBetween(4, 11, rng)) },
-    { id: `t${index}-3`, label: "Odds shift", detail: `YES moved to ${seed.yes} percent after a volume spike`, at: agoDays(intBetween(1, 3, rng)) },
+    {
+      id: `t${index}-1`,
+      label: "Market created",
+      detail: `Opened by @${creator.username}`,
+      at: agoDays(intBetween(12, 40, rng)),
+    },
+    {
+      id: `t${index}-2`,
+      label: "Liquidity milestone",
+      detail: `Pool crossed ${Math.round(pool / 2).toLocaleString()} USDC`,
+      at: agoDays(intBetween(4, 11, rng)),
+    },
+    {
+      id: `t${index}-3`,
+      label: "Odds shift",
+      detail: `YES moved to ${seed.yes} percent after a volume spike`,
+      at: agoDays(intBetween(1, 3, rng)),
+    },
     ...(seed.outcome
       ? [
           {

@@ -13,12 +13,36 @@ const INTERESTS: Interest[] = [
 ];
 
 const ACHIEVEMENT_POOL: Omit<Achievement, "id" | "earnedAt">[] = [
-  { label: "Top 100 Predictor", description: "Finished a season inside the top 100 predictors.", icon: "trophy" },
-  { label: "30 Day Streak", description: "Posted market analysis every day for a month.", icon: "flame" },
-  { label: "Sharp Caller", description: "Resolved ten predictions above 70 percent accuracy.", icon: "target" },
-  { label: "Early Pulse", description: "Joined during the Pulse testnet season.", icon: "sparkles" },
-  { label: "Community Guardian", description: "Moderated a community with over 10k members.", icon: "shield" },
-  { label: "Creator of the Month", description: "Highest engagement across the network.", icon: "crown" },
+  {
+    label: "Top 100 Predictor",
+    description: "Finished a season inside the top 100 predictors.",
+    icon: "trophy",
+  },
+  {
+    label: "30 Day Streak",
+    description: "Posted market analysis every day for a month.",
+    icon: "flame",
+  },
+  {
+    label: "Sharp Caller",
+    description: "Resolved ten predictions above 70 percent accuracy.",
+    icon: "target",
+  },
+  {
+    label: "Early Pulse",
+    description: "Joined during the Pulse testnet season.",
+    icon: "sparkles",
+  },
+  {
+    label: "Community Guardian",
+    description: "Moderated a community with over 10k members.",
+    icon: "shield",
+  },
+  {
+    label: "Creator of the Month",
+    description: "Highest engagement across the network.",
+    icon: "crown",
+  },
 ];
 
 interface Seed {
@@ -56,21 +80,33 @@ const SEEDS: Seed[] = [
     bio: "Reading blocks so you do not have to. Indexer diaries and Pulse validator notes.",
     verified: true,
   },
-  { username: "memecoin_mira", displayName: "Mira Sol", bio: "Rotations, narratives, and exit liquidity. Not financial advice, obviously." },
+  {
+    username: "memecoin_mira",
+    displayName: "Mira Sol",
+    bio: "Rotations, narratives, and exit liquidity. Not financial advice, obviously.",
+  },
   {
     username: "vaultkeeper",
     displayName: "Tobias Lind",
     bio: "Yield curves for stablecoin desks. Builder at a treasury automation shop.",
     creator: true,
   },
-  { username: "gm_kenji", displayName: "Kenji Arai", bio: "Perps, patience, and position sizing. Tokyo hours." },
+  {
+    username: "gm_kenji",
+    displayName: "Kenji Arai",
+    bio: "Perps, patience, and position sizing. Tokyo hours.",
+  },
   {
     username: "zkfarmer",
     displayName: "Lea Novak",
     bio: "Proving systems, bridges, and the unglamorous parts of scaling.",
     verified: true,
   },
-  { username: "nftcurator", displayName: "Ade Balogun", bio: "Curating onchain art. Floor prices are a lagging indicator of taste." },
+  {
+    username: "nftcurator",
+    displayName: "Ade Balogun",
+    bio: "Curating onchain art. Floor prices are a lagging indicator of taste.",
+  },
   {
     username: "riskrachel",
     displayName: "Rachel Kwan",
@@ -78,16 +114,56 @@ const SEEDS: Seed[] = [
     creator: true,
     verified: true,
   },
-  { username: "gaming_guild", displayName: "Iker Ruiz", bio: "Game economies, guild treasuries, and player incentive design." },
-  { username: "ai_alpha", displayName: "Hannah Weiss", bio: "Training small models on orderbook data. Sharing the ones that survive." },
-  { username: "stable_dan", displayName: "Daniyar Aliev", bio: "Payments corridors and FX. Stablecoins are the most boring revolution ever." },
-  { username: "quietquant", displayName: "Odette Marsh", bio: "Backtests, not vibes. Publishing weekly hit rates." },
-  { username: "bridge_ben", displayName: "Ben Iversen", bio: "Cross chain routing. Fewer hops, fewer problems." },
-  { username: "dao_dora", displayName: "Dora Fenn", bio: "Governance design and treasury policy. Long meetings, short opinions." },
-  { username: "chartsandchill", displayName: "Ravi Menon", bio: "Daily chart threads. Levels only, no narratives." },
-  { username: "yieldyara", displayName: "Yara Haddad", bio: "Hunting real yield. Allergic to emissions." },
-  { username: "nodeoperator", displayName: "Piotr Zielinski", bio: "Running validators since the first testnet. Uptime is a lifestyle." },
-  { username: "tradfi_tess", displayName: "Tess Buchanan", bio: "Twelve years on a rates desk, now onchain. Bridging both worlds." },
+  {
+    username: "gaming_guild",
+    displayName: "Iker Ruiz",
+    bio: "Game economies, guild treasuries, and player incentive design.",
+  },
+  {
+    username: "ai_alpha",
+    displayName: "Hannah Weiss",
+    bio: "Training small models on orderbook data. Sharing the ones that survive.",
+  },
+  {
+    username: "stable_dan",
+    displayName: "Daniyar Aliev",
+    bio: "Payments corridors and FX. Stablecoins are the most boring revolution ever.",
+  },
+  {
+    username: "quietquant",
+    displayName: "Odette Marsh",
+    bio: "Backtests, not vibes. Publishing weekly hit rates.",
+  },
+  {
+    username: "bridge_ben",
+    displayName: "Ben Iversen",
+    bio: "Cross chain routing. Fewer hops, fewer problems.",
+  },
+  {
+    username: "dao_dora",
+    displayName: "Dora Fenn",
+    bio: "Governance design and treasury policy. Long meetings, short opinions.",
+  },
+  {
+    username: "chartsandchill",
+    displayName: "Ravi Menon",
+    bio: "Daily chart threads. Levels only, no narratives.",
+  },
+  {
+    username: "yieldyara",
+    displayName: "Yara Haddad",
+    bio: "Hunting real yield. Allergic to emissions.",
+  },
+  {
+    username: "nodeoperator",
+    displayName: "Piotr Zielinski",
+    bio: "Running validators since the first testnet. Uptime is a lifestyle.",
+  },
+  {
+    username: "tradfi_tess",
+    displayName: "Tess Buchanan",
+    bio: "Twelve years on a rates desk, now onchain. Bridging both worlds.",
+  },
 ];
 
 function buildUser(seed: Seed, index: number): User {

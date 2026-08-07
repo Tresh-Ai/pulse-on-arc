@@ -47,13 +47,12 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
   return (
     <article className="relative border-b border-border transition-colors duration-150 hover:bg-elevated/25">
       <Link
-        to={"/app/post/$postId" as never}
-        params={{ postId: post.id } as never}
+        to="/app/post/$postId"
+        params={{ postId: post.id }}
         aria-label="Open post"
         className="absolute inset-0 z-0"
       />
       <div className="relative z-10 px-4 py-3 sm:px-5 [&_a]:relative [&_button]:relative">
-
         {post.pinned ? (
           <p className="mb-1.5 flex items-center gap-1.5 pl-[52px] text-xs font-medium text-muted-foreground">
             <Pin className="size-3.5" /> Pinned
@@ -184,8 +183,8 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
 
             {post.predictionId && !compact ? (
               <Link
-                to={"/app/predictions/$predictionId" as never}
-                params={{ predictionId: post.predictionId } as never}
+                to="/app/predictions/$predictionId"
+                params={{ predictionId: post.predictionId }}
                 onClick={(e) => e.stopPropagation()}
                 className="mt-3 flex items-center gap-3 rounded-[16px] border border-border bg-surface/50 px-4 py-3 transition-colors hover:border-cyan/50"
               >
@@ -203,7 +202,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 label="Reply"
                 value={post.replies}
                 hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
-                onClick={stop(() => router.navigate({ to: `/app/post/${post.id}` as never }))}
+                onClick={stop(() => router.navigate({ to: `/app/post/${post.id}` }))}
               />
               <Action
                 icon={Repeat2}

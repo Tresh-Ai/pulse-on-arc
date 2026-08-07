@@ -187,13 +187,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
                 <Link
-                  to={"/app/profile" as never}
+                  to="/app/profile"
                   className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
                 >
                   <UserIcon className="size-4" /> View profile
                 </Link>
                 <Link
-                  to={"/app/settings" as never}
+                  to="/app/settings"
                   className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
                 >
                   <Settings className="size-4" /> Settings
@@ -203,7 +203,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                     onClick={() => {
                       void signOut().then(() => {
                         toast.success("Signed out");
-                        void navigate({ to: "/" as never });
+                        void navigate({ to: "/" });
                       });
                     }}
                     className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm text-destructive transition-colors hover:bg-elevated"
@@ -212,7 +212,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   </button>
                 ) : (
                   <Link
-                    to={"/auth/sign-in" as never}
+                    to="/auth/sign-in"
                     className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-cyan transition-colors hover:bg-elevated"
                   >
                     <LogOut className="size-4" /> Sign in

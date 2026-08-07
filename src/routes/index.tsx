@@ -124,10 +124,10 @@ function LandingPage() {
 
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
-              <Link to={"/auth/sign-in" as never}>Sign in</Link>
+              <Link to="/auth/sign-in">Sign in</Link>
             </Button>
             <Button variant="gradient" size="sm" asChild>
-              <Link to={"/app" as never}>Open Pulse</Link>
+              <Link to="/app">Open Pulse</Link>
             </Button>
           </div>
         </div>
@@ -163,12 +163,12 @@ function LandingPage() {
               </motion.p>
               <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
                 <Button variant="gradient" size="xl" asChild>
-                  <Link to={"/app" as never}>
+                  <Link to="/app">
                     Open Pulse <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="xl" asChild>
-                  <Link to={"/auth/sign-up" as never}>Create an account</Link>
+                  <Link to="/auth/sign-up">Create an account</Link>
                 </Button>
               </motion.div>
               <motion.dl
@@ -201,8 +201,8 @@ function LandingPage() {
               {predictions.data?.slice(0, 3).map((p) => (
                 <Link
                   key={p.id}
-                  to={"/app/predictions/$predictionId" as never}
-                  params={{ predictionId: p.id } as never}
+                  to="/app/predictions/$predictionId"
+                  params={{ predictionId: p.id }}
                   className="surface-card block p-4 transition-transform duration-200 hover:-translate-y-0.5"
                 >
                   <p className="font-semibold">{p.title}</p>
@@ -219,7 +219,6 @@ function LandingPage() {
                 </Link>
               ))}
             </motion.div>
-
           </motion.div>
         </section>
 
@@ -269,7 +268,7 @@ function LandingPage() {
                 ))}
               </ul>
               <Button variant="outline" className="mt-8" asChild>
-                <Link to={"/app/predictions" as never}>
+                <Link to="/app/predictions">
                   Browse markets <ArrowRight className="size-4" />
                 </Link>
               </Button>
@@ -278,8 +277,8 @@ function LandingPage() {
               {predictions.data?.slice(0, 4).map((p) => (
                 <Link
                   key={p.id}
-                  to={"/app/predictions/$predictionId" as never}
-                  params={{ predictionId: p.id } as never}
+                  to="/app/predictions/$predictionId"
+                  params={{ predictionId: p.id }}
                   className="surface-card block p-5 transition-transform duration-200 hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -311,7 +310,7 @@ function LandingPage() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <h2 className="text-3xl font-bold tracking-tight">Follow people with a record</h2>
               <Button variant="ghost" asChild>
-                <Link to={"/app/leaderboards" as never}>
+                <Link to="/app/leaderboards">
                   See leaderboards <ArrowRight className="size-4" />
                 </Link>
               </Button>
@@ -320,8 +319,8 @@ function LandingPage() {
               {suggested.data?.slice(0, 6).map((u) => (
                 <Link
                   key={u.id}
-                  to={"/app/u/$handle" as never}
-                  params={{ handle: u.username } as never}
+                  to="/app/u/$handle"
+                  params={{ handle: u.username }}
                   className="surface-card flex items-start gap-3 p-5 transition-transform duration-200 hover:-translate-y-1"
                 >
                   <Avatar className="size-11">
@@ -352,10 +351,10 @@ function LandingPage() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button variant="gradient" size="xl" asChild>
-                <Link to={"/auth/sign-up" as never}>Create an account</Link>
+                <Link to="/auth/sign-up">Create an account</Link>
               </Button>
               <Button variant="outline" size="xl" asChild>
-                <Link to={"/app/predictions" as never}>See open markets</Link>
+                <Link to="/app/predictions">See open markets</Link>
               </Button>
             </div>
           </div>
@@ -370,13 +369,13 @@ function LandingPage() {
             </span>
             Pulse
           </span>
-          <Link to={"/app/explore" as never} className="flex items-center gap-1.5">
+          <Link to="/app/explore" className="flex items-center gap-1.5">
             <Compass className="size-4" /> Explore
           </Link>
-          <Link to={"/app/notifications" as never} className="flex items-center gap-1.5">
+          <Link to="/app/notifications" className="flex items-center gap-1.5">
             <Bell className="size-4" /> Activity
           </Link>
-          <Link to={"/app/token" as never} className="flex items-center gap-1.5">
+          <Link to="/app/token" className="flex items-center gap-1.5">
             <LineChart className="size-4" /> Token
           </Link>
           <span className="ml-auto">© 2026 Pulse Social Markets.</span>
