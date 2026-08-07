@@ -40,7 +40,7 @@ function SignUpPage() {
       if (needsConfirmation) {
         toast.success("Check your email to confirm your account.");
       } else {
-        void navigate({ to: "/app" as never });
+        void navigate({ to: "/app" });
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not create that account.");
@@ -108,7 +108,7 @@ function SignUpPage() {
         </Button>
         <p className="mt-4 text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link to={"/auth/sign-in" as never} className="text-cyan">
+          <Link to="/auth/sign-in" className="text-cyan">
             Sign in
           </Link>
         </p>

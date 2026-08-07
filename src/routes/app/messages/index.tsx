@@ -63,8 +63,8 @@ function MessagesPage() {
       {list.map((c) => (
         <Link
           key={c.id}
-          to={"/app/messages/$conversationId" as never}
-          params={{ conversationId: c.id } as never}
+          to="/app/messages/$conversationId"
+          params={{ conversationId: c.id }}
           className="flex gap-3 border-b border-border px-4 py-3.5 transition-colors hover:bg-elevated/25 sm:px-5"
         >
           <div className="relative shrink-0">

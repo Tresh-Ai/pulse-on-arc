@@ -35,7 +35,7 @@ function SignInPage() {
     try {
       await signInWithPassword(email, password);
       toast.success("Welcome back");
-      void navigate({ to: "/app" as never });
+      void navigate({ to: "/app" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not sign in.");
     } finally {
@@ -94,7 +94,7 @@ function SignInPage() {
 
         <p className="mt-4 text-sm text-muted-foreground">
           New here?{" "}
-          <Link to={"/auth/sign-up" as never} className="text-cyan">
+          <Link to="/auth/sign-up" className="text-cyan">
             Create an account
           </Link>
         </p>

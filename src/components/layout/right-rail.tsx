@@ -36,7 +36,7 @@ export function RightRail() {
             <Skeleton className="h-14 w-full bg-elevated" />
           </div>
         ) : token.data ? (
-          <Link to={"/app/token" as never} className="block px-4 pb-4 pt-2">
+          <Link to="/app/token" className="block px-4 pb-4 pt-2">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold tabular-nums">
                 {formatUsd(token.data.price)}
@@ -72,7 +72,7 @@ export function RightRail() {
             : trending.data?.slice(0, 6).map((topic) => (
                 <Link
                   key={topic.id}
-                  to={"/app/explore" as never}
+                  to="/app/explore"
                   className="block px-4 py-2.5 transition-colors hover:bg-elevated/50"
                 >
                   <p className="text-xs text-muted-foreground">{topic.category}</p>
@@ -87,7 +87,7 @@ export function RightRail() {
               ))}
         </div>
         <Link
-          to={"/app/explore" as never}
+          to="/app/explore"
           className="block rounded-b-[20px] px-4 py-3 text-sm text-cyan transition-colors hover:bg-elevated/50"
         >
           Show more
@@ -114,15 +114,15 @@ export function RightRail() {
                     key={u.id}
                     className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-elevated/50"
                   >
-                    <Link to={"/app/u/$handle" as never} params={{ handle: u.username } as never}>
+                    <Link to="/app/u/$handle" params={{ handle: u.username }}>
                       <Avatar className="size-10">
                         <AvatarImage src={u.avatar} alt="" />
                         <AvatarFallback>{u.displayName.slice(0, 2)}</AvatarFallback>
                       </Avatar>
                     </Link>
                     <Link
-                      to={"/app/u/$handle" as never}
-                      params={{ handle: u.username } as never}
+                      to="/app/u/$handle"
+                      params={{ handle: u.username }}
                       className="min-w-0 flex-1"
                     >
                       <p className="truncate text-sm font-bold">{u.displayName}</p>
@@ -140,7 +140,7 @@ export function RightRail() {
               })}
         </div>
         <Link
-          to={"/app/explore" as never}
+          to="/app/explore"
           className="block rounded-b-[20px] px-4 py-3 text-sm text-cyan transition-colors hover:bg-elevated/50"
         >
           Show more
@@ -156,7 +156,7 @@ export function RightRail() {
 
       <nav className="flex flex-wrap gap-x-3 gap-y-1 px-4 py-5 text-xs text-muted-foreground">
         <Link to="/">Landing</Link>
-        <Link to={"/app/settings" as never}>Settings</Link>
+        <Link to="/app/settings">Settings</Link>
         <span>© 2026 Pulse</span>
       </nav>
     </aside>
@@ -179,8 +179,8 @@ function MarketMini() {
       {data?.slice(0, 3).map((p) => (
         <Link
           key={p.id}
-          to={"/app/predictions/$predictionId" as never}
-          params={{ predictionId: p.id } as never}
+          to="/app/predictions/$predictionId"
+          params={{ predictionId: p.id }}
           className="block rounded-[14px] px-2 py-2 transition-colors hover:bg-elevated/60"
         >
           <p className="line-clamp-2 text-sm font-medium">{p.title}</p>

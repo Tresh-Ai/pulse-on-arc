@@ -11,8 +11,8 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
   const resolved = prediction.status === "resolved";
   return (
     <Link
-      to={"/app/predictions/$predictionId" as never}
-      params={{ predictionId: prediction.id } as never}
+      to="/app/predictions/$predictionId"
+      params={{ predictionId: prediction.id }}
       className="block border-b border-border px-4 py-4 transition-colors hover:bg-elevated/25 sm:px-5"
     >
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
@@ -65,7 +65,7 @@ export function UserRow({ user, showBio = true }: { user: User; showBio?: boolea
   const following = app.isFollowing(user);
   return (
     <div className="flex gap-3 border-b border-border px-4 py-3 transition-colors hover:bg-elevated/25 sm:px-5">
-      <Link to={"/app/u/$handle" as never} params={{ handle: user.username } as never}>
+      <Link to="/app/u/$handle" params={{ handle: user.username }}>
         <Avatar className="size-11">
           <AvatarImage src={user.avatar} alt="" />
           <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
@@ -74,8 +74,8 @@ export function UserRow({ user, showBio = true }: { user: User; showBio?: boolea
       <div className="min-w-0 flex-1">
         <div className="flex items-start gap-2">
           <Link
-            to={"/app/u/$handle" as never}
-            params={{ handle: user.username } as never}
+            to="/app/u/$handle"
+            params={{ handle: user.username }}
             className="min-w-0 flex-1"
           >
             <p className="truncate text-[15px] font-bold">{user.displayName}</p>
@@ -104,8 +104,8 @@ export function CommunityCard({ community }: { community: Community }) {
   return (
     <article className="surface-card overflow-hidden transition-transform duration-200 hover:-translate-y-1">
       <Link
-        to={"/app/communities/$slug" as never}
-        params={{ slug: community.slug } as never}
+        to="/app/communities/$slug"
+        params={{ slug: community.slug }}
         className="block"
       >
         <img src={community.banner} alt="" className="h-24 w-full object-cover" loading="lazy" />

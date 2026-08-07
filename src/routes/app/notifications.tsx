@@ -114,8 +114,8 @@ function NotificationsPage() {
               <div className="flex items-start gap-2">
                 {n.actor ? (
                   <Link
-                    to={"/app/u/$handle" as never}
-                    params={{ handle: n.actor.username } as never}
+                    to="/app/u/$handle"
+                    params={{ handle: n.actor.username }}
                   >
                     <Avatar className="size-6">
                       <AvatarImage src={n.actor.avatar} alt="" />

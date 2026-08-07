@@ -127,12 +127,12 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
           </Avatar>
           {own ? (
             <Button variant="outline" asChild>
-              <Link to={"/app/settings" as never}>Edit profile</Link>
+              <Link to="/app/settings">Edit profile</Link>
             </Button>
           ) : (
             <div className="flex gap-2">
               <Button variant="outline" asChild>
-                <Link to={"/app/messages" as never}>Message</Link>
+                <Link to="/app/messages">Message</Link>
               </Button>
               <Button
                 variant={following ? "outline" : "gradient"}

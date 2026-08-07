@@ -88,7 +88,7 @@ export function NotificationsDrawer() {
               return (
                 <li key={n.id}>
                   <Link
-                    to={"/app/notifications" as never}
+                    to="/app/notifications"
                     onClick={() => setNotificationsOpen(false)}
                     className={cn(
                       "flex gap-3 rounded-[14px] px-4 py-3 transition-colors hover:bg-elevated/60",

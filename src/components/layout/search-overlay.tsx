@@ -62,7 +62,7 @@ export function SearchOverlay() {
             {(results?.topics ?? []).slice(0, 5).map((t) => (
               <Link
                 key={t.id}
-                to={"/app/explore" as never}
+                to="/app/explore"
                 onClick={close}
                 className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
               >
@@ -88,8 +88,8 @@ export function SearchOverlay() {
             {(results?.predictions ?? []).map((p) => (
               <Link
                 key={p.id}
-                to={"/app/predictions/$predictionId" as never}
-                params={{ predictionId: p.id } as never}
+                to="/app/predictions/$predictionId"
+                params={{ predictionId: p.id }}
                 onClick={close}
                 className="flex items-start gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
               >
@@ -108,8 +108,8 @@ export function SearchOverlay() {
             {(results?.communities ?? []).map((c) => (
               <Link
                 key={c.id}
-                to={"/app/communities/$slug" as never}
-                params={{ slug: c.slug } as never}
+                to="/app/communities/$slug"
+                params={{ slug: c.slug }}
                 onClick={close}
                 className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
               >
@@ -128,7 +128,7 @@ export function SearchOverlay() {
             {(results?.tokens ?? []).map((t) => (
               <Link
                 key={t.symbol}
-                to={"/app/token" as never}
+                to="/app/token"
                 onClick={close}
                 className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
               >
@@ -157,8 +157,8 @@ export function SearchOverlay() {
 function PersonRow({ user, onClick }: { user: import("@/types").User; onClick: () => void }) {
   return (
     <Link
-      to={"/app/u/$handle" as never}
-      params={{ handle: user.username } as never}
+      to="/app/u/$handle"
+      params={{ handle: user.username }}
       onClick={onClick}
       className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
     >
