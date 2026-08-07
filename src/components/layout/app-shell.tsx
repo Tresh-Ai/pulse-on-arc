@@ -136,7 +136,7 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
             );
           })}
           <Link
-            to="/search"
+            to="/app/explore"
             aria-label="Search"
             className="flex flex-col items-center gap-1 rounded-[14px] px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
           >
