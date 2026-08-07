@@ -13,8 +13,7 @@ const buttonVariants = cva(
         gradient:
           "gradient-fill text-primary-foreground shadow-[var(--shadow-glow)] hover:brightness-110",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline:
-          "border border-border bg-transparent hover:bg-elevated/70 hover:text-foreground",
+        outline: "border border-border bg-transparent hover:bg-elevated/70 hover:text-foreground",
         secondary: "bg-elevated text-secondary-foreground hover:bg-elevated/70",
         glass:
           "border border-border bg-surface/60 backdrop-blur-xl text-foreground hover:bg-elevated/70",
@@ -36,7 +35,6 @@ const buttonVariants = cva(
     },
   },
 );
-
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {

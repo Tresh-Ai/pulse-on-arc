@@ -85,7 +85,6 @@ function LeaderboardsPage() {
         />
       ) : null}
 
-
       {list.data?.map((entry) => (
         <Link
           key={entry.user.id}

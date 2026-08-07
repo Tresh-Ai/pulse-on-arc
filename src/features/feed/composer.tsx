@@ -232,13 +232,7 @@ export function ComposerDialog({
   );
 }
 
-export function ReplyComposer({
-  replyToId,
-  onDone,
-}: {
-  replyToId: string;
-  onDone?: () => void;
-}) {
+export function ReplyComposer({ replyToId, onDone }: { replyToId: string; onDone?: () => void }) {
   return (
     <div className="border-b border-border px-4 py-3 sm:px-5">
       <ComposerBody

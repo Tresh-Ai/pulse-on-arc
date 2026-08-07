@@ -1,9 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import type {
-  FeedFilter,
-  LeaderboardBoard,
-  LeaderboardRange,
-} from "@/types";
+import type { FeedFilter, LeaderboardBoard, LeaderboardRange } from "@/types";
 import * as api from "./api";
 
 export const queries = {

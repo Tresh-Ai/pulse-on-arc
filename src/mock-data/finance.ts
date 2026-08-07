@@ -60,7 +60,8 @@ export const walletSummary: WalletSummary = {
   transactions: TX_SEEDS.map((seed, i) => ({
     ...seed,
     id: `tx_${i + 1}`,
-    usdValue: Math.abs(seed.amount) * (seed.asset === "USDC" ? 1 : seed.asset === "PLS" ? 3.48 : 0.42),
+    usdValue:
+      Math.abs(seed.amount) * (seed.asset === "USDC" ? 1 : seed.asset === "PLS" ? 3.48 : 0.42),
     at: agoMinutes(intBetween(20, 40_000, rng)),
     status: i === 1 ? "pending" : i === 7 ? "failed" : "confirmed",
     hash: `0x${createRng(`tx-${i}`)().toString(16).slice(2, 12)}${i}a4f`,
@@ -100,10 +101,30 @@ export const tokenInfo: TokenInfo = {
     },
   ],
   activity: [
-    { id: "ta_1", label: "Season two reward pool funded", detail: "1.2M PulseS moved to the reward contract", at: agoMinutes(120) },
-    { id: "ta_2", label: "New market collateral record", detail: "184k PulseS posted as collateral in one day", at: agoMinutes(640) },
-    { id: "ta_3", label: "Creator payouts settled", detail: "2,410 creators received subscription revenue", at: agoDays(2) },
-    { id: "ta_4", label: "Staking tier update", detail: "Reputation weighting curve adjusted after governance signal", at: agoDays(5) },
+    {
+      id: "ta_1",
+      label: "Season two reward pool funded",
+      detail: "1.2M PulseS moved to the reward contract",
+      at: agoMinutes(120),
+    },
+    {
+      id: "ta_2",
+      label: "New market collateral record",
+      detail: "184k PulseS posted as collateral in one day",
+      at: agoMinutes(640),
+    },
+    {
+      id: "ta_3",
+      label: "Creator payouts settled",
+      detail: "2,410 creators received subscription revenue",
+      at: agoDays(2),
+    },
+    {
+      id: "ta_4",
+      label: "Staking tier update",
+      detail: "Reputation weighting curve adjusted after governance signal",
+      at: agoDays(5),
+    },
   ],
 };
 
@@ -125,11 +146,41 @@ export const creatorStats: CreatorStats = {
     revenue: 220 + i * 12 + Math.round((rng() - 0.4) * 90),
   })),
   topContent: [
-    { id: "po_me_1", title: "Running a small prediction desk for a season taught me...", kind: "standard", impressions: 48_200, engagement: 9.4 },
-    { id: "po_me_2", title: "Thirty day performance on the settlement basket", kind: "chart", impressions: 22_600, engagement: 7.1 },
-    { id: "po_me_3", title: "Why I price my own uncertainty before the market does", kind: "announcement", impressions: 18_400, engagement: 6.2 },
-    { id: "po_me_4", title: "Corridor volume, normalised per 10k USDC", kind: "image", impressions: 14_820, engagement: 5.8 },
-    { id: "po_me_5", title: "Season one desk review, every trade listed", kind: "standard", impressions: 12_240, engagement: 5.1 },
+    {
+      id: "po_me_1",
+      title: "Running a small prediction desk for a season taught me...",
+      kind: "standard",
+      impressions: 48_200,
+      engagement: 9.4,
+    },
+    {
+      id: "po_me_2",
+      title: "Thirty day performance on the settlement basket",
+      kind: "chart",
+      impressions: 22_600,
+      engagement: 7.1,
+    },
+    {
+      id: "po_me_3",
+      title: "Why I price my own uncertainty before the market does",
+      kind: "announcement",
+      impressions: 18_400,
+      engagement: 6.2,
+    },
+    {
+      id: "po_me_4",
+      title: "Corridor volume, normalised per 10k USDC",
+      kind: "image",
+      impressions: 14_820,
+      engagement: 5.8,
+    },
+    {
+      id: "po_me_5",
+      title: "Season one desk review, every trade listed",
+      kind: "standard",
+      impressions: 12_240,
+      engagement: 5.1,
+    },
   ],
 };
 

@@ -55,10 +55,7 @@ function ThreadPage() {
         title={conversation?.participant.displayName ?? "Conversation"}
         action={
           conversation ? (
-            <Link
-              to="/app/u/$handle"
-              params={{ handle: conversation.participant.username }}
-            >
+            <Link to="/app/u/$handle" params={{ handle: conversation.participant.username }}>
               <Avatar className="size-8">
                 <AvatarImage src={conversation.participant.avatar} alt="" />
                 <AvatarFallback>{conversation.participant.displayName.slice(0, 2)}</AvatarFallback>

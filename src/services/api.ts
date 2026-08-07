@@ -84,9 +84,12 @@ export async function getBookmarks(): Promise<Post[]> {
 
 /* --------------------------------- people --------------------------------- */
 
-export async function getProfile(
-  handle: string,
-): Promise<{ user: User; posts: Post[]; predictions: Prediction[]; activity: typeof activityFeed }> {
+export async function getProfile(handle: string): Promise<{
+  user: User;
+  posts: Post[];
+  predictions: Prediction[];
+  activity: typeof activityFeed;
+}> {
   const user = findUser(handle);
   if (!user) throw new MockApiError("That account does not exist.");
   const authored =
@@ -168,8 +171,12 @@ export async function getPrediction(
   if (!prediction) throw new MockApiError("That market could not be found.");
   return delay({
     prediction,
-    discussion: allPosts.filter((p) => p.predictionId === id || p.tags.includes("predictions")).slice(0, 6),
-    related: predictions.filter((p) => p.id !== id && p.category === prediction.category).slice(0, 3),
+    discussion: allPosts
+      .filter((p) => p.predictionId === id || p.tags.includes("predictions"))
+      .slice(0, 6),
+    related: predictions
+      .filter((p) => p.id !== id && p.category === prediction.category)
+      .slice(0, 3),
   });
 }
 

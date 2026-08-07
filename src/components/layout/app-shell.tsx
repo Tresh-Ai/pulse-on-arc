@@ -59,7 +59,9 @@ export function AppShell({ children, rail }: { children: ReactNode; rail?: React
               <span className="gradient-fill flex size-10 items-center justify-center rounded-2xl text-base font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
                 P
               </span>
-              <span className="hidden text-lg font-bold tracking-tight xl:inline">Pulse Social</span>
+              <span className="hidden text-lg font-bold tracking-tight xl:inline">
+                Pulse Social
+              </span>
             </Link>
 
             <nav className="flex flex-col gap-1" aria-label="Primary">

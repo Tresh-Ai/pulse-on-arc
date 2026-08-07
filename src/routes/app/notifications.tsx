@@ -113,10 +113,7 @@ function NotificationsPage() {
             <div className="min-w-0 flex-1">
               <div className="flex items-start gap-2">
                 {n.actor ? (
-                  <Link
-                    to="/app/u/$handle"
-                    params={{ handle: n.actor.username }}
-                  >
+                  <Link to="/app/u/$handle" params={{ handle: n.actor.username }}>
                     <Avatar className="size-6">
                       <AvatarImage src={n.actor.avatar} alt="" />
                       <AvatarFallback>{n.actor.displayName.slice(0, 2)}</AvatarFallback>

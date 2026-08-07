@@ -219,7 +219,6 @@ function LandingPage() {
                 </Link>
               ))}
             </motion.div>
-
           </motion.div>
         </section>
 

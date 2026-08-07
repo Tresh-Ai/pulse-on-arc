@@ -73,11 +73,7 @@ export function UserRow({ user, showBio = true }: { user: User; showBio?: boolea
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex items-start gap-2">
-          <Link
-            to="/app/u/$handle"
-            params={{ handle: user.username }}
-            className="min-w-0 flex-1"
-          >
+          <Link to="/app/u/$handle" params={{ handle: user.username }} className="min-w-0 flex-1">
             <p className="truncate text-[15px] font-bold">{user.displayName}</p>
             <p className="truncate text-sm text-muted-foreground">@{user.username}</p>
           </Link>
@@ -103,11 +99,7 @@ export function CommunityCard({ community }: { community: Community }) {
   const joined = app.isJoined(community.id, community.joined);
   return (
     <article className="surface-card overflow-hidden transition-transform duration-200 hover:-translate-y-1">
-      <Link
-        to="/app/communities/$slug"
-        params={{ slug: community.slug }}
-        className="block"
-      >
+      <Link to="/app/communities/$slug" params={{ slug: community.slug }} className="block">
         <img src={community.banner} alt="" className="h-24 w-full object-cover" loading="lazy" />
         <div className="p-4">
           <div className="flex items-center gap-3">

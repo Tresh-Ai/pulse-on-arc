@@ -38,9 +38,7 @@ export function RightRail() {
         ) : token.data ? (
           <Link to="/app/token" className="block px-4 pb-4 pt-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold tabular-nums">
-                {formatUsd(token.data.price)}
-              </span>
+              <span className="text-2xl font-bold tabular-nums">{formatUsd(token.data.price)}</span>
               <span
                 className={cn(
                   "text-sm font-semibold tabular-nums",

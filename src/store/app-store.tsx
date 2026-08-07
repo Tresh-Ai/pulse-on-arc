@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { currentUser } from "@/mock-data/users";
 import { communities } from "@/mock-data/communities";
 import { users } from "@/mock-data/users";

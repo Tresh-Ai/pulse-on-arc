@@ -53,7 +53,6 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
         className="absolute inset-0 z-0"
       />
       <div className="relative z-10 px-4 py-3 sm:px-5 [&_a]:relative [&_button]:relative">
-
         {post.pinned ? (
           <p className="mb-1.5 flex items-center gap-1.5 pl-[52px] text-xs font-medium text-muted-foreground">
             <Pin className="size-3.5" /> Pinned

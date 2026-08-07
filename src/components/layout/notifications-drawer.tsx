@@ -44,7 +44,10 @@ export function NotificationsDrawer() {
 
   return (
     <Sheet open={notificationsOpen} onOpenChange={setNotificationsOpen}>
-      <SheetContent side="right" className="w-full border-border bg-surface/95 backdrop-blur-2xl sm:max-w-[420px]">
+      <SheetContent
+        side="right"
+        className="w-full border-border bg-surface/95 backdrop-blur-2xl sm:max-w-[420px]"
+      >
         <SheetHeader className="text-left">
           <SheetTitle className="text-base">Notifications</SheetTitle>
           <SheetDescription className="text-xs">
