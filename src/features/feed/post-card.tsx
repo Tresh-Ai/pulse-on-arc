@@ -251,10 +251,18 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                   activeClass="text-cyan"
                   hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
                   onClick={stop(() => {
-                    app.toggleBookmark(post.id, post.bookmarked);
-                    toast.success(bookmarked ? "Removed from bookmarks" : "Saved to bookmarks");
+                    bookmark.mutate(
+                      { postId: post.id, saved: !bookmarked },
+                      {
+                        onSuccess: () =>
+                          toast.success(
+                            bookmarked ? "Removed from bookmarks" : "Saved to bookmarks",
+                          ),
+                      },
+                    );
                   })}
                 />
+
                 <Action
                   icon={Share2}
                   label="Share"
