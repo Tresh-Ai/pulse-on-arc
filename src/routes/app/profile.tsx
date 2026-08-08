@@ -1,44 +1,34 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { CalendarDays, Link2, MapPin } from "lucide-react";
-import { ColumnHeader, ErrorState, ListSkeleton, TabStrip } from "@/components/common/states";
+import { CalendarDays, Inbox, Link2, ShieldCheck } from "lucide-react";
+import { ColumnHeader, EmptyState, ErrorState, ListSkeleton } from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/features/feed/post-card";
-import { PredictionCard } from "@/features/cards";
 import { queries } from "@/services/queries";
-import { useApp } from "@/store/app-store";
-import {
-  formatCompact,
-  formatDate,
-  formatRelativeTime,
-  formatUsd,
-  truncateAddress,
-} from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+import { useToggleFollow } from "@/hooks/use-social";
+import { formatCompact, formatDate, truncateAddress } from "@/lib/utils";
 import type { User } from "@/types";
 
 export const Route = createFileRoute("/app/profile")({
   head: () => ({
     meta: [
       { title: "Your profile | Pulse" },
-      { name: "description", content: "Your posts, markets, accuracy and activity on Pulse." },
+      { name: "description", content: "Your posts, followers and activity on Pulse." },
       { property: "og:title", content: "Your profile | Pulse" },
-      { property: "og:description", content: "Your posts, markets, accuracy and activity." },
+      { property: "og:description", content: "Your posts, followers and activity." },
     ],
   }),
   component: ProfilePage,
 });
 
-type Tab = "posts" | "markets" | "activity" | "achievements";
-
 function ProfilePage() {
-  const app = useApp();
-  const profile = useQuery(queries.profile(app.user.username));
-  const [tab, setTab] = useState<Tab>("posts");
+  const { profile: me, loading } = useAuth();
+  const profile = useQuery(queries.profile(me?.handle ?? ""));
 
-  if (profile.isPending) {
+  if (loading || (me && profile.isPending)) {
     return (
       <div>
         <ColumnHeader title="Profile" />
@@ -46,6 +36,24 @@ function ProfilePage() {
       </div>
     );
   }
+
+  if (!me) {
+    return (
+      <div>
+        <ColumnHeader title="Profile" />
+        <EmptyState
+          icon={ShieldCheck}
+          title="Sign in to see your profile"
+          description="Your posts, followers and saved items live in your account."
+          actionLabel="Sign in"
+          onAction={() => {
+            window.location.href = "/auth/sign-in";
+          }}
+        />
+      </div>
+    );
+  }
+
   if (profile.isError || !profile.data) {
     return (
       <div>
@@ -55,70 +63,39 @@ function ProfilePage() {
     );
   }
 
-  const { user, posts, predictions, activity } = profile.data;
+  const { user, posts } = profile.data;
 
   return (
     <div>
       <ColumnHeader title={user.displayName} back />
       <ProfileHeader user={user} own />
 
-      <ColumnHeader
-        tabs={
-          <TabStrip
-            value={tab}
-            onChange={setTab}
-            options={[
-              { id: "posts", label: "Posts" },
-              { id: "markets", label: "Markets" },
-              { id: "activity", label: "Activity" },
-              { id: "achievements", label: "Badges" },
-            ]}
-          />
-        }
-      />
-
-      {tab === "posts" ? posts.map((p) => <PostCard key={p.id} post={p} />) : null}
-      {tab === "markets"
-        ? predictions.map((p) => <PredictionCard key={p.id} prediction={p} />)
-        : null}
-      {tab === "activity"
-        ? activity.map((a) => (
-            <div key={a.id} className="border-b border-border px-4 py-3 sm:px-5">
-              <div className="flex items-center gap-2">
-                <p className="min-w-0 flex-1 truncate text-sm font-semibold">{a.label}</p>
-                <span className="shrink-0 text-xs text-muted-foreground">
-                  {formatRelativeTime(a.at)}
-                </span>
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {a.detail}
-                {a.amount ? ` · ${formatUsd(a.amount)}` : ""}
-              </p>
-            </div>
-          ))
-        : null}
-      {tab === "achievements" ? (
-        <div className="grid gap-3 p-4 sm:grid-cols-2 sm:px-5">
-          {user.achievements.map((a) => (
-            <div key={a.id} className="surface-card p-4">
-              <p className="text-sm font-bold">{a.label}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{a.description}</p>
-              <p className="mt-2 text-xs text-muted-foreground">Earned {formatDate(a.earnedAt)}</p>
-            </div>
-          ))}
-        </div>
-      ) : null}
+      {posts.length === 0 ? (
+        <EmptyState
+          icon={Inbox}
+          title="No posts yet"
+          description="Share your first take from the composer on the home timeline."
+        />
+      ) : (
+        posts.map((p) => <PostCard key={p.id} post={p} />)
+      )}
     </div>
   );
 }
 
 export function ProfileHeader({ user, own = false }: { user: User; own?: boolean }) {
-  const app = useApp();
-  const following = app.isFollowing(user);
+  const { session } = useAuth();
+  const follow = useToggleFollow();
 
   return (
     <div className="border-b border-border">
-      <img src={user.banner} alt="" className="h-36 w-full object-cover" />
+      <img
+        src={user.banner}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="h-36 w-full object-cover"
+      />
       <div className="px-4 pb-4 sm:px-5">
         <div className="-mt-10 flex items-end justify-between gap-3">
           <Avatar className="size-20 border-4 border-background">
@@ -134,12 +111,19 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
               <Button variant="outline" asChild>
                 <Link to="/app/messages">Message</Link>
               </Button>
-              <Button
-                variant={following ? "outline" : "gradient"}
-                onClick={() => app.toggleFollow(user.id)}
-              >
-                {following ? "Following" : "Follow"}
-              </Button>
+              {session ? (
+                <Button
+                  variant={user.isFollowing ? "outline" : "gradient"}
+                  disabled={follow.isPending}
+                  onClick={() => follow.mutate({ userId: user.id, following: !user.isFollowing })}
+                >
+                  {user.isFollowing ? "Following" : "Follow"}
+                </Button>
+              ) : (
+                <Button variant="gradient" asChild>
+                  <Link to="/auth/sign-in">Sign in to follow</Link>
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -151,18 +135,17 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
           ) : null}
         </div>
         <p className="text-sm text-muted-foreground">@{user.username}</p>
-        <p className="mt-2 text-sm">{user.bio}</p>
+        {user.bio ? <p className="mt-2 text-sm">{user.bio}</p> : null}
 
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <CalendarDays className="size-3.5" /> Joined {formatDate(user.joinedAt)}
           </span>
-          <span className="flex items-center gap-1">
-            <Link2 className="size-3.5" /> {truncateAddress(user.walletAddress)}
-          </span>
-          <span className="flex items-center gap-1">
-            <MapPin className="size-3.5" /> Reputation {user.reputation}
-          </span>
+          {user.walletAddress ? (
+            <span className="flex items-center gap-1">
+              <Link2 className="size-3.5" /> {truncateAddress(user.walletAddress)}
+            </span>
+          ) : null}
         </div>
 
         <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
@@ -175,17 +158,9 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
             <span className="text-muted-foreground">followers</span>
           </span>
           <span>
-            <strong className="tabular-nums text-cyan">{user.predictionAccuracy}%</strong>{" "}
-            <span className="text-muted-foreground">accuracy</span>
+            <strong className="tabular-nums">{formatCompact(user.postCount)}</strong>{" "}
+            <span className="text-muted-foreground">posts</span>
           </span>
-        </div>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          {user.interests.map((i) => (
-            <Badge key={i} className="rounded-full bg-elevated text-[11px] text-foreground">
-              {i}
-            </Badge>
-          ))}
         </div>
       </div>
     </div>

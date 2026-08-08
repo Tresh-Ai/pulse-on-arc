@@ -21,7 +21,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { queries } from "@/services/queries";
-import { useApp } from "@/store/app-store";
+import { useMarkNotificationsRead } from "@/hooks/use-social";
 import { cn, formatRelativeTime } from "@/lib/utils";
 import type { NotificationKind } from "@/types";
 
@@ -52,7 +52,7 @@ type Tab = "all" | "mentions" | "markets";
 function NotificationsPage() {
   const [tab, setTab] = useState<Tab>("all");
   const list = useQuery(queries.notifications());
-  const app = useApp();
+  const markRead = useMarkNotificationsRead();
 
   const items = (list.data ?? []).filter((n) =>
     tab === "mentions"
@@ -67,7 +67,7 @@ function NotificationsPage() {
       <ColumnHeader
         title="Notifications"
         action={
-          <Button variant="ghost" size="sm" onClick={app.markNotificationsRead}>
+          <Button variant="ghost" size="sm" onClick={() => markRead.mutate(undefined)}>
             Mark all read
           </Button>
         }
@@ -98,7 +98,7 @@ function NotificationsPage() {
 
       {items.map((n) => {
         const Icon = ICONS[n.kind];
-        const unread = !n.read && !app.readNotifications.has(n.id);
+        const unread = !n.read;
         return (
           <div
             key={n.id}

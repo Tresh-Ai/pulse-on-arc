@@ -23,17 +23,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn, formatCompact, formatPercent, formatRelativeTime, timeRemaining } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
+import { useAuth } from "@/hooks/use-auth";
+import { useDeletePost, useToggleBookmark, useToggleLike } from "@/hooks/use-social";
 
 /**
  * Timeline post row. Borderless, full bleed and edge to edge like a native
  * social timeline: avatar column on the left, content and actions on the right.
+ * Likes, bookmarks and deletes write straight to the backend.
  */
 export function PostCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const app = useApp();
   const router = useRouter();
-  const liked = app.isLiked(post.id, post.liked);
+  const { profile: me } = useAuth();
+  const like = useToggleLike();
+  const bookmark = useToggleBookmark();
+  const removePost = useDeletePost();
+  const liked = post.liked;
   const reposted = app.isReposted(post.id, post.reposted);
-  const bookmarked = app.isBookmarked(post.id, post.bookmarked);
+  const bookmarked = post.bookmarked;
+  const isMine = me?.id === post.author.id;
 
   const pollTotal = post.poll?.options.reduce((sum, o) => sum + o.votes, 0) ?? 0;
   const votedOption = post.poll ? app.pollVotes[post.id] : undefined;
@@ -92,13 +100,30 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                   <MoreHorizontal className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onSelect={() => toast("Muted for this session")}>
-                    Mute @{post.author.username}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => toast("Report submitted")}>
-                    Report post
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => toast.success("Link copied")}>
+                  {isMine ? (
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onSelect={() =>
+                        removePost.mutate(post.id, {
+                          onSuccess: () => toast.success("Post deleted"),
+                        })
+                      }
+                    >
+                      Delete post
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onSelect={() => toast("Report submitted")}>
+                      Report post
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      void navigator.clipboard?.writeText(
+                        `${window.location.origin}/app/post/${post.id}`,
+                      );
+                      toast.success("Link copied");
+                    }}
+                  >
                     Copy link
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -219,12 +244,12 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
               <Action
                 icon={Heart}
                 label="Like"
-                value={post.likes + (liked !== post.liked ? (liked ? 1 : -1) : 0)}
+                value={post.likes}
                 active={liked}
                 activeClass="text-destructive"
                 fill={liked}
                 hoverClass="group-hover:bg-destructive/10 group-hover:text-destructive"
-                onClick={stop(() => app.toggleLike(post.id, post.liked))}
+                onClick={stop(() => like.mutate({ postId: post.id, liked: !liked }))}
               />
               <Action
                 icon={BarChart2}
@@ -242,10 +267,18 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                   activeClass="text-cyan"
                   hoverClass="group-hover:bg-cyan/10 group-hover:text-cyan"
                   onClick={stop(() => {
-                    app.toggleBookmark(post.id, post.bookmarked);
-                    toast.success(bookmarked ? "Removed from bookmarks" : "Saved to bookmarks");
+                    bookmark.mutate(
+                      { postId: post.id, saved: !bookmarked },
+                      {
+                        onSuccess: () =>
+                          toast.success(
+                            bookmarked ? "Removed from bookmarks" : "Saved to bookmarks",
+                          ),
+                      },
+                    );
                   })}
                 />
+
                 <Action
                   icon={Share2}
                   label="Share"

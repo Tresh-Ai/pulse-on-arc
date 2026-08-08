@@ -8,6 +8,188 @@ export type Database = {
   };
   public: {
     Tables: {
+      follows: {
+        Row: {
+          created_at: string;
+          follower_id: string;
+          following_id: string;
+          id: string;
+        };
+        Insert: {
+          created_at?: string;
+          follower_id: string;
+          following_id: string;
+          id?: string;
+        };
+        Update: {
+          created_at?: string;
+          follower_id?: string;
+          following_id?: string;
+          id?: string;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          actor_id: string | null;
+          body: string | null;
+          created_at: string;
+          id: string;
+          kind: string;
+          post_id: string | null;
+          read: boolean;
+          user_id: string;
+        };
+        Insert: {
+          actor_id?: string | null;
+          body?: string | null;
+          created_at?: string;
+          id?: string;
+          kind: string;
+          post_id?: string | null;
+          read?: boolean;
+          user_id: string;
+        };
+        Update: {
+          actor_id?: string | null;
+          body?: string | null;
+          created_at?: string;
+          id?: string;
+          kind?: string;
+          post_id?: string | null;
+          read?: boolean;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_bookmarks: {
+        Row: {
+          created_at: string;
+          id: string;
+          post_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          post_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          post_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_bookmarks_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_likes: {
+        Row: {
+          created_at: string;
+          id: string;
+          post_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          post_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          post_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      posts: {
+        Row: {
+          author_id: string;
+          body: string;
+          chart_symbol: string | null;
+          community_id: string | null;
+          created_at: string;
+          id: string;
+          image_url: string | null;
+          kind: string;
+          like_count: number;
+          parent_id: string | null;
+          prediction_id: string | null;
+          reply_count: number;
+          tags: string[];
+          updated_at: string;
+          view_count: number;
+        };
+        Insert: {
+          author_id: string;
+          body: string;
+          chart_symbol?: string | null;
+          community_id?: string | null;
+          created_at?: string;
+          id?: string;
+          image_url?: string | null;
+          kind?: string;
+          like_count?: number;
+          parent_id?: string | null;
+          prediction_id?: string | null;
+          reply_count?: number;
+          tags?: string[];
+          updated_at?: string;
+          view_count?: number;
+        };
+        Update: {
+          author_id?: string;
+          body?: string;
+          chart_symbol?: string | null;
+          community_id?: string | null;
+          created_at?: string;
+          id?: string;
+          image_url?: string | null;
+          kind?: string;
+          like_count?: number;
+          parent_id?: string | null;
+          prediction_id?: string | null;
+          reply_count?: number;
+          tags?: string[];
+          updated_at?: string;
+          view_count?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "posts_parent_id_fkey";
+            columns: ["parent_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
