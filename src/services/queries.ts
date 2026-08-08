@@ -1,16 +1,28 @@
 import { queryOptions } from "@tanstack/react-query";
 import type { FeedFilter, LeaderboardBoard, LeaderboardRange } from "@/types";
 import * as api from "./api";
+import * as social from "./social";
 
 export const queries = {
+  /* Social graph — stored in the backend. */
   feed: (filter: FeedFilter) =>
-    queryOptions({ queryKey: ["feed", filter], queryFn: () => api.getFeed(filter) }),
-  post: (id: string) => queryOptions({ queryKey: ["post", id], queryFn: () => api.getPost(id) }),
-  bookmarks: () => queryOptions({ queryKey: ["bookmarks"], queryFn: api.getBookmarks }),
+    queryOptions({ queryKey: ["feed", filter], queryFn: () => social.listFeed(filter) }),
+  post: (id: string) =>
+    queryOptions({ queryKey: ["post", id], queryFn: () => social.getPostThread(id) }),
+  bookmarks: () => queryOptions({ queryKey: ["bookmarks"], queryFn: social.listBookmarks }),
   profile: (handle: string) =>
-    queryOptions({ queryKey: ["profile", handle], queryFn: () => api.getProfile(handle) }),
+    queryOptions({
+      queryKey: ["profile", handle],
+      queryFn: () => social.getProfileByHandle(handle),
+      enabled: handle.length > 0,
+    }),
   suggestedUsers: () =>
-    queryOptions({ queryKey: ["suggested-users"], queryFn: () => api.getSuggestedUsers() }),
+    queryOptions({ queryKey: ["suggested-users"], queryFn: () => social.listSuggestedAccounts() }),
+  notifications: () =>
+    queryOptions({ queryKey: ["notifications"], queryFn: social.listNotifications }),
+
+  /* Market simulation surfaces (prices, markets, portfolio). */
+
   portfolioPreview: () =>
     queryOptions({ queryKey: ["portfolio-preview"], queryFn: api.getPortfolioPreview }),
   communities: () => queryOptions({ queryKey: ["communities"], queryFn: api.getCommunities }),
