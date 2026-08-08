@@ -39,7 +39,6 @@ export const queries = {
       queryKey: ["leaderboard", board, range],
       queryFn: () => api.getLeaderboard(board, range),
     }),
-  notifications: () => queryOptions({ queryKey: ["notifications"], queryFn: api.getNotifications }),
   conversations: () => queryOptions({ queryKey: ["conversations"], queryFn: api.getConversations }),
   messages: (id: string) =>
     queryOptions({ queryKey: ["messages", id], queryFn: () => api.getMessages(id) }),
