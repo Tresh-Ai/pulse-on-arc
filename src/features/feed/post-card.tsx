@@ -233,7 +233,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                 activeClass="text-destructive"
                 fill={liked}
                 hoverClass="group-hover:bg-destructive/10 group-hover:text-destructive"
-                onClick={stop(() => app.toggleLike(post.id, post.liked))}
+                onClick={stop(() => like.mutate({ postId: post.id, liked: !liked }))}
               />
               <Action
                 icon={BarChart2}
