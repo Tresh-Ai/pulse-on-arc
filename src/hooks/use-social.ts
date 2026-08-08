@@ -50,12 +50,10 @@ export function useCreatePost() {
 }
 
 export function useDeletePost() {
-  return useSocialMutation((id: string) => social.deletePost(id), [
-    "feed",
-    "post",
-    "profile",
-    "bookmarks",
-  ]);
+  return useSocialMutation(
+    (id: string) => social.deletePost(id),
+    ["feed", "post", "profile", "bookmarks"],
+  );
 }
 
 export function useMarkNotificationsRead() {

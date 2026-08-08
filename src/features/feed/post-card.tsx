@@ -52,7 +52,6 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
     fn();
   };
 
-
   return (
     <article className="relative border-b border-border transition-colors duration-150 hover:bg-elevated/25">
       <Link
@@ -128,7 +127,6 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                     Copy link
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-
               </DropdownMenu>
             </div>
 

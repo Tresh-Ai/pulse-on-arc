@@ -1,12 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Inbox, Link2, ShieldCheck } from "lucide-react";
-import {
-  ColumnHeader,
-  EmptyState,
-  ErrorState,
-  ListSkeleton,
-} from "@/components/common/states";
+import { ColumnHeader, EmptyState, ErrorState, ListSkeleton } from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -120,9 +115,7 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
                 <Button
                   variant={user.isFollowing ? "outline" : "gradient"}
                   disabled={follow.isPending}
-                  onClick={() =>
-                    follow.mutate({ userId: user.id, following: !user.isFollowing })
-                  }
+                  onClick={() => follow.mutate({ userId: user.id, following: !user.isFollowing })}
                 >
                   {user.isFollowing ? "Following" : "Follow"}
                 </Button>

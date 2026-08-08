@@ -10,7 +10,11 @@ export const handleSchema = z
   .max(20, "Handles can be at most 20 characters.")
   .regex(/^[a-z0-9_]+$/, "Use letters, numbers and underscores only.");
 
-export const emailSchema = z.string().trim().min(1, "Email is required.").email("Enter a valid email address.");
+export const emailSchema = z
+  .string()
+  .trim()
+  .min(1, "Email is required.")
+  .email("Enter a valid email address.");
 
 export const passwordSchema = z
   .string()
@@ -40,7 +44,11 @@ export const postSchema = z.object({
 });
 
 export const profileSchema = z.object({
-  display_name: z.string().trim().min(1, "Add a display name.").max(50, "Keep it under 50 characters."),
+  display_name: z
+    .string()
+    .trim()
+    .min(1, "Add a display name.")
+    .max(50, "Keep it under 50 characters."),
   handle: handleSchema,
   bio: z.string().trim().max(280, "Bios are limited to 280 characters.").optional(),
 });

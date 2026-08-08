@@ -79,9 +79,7 @@ function SignInPage() {
               onChange={(e) => setEmail(e.target.value)}
               aria-invalid={Boolean(errors["email"])}
             />
-            {errors["email"] ? (
-              <p className="text-sm text-destructive">{errors["email"]}</p>
-            ) : null}
+            {errors["email"] ? <p className="text-sm text-destructive">{errors["email"]}</p> : null}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>

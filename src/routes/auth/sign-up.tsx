@@ -96,7 +96,9 @@ function SignUpPage() {
               onChange={(e) => setHandle(e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase())}
               aria-invalid={Boolean(errors["handle"])}
             />
-            {errors["handle"] ? <p className="text-sm text-destructive">{errors["handle"]}</p> : null}
+            {errors["handle"] ? (
+              <p className="text-sm text-destructive">{errors["handle"]}</p>
+            ) : null}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>
@@ -108,7 +110,9 @@ function SignUpPage() {
               onChange={(e) => setPassword(e.target.value)}
               aria-invalid={Boolean(errors["password"])}
             />
-            {errors["password"] ? <p className="text-sm text-destructive">{errors["password"]}</p> : null}
+            {errors["password"] ? (
+              <p className="text-sm text-destructive">{errors["password"]}</p>
+            ) : null}
           </div>
           <Button variant="gradient" className="w-full" type="submit" disabled={pending}>
             {pending ? "Creating" : "Create account"}

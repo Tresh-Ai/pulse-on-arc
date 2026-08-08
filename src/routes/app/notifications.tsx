@@ -54,7 +54,6 @@ function NotificationsPage() {
   const list = useQuery(queries.notifications());
   const markRead = useMarkNotificationsRead();
 
-
   const items = (list.data ?? []).filter((n) =>
     tab === "mentions"
       ? n.kind === "mention" || n.kind === "reply"

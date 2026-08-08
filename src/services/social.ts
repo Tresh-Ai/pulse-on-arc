@@ -344,7 +344,10 @@ export async function getProfileByHandle(handle: string): Promise<ProfileView> {
       .is("parent_id", null)
       .order("created_at", { ascending: false })
       .limit(50),
-    supabase.from("follows").select("id", { count: "exact", head: true }).eq("following_id", row.id),
+    supabase
+      .from("follows")
+      .select("id", { count: "exact", head: true })
+      .eq("following_id", row.id),
     supabase.from("follows").select("id", { count: "exact", head: true }).eq("follower_id", row.id),
     uid
       ? supabase
