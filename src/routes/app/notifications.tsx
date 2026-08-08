@@ -52,7 +52,8 @@ type Tab = "all" | "mentions" | "markets";
 function NotificationsPage() {
   const [tab, setTab] = useState<Tab>("all");
   const list = useQuery(queries.notifications());
-  const app = useApp();
+  const markRead = useMarkNotificationsRead();
+
 
   const items = (list.data ?? []).filter((n) =>
     tab === "mentions"
