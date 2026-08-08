@@ -364,7 +364,7 @@ export async function getProfileByHandle(handle: string): Promise<ProfileView> {
     postCount: posts.length,
     isFollowing: Boolean(isFollowing.data),
   });
-  return { user, posts };
+  return { user, posts, predictions: [], activity: [] };
 }
 
 export async function listSuggestedAccounts(limit = 5): Promise<User[]> {
