@@ -318,7 +318,14 @@ export async function setFollow(userId: string, following: boolean): Promise<voi
 
 /* -------------------------------- profiles -------------------------------- */
 
-export async function getProfileByHandle(handle: string): Promise<{ user: User; posts: Post[] }> {
+export interface ProfileView {
+  user: User;
+  posts: Post[];
+  predictions: never[];
+  activity: never[];
+}
+
+export async function getProfileByHandle(handle: string): Promise<ProfileView> {
   const { data, error } = await supabase
     .from("profiles")
     .select(PROFILE_COLUMNS)
