@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { Image as ImageIcon, ListChecks, TrendingUp, X, Plus } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Image as ImageIcon, TrendingUp, X } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useApp } from "@/store/app-store";
+import { useAuth } from "@/hooks/use-auth";
+import { useCreatePost } from "@/hooks/use-social";
+import { postSchema } from "@/lib/validation";
+import { avatarUrl } from "@/lib/identity";
 import { cn } from "@/lib/utils";
 
-const LIMIT = 280;
+const LIMIT = 1000;
 
 const IMAGE_CHOICES = [
   "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=70",
@@ -32,43 +34,54 @@ function ComposerBody({
   predictionId?: string;
   placeholder?: string;
 }) {
-  const { user, createPost } = useApp();
-  const queryClient = useQueryClient();
+  const { session, profile } = useAuth();
+  const create = useCreatePost();
   const [value, setValue] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [pollOptions, setPollOptions] = useState<string[] | null>(null);
-  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const remaining = LIMIT - value.length;
   const over = remaining < 0;
-  const pollReady = !pollOptions || pollOptions.filter((o) => o.trim()).length >= 2;
+
+  if (!session) {
+    return (
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Sign in to post, reply and follow accounts on Pulse.
+        </p>
+        <Button variant="gradient" size="sm" asChild>
+          <Link to="/auth/sign-in">Sign in</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const submit = async () => {
-    if (!value.trim() || over || !pollReady) return;
-    setPending(true);
-    createPost({
-      body: value.trim(),
-      ...(replyToId ? { replyToId } : {}),
-      ...(communityId ? { communityId } : {}),
-      ...(predictionId ? { predictionId } : {}),
-      ...(imageUrl ? { imageUrl } : {}),
-      ...(pollOptions
-        ? {
-            poll: {
-              question: value.trim(),
-              options: pollOptions.map((o) => o.trim()).filter(Boolean),
-            },
-          }
-        : {}),
-    });
-    await queryClient.invalidateQueries();
-    setPending(false);
-    setValue("");
-    setImageUrl(null);
-    setPollOptions(null);
-    toast.success(replyToId ? "Reply posted" : "Posted to your followers");
-    onDone?.();
+    const parsed = postSchema.safeParse({ body: value });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Check your post.");
+      return;
+    }
+    setError(null);
+    try {
+      await create.mutateAsync({
+        body: parsed.data.body,
+        ...(replyToId ? { parentId: replyToId } : {}),
+        ...(communityId ? { communityId } : {}),
+        ...(predictionId ? { predictionId } : {}),
+        ...(imageUrl ? { imageUrl } : {}),
+      });
+      setValue("");
+      setImageUrl(null);
+      toast.success(replyToId ? "Reply posted" : "Posted to your followers");
+      onDone?.();
+    } catch {
+      // useCreatePost already surfaces the failure as a toast.
+    }
   };
+
+  const displayName = profile?.display_name ?? "You";
+  const avatar = profile?.avatar_url ?? avatarUrl(profile?.handle ?? session.user.id);
 
   const cycleImage = () => {
     const index = imageUrl ? IMAGE_CHOICES.indexOf(imageUrl) + 1 : 0;
@@ -78,8 +91,8 @@ function ComposerBody({
   return (
     <div className="flex gap-3">
       <Avatar className="size-10 shrink-0">
-        <AvatarImage src={user.avatar} alt="" />
-        <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
+        <AvatarImage src={avatar} alt="" />
+        <AvatarFallback>{displayName.slice(0, 2)}</AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
         <textarea
@@ -93,7 +106,13 @@ function ComposerBody({
 
         {imageUrl ? (
           <div className="relative mt-2 overflow-hidden rounded-[18px] border border-border">
-            <img src={imageUrl} alt="" className="max-h-72 w-full object-cover" loading="lazy" />
+            <img
+              src={imageUrl}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="max-h-72 w-full object-cover"
+            />
             <button
               onClick={() => setImageUrl(null)}
               aria-label="Remove image"
@@ -104,41 +123,7 @@ function ComposerBody({
           </div>
         ) : null}
 
-        {pollOptions ? (
-          <div className="mt-3 space-y-2 rounded-[18px] border border-border p-3">
-            {pollOptions.map((option, i) => (
-              <Input
-                key={i}
-                value={option}
-                placeholder={`Choice ${i + 1}`}
-                onChange={(e) =>
-                  setPollOptions((prev) =>
-                    (prev ?? []).map((o, oi) => (oi === i ? e.target.value : o)),
-                  )
-                }
-              />
-            ))}
-            <div className="flex items-center gap-2">
-              {pollOptions.length < 4 ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setPollOptions((prev) => [...(prev ?? []), ""])}
-                >
-                  <Plus className="size-4" /> Add choice
-                </Button>
-              ) : null}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="ml-auto text-muted-foreground"
-                onClick={() => setPollOptions(null)}
-              >
-                Remove poll
-              </Button>
-            </div>
-          </div>
-        ) : null}
+        {error ? <p className="mt-1 text-sm text-destructive">{error}</p> : null}
 
         <div className="mt-2 flex items-center gap-1 border-t border-border pt-3">
           <button
@@ -148,17 +133,6 @@ function ComposerBody({
             className="grid size-9 place-items-center rounded-full text-cyan transition-colors hover:bg-cyan/10"
           >
             <ImageIcon className="size-[18px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setPollOptions((prev) => (prev ? null : ["", ""]))}
-            aria-label="Add poll"
-            className={cn(
-              "grid size-9 place-items-center rounded-full text-cyan transition-colors hover:bg-cyan/10",
-              pollOptions && "bg-cyan/10",
-            )}
-          >
-            <ListChecks className="size-[18px]" />
           </button>
           <button
             type="button"
@@ -181,10 +155,10 @@ function ComposerBody({
             variant="gradient"
             size="sm"
             className="ml-3"
-            disabled={!value.trim() || over || pending || !pollReady}
+            disabled={!value.trim() || over || create.isPending}
             onClick={submit}
           >
-            {pending ? "Posting…" : replyToId ? "Reply" : "Post"}
+            {create.isPending ? "Posting…" : replyToId ? "Reply" : "Post"}
           </Button>
         </div>
       </div>
