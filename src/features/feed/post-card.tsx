@@ -101,16 +101,34 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
                   <MoreHorizontal className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onSelect={() => toast("Muted for this session")}>
-                    Mute @{post.author.username}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => toast("Report submitted")}>
-                    Report post
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => toast.success("Link copied")}>
+                  {isMine ? (
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onSelect={() =>
+                        removePost.mutate(post.id, {
+                          onSuccess: () => toast.success("Post deleted"),
+                        })
+                      }
+                    >
+                      Delete post
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onSelect={() => toast("Report submitted")}>
+                      Report post
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      void navigator.clipboard?.writeText(
+                        `${window.location.origin}/app/post/${post.id}`,
+                      );
+                      toast.success("Link copied");
+                    }}
+                  >
                     Copy link
                   </DropdownMenuItem>
                 </DropdownMenuContent>
+
               </DropdownMenu>
             </div>
 
