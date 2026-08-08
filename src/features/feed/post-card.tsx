@@ -23,17 +23,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn, formatCompact, formatPercent, formatRelativeTime, timeRemaining } from "@/lib/utils";
 import { useApp } from "@/store/app-store";
+import { useAuth } from "@/hooks/use-auth";
+import { useDeletePost, useToggleBookmark, useToggleLike } from "@/hooks/use-social";
 
 /**
  * Timeline post row. Borderless, full bleed and edge to edge like a native
  * social timeline: avatar column on the left, content and actions on the right.
+ * Likes, bookmarks and deletes write straight to the backend.
  */
 export function PostCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const app = useApp();
   const router = useRouter();
-  const liked = app.isLiked(post.id, post.liked);
+  const { profile: me } = useAuth();
+  const like = useToggleLike();
+  const bookmark = useToggleBookmark();
+  const removePost = useDeletePost();
+  const liked = post.liked;
   const reposted = app.isReposted(post.id, post.reposted);
-  const bookmarked = app.isBookmarked(post.id, post.bookmarked);
+  const bookmarked = post.bookmarked;
+  const isMine = me?.id === post.author.id;
 
   const pollTotal = post.poll?.options.reduce((sum, o) => sum + o.votes, 0) ?? 0;
   const votedOption = post.poll ? app.pollVotes[post.id] : undefined;
@@ -43,6 +51,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
     e.stopPropagation();
     fn();
   };
+
 
   return (
     <article className="relative border-b border-border transition-colors duration-150 hover:bg-elevated/25">
