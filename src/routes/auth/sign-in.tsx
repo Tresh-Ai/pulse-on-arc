@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BrandMark } from "@/components/brand";
 import { useAuth } from "@/hooks/use-auth";
+import { fieldErrors, signInSchema } from "@/lib/validation";
 
 export const Route = createFileRoute("/auth/sign-in")({
   head: () => ({
@@ -28,9 +29,16 @@ function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const parsed = signInSchema.safeParse({ email, password });
+    if (!parsed.success) {
+      setErrors(fieldErrors(parsed.error));
+      return;
+    }
+    setErrors({});
     setPending(true);
     try {
       await signInWithPassword(email, password);
@@ -69,7 +77,11 @@ function SignInPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={Boolean(errors["email"])}
             />
+            {errors["email"] ? (
+              <p className="text-sm text-destructive">{errors["email"]}</p>
+            ) : null}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>
@@ -79,7 +91,11 @@ function SignInPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              aria-invalid={Boolean(errors["password"])}
             />
+            {errors["password"] ? (
+              <p className="text-sm text-destructive">{errors["password"]}</p>
+            ) : null}
           </div>
           <Button variant="gradient" className="w-full" type="submit" disabled={pending}>
             {pending ? "Signing in" : "Sign in"}
