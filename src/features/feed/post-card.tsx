@@ -228,7 +228,7 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
               <Action
                 icon={Heart}
                 label="Like"
-                value={post.likes + (liked !== post.liked ? (liked ? 1 : -1) : 0)}
+                value={post.likes}
                 active={liked}
                 activeClass="text-destructive"
                 fill={liked}
