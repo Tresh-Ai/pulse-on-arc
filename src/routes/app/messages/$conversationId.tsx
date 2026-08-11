@@ -19,7 +19,7 @@ export const Route = createFileRoute("/app/messages/$conversationId")({
       { property: "og:description", content: "A direct conversation thread on Pulse." },
     ],
   }),
-  component: ThreadPage,
+  component: ComingSoonRoute,
 });
 
 function ThreadPage() {
@@ -121,5 +121,13 @@ function ThreadPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Messages" title="Coming soon" description="Direct messages are built and in final testing. You will be able to DM anyone you follow shortly.">
+      <ThreadPage />
+    </ComingSoon>
   );
 }

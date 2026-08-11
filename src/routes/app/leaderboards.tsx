@@ -26,7 +26,7 @@ export const Route = createFileRoute("/app/leaderboards")({
       { property: "og:description", content: "Ranked traders, predictors and creators on Pulse." },
     ],
   }),
-  component: LeaderboardsPage,
+  component: ComingSoonRoute,
 });
 
 const BOARDS: { id: LeaderboardBoard; label: string }[] = [
@@ -128,5 +128,13 @@ function LeaderboardsPage() {
         </Link>
       ))}
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Leaderboards" title="Coming soon" description="Ranking traders, predictors and creators needs a full season of real activity first.">
+      <LeaderboardsPage />
+    </ComingSoon>
   );
 }

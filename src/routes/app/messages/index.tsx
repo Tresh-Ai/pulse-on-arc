@@ -17,7 +17,7 @@ export const Route = createFileRoute("/app/messages/")({
       { property: "og:description", content: "Direct conversations with traders and creators." },
     ],
   }),
-  component: MessagesPage,
+  component: ComingSoonRoute,
 });
 
 function MessagesPage() {
@@ -95,5 +95,13 @@ function MessagesPage() {
         </Link>
       ))}
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Messages" title="Coming soon" description="Direct messages are built and in final testing. You will be able to DM anyone you follow shortly.">
+      <MessagesPage />
+    </ComingSoon>
   );
 }
