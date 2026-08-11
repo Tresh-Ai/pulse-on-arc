@@ -1,3 +1,4 @@
+import { ComingSoon } from "@/components/common/coming-soon";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/app/token")({
       { property: "og:description", content: "PLS price, supply, holders and network utility." },
     ],
   }),
-  component: TokenPage,
+  component: ComingSoonRoute,
 });
 
 function TokenPage() {
@@ -114,5 +115,13 @@ function TokenPage() {
         </div>
       ))}
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Token" title="Launch soon" description="The PLS token page goes live with the token launch. Metrics, supply and staking are ready to switch on.">
+      <TokenPage />
+    </ComingSoon>
   );
 }

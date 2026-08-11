@@ -1,3 +1,4 @@
+import { ComingSoon } from "@/components/common/coming-soon";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/app/communities/$slug")({
       { property: "og:description", content: "Community posts, markets, moderators and members." },
     ],
   }),
-  component: CommunityDetail,
+  component: ComingSoonRoute,
 });
 
 type Tab = "posts" | "markets" | "members" | "about";
@@ -154,5 +155,13 @@ function CommunityDetail() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Communities" title="Coming soon" description="Rooms, moderation and shared feeds are on the way so groups can trade ideas together.">
+      <CommunityDetail />
+    </ComingSoon>
   );
 }

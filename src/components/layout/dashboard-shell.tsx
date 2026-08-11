@@ -19,7 +19,7 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { ShellContext } from "./shell-context";
-import { bottomNav, moreNav, primaryNav, type NavItem } from "./nav-items";
+import { bottomNav, moreNav, primaryNav, visibleNav, type NavItem } from "./nav-items";
 import { SearchOverlay } from "./search-overlay";
 import { NotificationsDrawer } from "./notifications-drawer";
 import { ComposerDialog } from "@/features/feed/composer";
@@ -132,7 +132,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               </Link>
 
               <nav className="flex flex-col gap-0.5" aria-label="Primary">
-                {primaryNav.map((item) => sidebarLink(item))}
+                {visibleNav(primaryNav, Boolean(session)).map((item) => sidebarLink(item))}
 
                 <button
                   onClick={() => setMoreOpen((v) => !v)}
@@ -151,7 +151,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
                 {moreOpen ? (
                   <div className="flex flex-col gap-0.5">
-                    {moreNav.map((item) => sidebarLink(item))}
+                    {visibleNav(moreNav, Boolean(session)).map((item) => sidebarLink(item))}
                   </div>
                 ) : null}
               </nav>
@@ -186,18 +186,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 </span>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
-                <Link
-                  to="/app/profile"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
-                >
-                  <UserIcon className="size-4" /> View profile
-                </Link>
-                <Link
-                  to="/app/settings"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
-                >
-                  <Settings className="size-4" /> Settings
-                </Link>
                 {session ? (
                   <button
                     onClick={() => {
@@ -236,7 +224,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           aria-label="Primary mobile"
         >
           <div className="flex items-center justify-around px-1 pb-[env(safe-area-inset-bottom)] pt-1.5">
-            {bottomNav.map((item) => {
+            {visibleNav(bottomNav, Boolean(session)).map((item) => {
               const active = isActive(pathname, item.to);
               const badge = item.badgeKey ? badges[item.badgeKey] : 0;
               return (
@@ -281,13 +269,15 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               <div className="flex items-center gap-3 border-b border-border p-4">
                 <BrandMark className="size-10" />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold">{user.displayName}</p>
-                  <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
+                  <p className="truncate text-sm font-bold">{session ? displayName : "Guest"}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {session ? `@${handle}` : "Not signed in"}
+                  </p>
                 </div>
               </div>
 
               <nav className="flex-1 overflow-y-auto p-2" aria-label="Mobile">
-                {[...primaryNav, ...moreNav].map((item) => (
+                {visibleNav([...primaryNav, ...moreNav], Boolean(session)).map((item) => (
                   <Link
                     key={item.to}
                     to={item.to as never}

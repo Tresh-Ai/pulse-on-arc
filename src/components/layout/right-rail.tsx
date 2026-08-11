@@ -162,7 +162,7 @@ export function RightRail() {
 }
 
 function MarketMini() {
-  const { data, isPending } = useQuery(queries.predictions({ status: "open" }));
+  const { data, isPending } = useQuery(queries.markets({ status: "open" }));
   if (isPending) {
     return (
       <div className="mt-3 space-y-3">

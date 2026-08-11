@@ -1,3 +1,4 @@
+import { ComingSoon } from "@/components/common/coming-soon";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/app/creator")({
       { property: "og:description", content: "Audience growth, revenue and content performance." },
     ],
   }),
-  component: CreatorPage,
+  component: ComingSoonRoute,
 });
 
 function CreatorPage() {
@@ -124,5 +125,13 @@ function CreatorPage() {
         </div>
       ))}
     </div>
+  );
+}
+
+function ComingSoonRoute() {
+  return (
+    <ComingSoon eyebrow="Creator studio" title="Coming soon" description="Audience analytics, earnings and post performance open up for creators in the next release.">
+      <CreatorPage />
+    </ComingSoon>
   );
 }
