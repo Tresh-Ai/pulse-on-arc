@@ -2,6 +2,8 @@ import { queryOptions } from "@tanstack/react-query";
 import type { FeedFilter, LeaderboardBoard, LeaderboardRange } from "@/types";
 import * as api from "./api";
 import * as social from "./social";
+import * as markets from "./markets";
+import { listTrendingTags } from "./discovery";
 
 export const queries = {
   /* Social graph — stored in the backend. */
@@ -28,12 +30,22 @@ export const queries = {
   communities: () => queryOptions({ queryKey: ["communities"], queryFn: api.getCommunities }),
   community: (slug: string) =>
     queryOptions({ queryKey: ["community", slug], queryFn: () => api.getCommunity(slug) }),
-  predictions: (query: api.PredictionQuery) =>
-    queryOptions({ queryKey: ["predictions", query], queryFn: () => api.getPredictions(query) }),
-  prediction: (id: string) =>
-    queryOptions({ queryKey: ["prediction", id], queryFn: () => api.getPrediction(id) }),
-  myPredictionStats: () =>
-    queryOptions({ queryKey: ["my-prediction-stats"], queryFn: api.getMyPredictionStats }),
+  markets: (query: markets.MarketQuery) =>
+    queryOptions({ queryKey: ["markets", query], queryFn: () => markets.listMarkets(query) }),
+  market: (id: string) =>
+    queryOptions({ queryKey: ["market", id], queryFn: () => markets.getMarket(id) }),
+  relatedMarkets: (market: markets.Market) =>
+    queryOptions({
+      queryKey: ["related-markets", market.id],
+      queryFn: () => markets.listRelatedMarkets(market),
+    }),
+  myPositions: (marketId?: string) =>
+    queryOptions({
+      queryKey: ["my-positions", marketId ?? "all"],
+      queryFn: () => markets.listMyPositions(marketId),
+    }),
+  myMarketStats: () =>
+    queryOptions({ queryKey: ["my-market-stats"], queryFn: markets.getMyMarketStats }),
   leaderboard: (board: LeaderboardBoard, range: LeaderboardRange) =>
     queryOptions({
       queryKey: ["leaderboard", board, range],
@@ -45,7 +57,7 @@ export const queries = {
   search: (term: string) =>
     queryOptions({ queryKey: ["search", term], queryFn: () => api.search(term) }),
   trendingTopics: () =>
-    queryOptions({ queryKey: ["trending-topics"], queryFn: api.getTrendingTopics }),
+    queryOptions({ queryKey: ["trending-topics"], queryFn: () => listTrendingTags() }),
   wallet: () => queryOptions({ queryKey: ["wallet"], queryFn: api.getWallet }),
   token: () => queryOptions({ queryKey: ["token"], queryFn: api.getToken }),
   creatorStats: () => queryOptions({ queryKey: ["creator-stats"], queryFn: api.getCreatorStats }),
