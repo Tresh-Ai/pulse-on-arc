@@ -186,18 +186,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 </span>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-[240px] p-1.5">
-                <Link
-                  to="/app/profile"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
-                >
-                  <UserIcon className="size-4" /> View profile
-                </Link>
-                <Link
-                  to="/app/settings"
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-elevated"
-                >
-                  <Settings className="size-4" /> Settings
-                </Link>
                 {session ? (
                   <button
                     onClick={() => {
