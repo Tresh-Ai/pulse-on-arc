@@ -196,6 +196,86 @@ export type Database = {
           },
         ]
       }
+      prediction_markets: {
+        Row: {
+          category: string
+          closes_at: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          no_pool: number
+          resolved_outcome: string | null
+          status: string
+          title: string
+          updated_at: string
+          yes_pool: number
+        }
+        Insert: {
+          category?: string
+          closes_at?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          no_pool?: number
+          resolved_outcome?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          yes_pool?: number
+        }
+        Update: {
+          category?: string
+          closes_at?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          no_pool?: number
+          resolved_outcome?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          yes_pool?: number
+        }
+        Relationships: []
+      }
+      prediction_positions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          market_id: string
+          side: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          market_id: string
+          side: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          market_id?: string
+          side?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prediction_positions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
