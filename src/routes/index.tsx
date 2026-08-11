@@ -107,7 +107,7 @@ const STEPS = [
 
 function LandingPage() {
   const token = useQuery(queries.token());
-  const predictions = useQuery(queries.predictions({ status: "open" }));
+  const predictions = useQuery(queries.markets({ status: "open" }));
   const suggested = useQuery(queries.suggestedUsers());
 
   return (
@@ -214,7 +214,7 @@ function LandingPage() {
                   </div>
                   <div className="mt-2 flex justify-between text-xs text-muted-foreground">
                     <span className="text-success">YES {p.yesPercent}%</span>
-                    <span>{formatCompact(p.participants)} participants</span>
+                    <span>{formatUsd(p.pool, { compact: true })} pool</span>
                   </div>
                 </Link>
               ))}
@@ -285,7 +285,7 @@ function LandingPage() {
                     <Badge className="rounded-full bg-elevated text-[11px] text-foreground">
                       {p.category}
                     </Badge>
-                    {formatCompact(p.participants)} participants
+                    {formatUsd(p.pool, { compact: true })} pool
                   </div>
                   <p className="mt-2 font-semibold">{p.title}</p>
                   <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-elevated">

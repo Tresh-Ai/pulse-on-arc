@@ -52,7 +52,7 @@ function ExplorePage() {
 
   const topics = useQuery({ ...queries.trendingTopics(), enabled: tab === "trending" });
   const feed = useQuery({ ...queries.feed("trending"), enabled: tab === "trending" });
-  const markets = useQuery({ ...queries.predictions({}), enabled: tab === "markets" });
+  const markets = useQuery({ ...queries.markets({ status: "open" }), enabled: tab === "markets" });
   const people = useQuery({ ...queries.suggestedUsers(), enabled: tab === "people" });
   const rooms = useQuery({ ...queries.communities(), enabled: tab === "communities" });
 
@@ -115,7 +115,7 @@ function ExplorePage() {
         markets.isPending ? (
           <ListSkeleton count={4} />
         ) : markets.data?.length ? (
-          markets.data.map((p) => <PredictionCard key={p.id} prediction={p} />)
+          markets.data.map((m) => <MarketCard key={m.id} market={m} />)
         ) : (
           <EmptyState icon={Compass} title="No markets" description="Nothing matches right now." />
         )
