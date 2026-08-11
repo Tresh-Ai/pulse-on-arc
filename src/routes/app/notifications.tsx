@@ -34,7 +34,7 @@ export const Route = createFileRoute("/app/notifications")({
       { property: "og:description", content: "Replies, mentions, follows and market activity." },
     ],
   }),
-  component: NotificationsPage,
+  component: GuardedRoute,
 });
 
 const ICONS: Record<NotificationKind, typeof Heart> = {
@@ -131,5 +131,13 @@ function NotificationsPage() {
         );
       })}
     </div>
+  );
+}
+
+function GuardedRoute() {
+  return (
+    <RequireAuth title="Notifications">
+      <NotificationsPage />
+    </RequireAuth>
   );
 }

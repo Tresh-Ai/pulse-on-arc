@@ -1,3 +1,4 @@
+import { RequireAuth } from "@/components/common/require-auth";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/app/bookmarks")({
       { property: "og:description", content: "Posts you saved for later on Pulse." },
     ],
   }),
-  component: BookmarksPage,
+  component: GuardedRoute,
 });
 
 function BookmarksPage() {
@@ -38,5 +39,13 @@ function BookmarksPage() {
         <PostCard key={p.id} post={p} />
       ))}
     </div>
+  );
+}
+
+function GuardedRoute() {
+  return (
+    <RequireAuth title="Bookmarks">
+      <BookmarksPage />
+    </RequireAuth>
   );
 }
