@@ -279,33 +279,84 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          banner_url: string | null
           bio: string | null
           created_at: string
           display_name: string
           handle: string
           id: string
+          location: string | null
           updated_at: string
           wallet_address: string | null
+          wallet_chain_id: number | null
+          website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string
           handle: string
           id: string
+          location?: string | null
           updated_at?: string
           wallet_address?: string | null
+          wallet_chain_id?: number | null
+          website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string
           handle?: string
           id?: string
+          location?: string | null
           updated_at?: string
           wallet_address?: string | null
+          wallet_chain_id?: number | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          notify_market_resolutions: boolean
+          notify_mentions: boolean
+          notify_new_followers: boolean
+          notify_weekly_digest: boolean
+          private_profile: boolean
+          show_positions: boolean
+          show_wallet: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          notify_market_resolutions?: boolean
+          notify_mentions?: boolean
+          notify_new_followers?: boolean
+          notify_weekly_digest?: boolean
+          private_profile?: boolean
+          show_positions?: boolean
+          show_wallet?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          notify_market_resolutions?: boolean
+          notify_mentions?: boolean
+          notify_new_followers?: boolean
+          notify_weekly_digest?: boolean
+          private_profile?: boolean
+          show_positions?: boolean
+          show_wallet?: boolean
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
