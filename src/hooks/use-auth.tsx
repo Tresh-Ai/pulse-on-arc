@@ -17,8 +17,13 @@ export interface Profile {
   display_name: string;
   bio: string | null;
   avatar_url: string | null;
+  banner_url: string | null;
+  location: string | null;
+  website: string | null;
   wallet_address: string | null;
+  wallet_chain_id: number | null;
 }
+
 
 interface AuthState {
   session: Session | null;
