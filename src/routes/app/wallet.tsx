@@ -1,278 +1,306 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowDownLeft, ArrowUpRight, Copy, Plus } from "lucide-react";
-import { ColumnHeader, ErrorState, ListSkeleton, SectionTitle } from "@/components/common/states";
+import {
+  ArrowUpRight,
+  Copy,
+  ExternalLink,
+  Droplets,
+  RefreshCw,
+  Wallet as WalletIcon,
+} from "lucide-react";
+import { ColumnHeader, EmptyState, SectionTitle } from "@/components/common/states";
+import { RequireAuth } from "@/components/common/require-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConnectWalletDialog } from "@/features/wallet/connect-wallet-dialog";
+import { useWallet } from "@/features/wallet/wallet-provider";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { AreaTrend, Sparkline } from "@/components/charts";
-import { ArcWalletCard } from "@/features/wallet/arc-wallet-card";
-import { queries } from "@/services/queries";
-import { submitTransfer } from "@/services/api";
-import {
-  cn,
-  formatCompact,
-  formatPercent,
-  formatRelativeTime,
-  formatUsd,
-  truncateAddress,
-} from "@/lib/utils";
+  ARC_NETWORKS,
+  explorerAddressUrl,
+  explorerTxUrl,
+  isAddress,
+  networkByChainId,
+  type ArcNetwork,
+} from "@/lib/arc";
+import { cn, formatRelativeTime, truncateAddress } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({
     meta: [
       { title: "Wallet | Pulse" },
-      { name: "description", content: "Balances, transfers and transaction history on Pulse." },
+      { name: "description", content: "Connect a wallet and move USDC on the Arc network." },
       { property: "og:title", content: "Wallet | Pulse" },
-      { property: "og:description", content: "Balances, transfers and transaction history." },
+      { property: "og:description", content: "Balances, transfers and network switching on Arc." },
     ],
   }),
-  component: WalletPage,
+  component: WalletRoute,
 });
 
-type Action = "deposit" | "withdraw" | "send";
-
-function WalletPage() {
-  const wallet = useQuery(queries.wallet());
-  const portfolio = useQuery(queries.portfolioPreview());
-  const [action, setAction] = useState<Action | null>(null);
-
-  if (wallet.isPending) {
-    return (
-      <div>
-        <ColumnHeader title="Wallet" />
-        <ListSkeleton count={4} />
-      </div>
-    );
-  }
-  if (wallet.isError || !wallet.data) {
-    return (
-      <div>
-        <ColumnHeader title="Wallet" />
-        <ErrorState description="Wallet did not load." onRetry={() => wallet.refetch()} />
-      </div>
-    );
-  }
-
-  const data = wallet.data;
-
+function WalletRoute() {
   return (
-    <div>
-      <ColumnHeader title="Wallet" />
-
-      <ArcWalletCard />
-
-      <div className="border-b border-border px-4 py-5 sm:px-5">
-        <p className="text-sm text-muted-foreground">Total balance</p>
-        <p className="mt-1 text-3xl font-bold tabular-nums">{formatUsd(data.totalUsd)}</p>
-        <p
-          className={cn(
-            "mt-1 text-sm font-semibold tabular-nums",
-            data.change24h >= 0 ? "text-success" : "text-destructive",
-          )}
-        >
-          {formatPercent(data.change24h)} today
-        </p>
-
-        <button
-          onClick={() => {
-            void navigator.clipboard?.writeText(data.address);
-            toast.success("Address copied");
-          }}
-          className="mt-3 flex items-center gap-2 rounded-full bg-elevated px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {truncateAddress(data.address)} <Copy className="size-3" />
-        </button>
-
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          <Button variant="gradient" onClick={() => setAction("deposit")}>
-            <Plus className="size-4" /> Deposit
-          </Button>
-          <Button variant="outline" onClick={() => setAction("send")}>
-            <ArrowUpRight className="size-4" /> Send
-          </Button>
-          <Button variant="outline" onClick={() => setAction("withdraw")}>
-            <ArrowDownLeft className="size-4" /> Withdraw
-          </Button>
-        </div>
-      </div>
-
-      {portfolio.data ? (
-        <div className="border-b border-border px-4 py-4 sm:px-5">
-          <SectionTitle>Portfolio, 30 days</SectionTitle>
-          <div className="mt-3">
-            <AreaTrend
-              data={portfolio.data.series.map((p) => ({ label: p.t, value: p.value }))}
-              xKey="label"
-              yKey="value"
-              height={180}
-            />
-          </div>
-        </div>
-      ) : null}
-
-      <div className="px-4 py-4 sm:px-5">
-        <SectionTitle>Assets</SectionTitle>
-      </div>
-      {data.assets.map((a) => (
-        <div
-          key={a.symbol}
-          className="flex items-center gap-3 border-b border-border px-4 py-3.5 sm:px-5"
-        >
-          <span
-            className={cn(
-              "grid size-10 shrink-0 place-items-center rounded-full text-xs font-bold",
-              a.logoTint === "primary" && "bg-primary/15 text-primary",
-              a.logoTint === "cyan" && "bg-cyan/15 text-cyan",
-              a.logoTint === "success" && "bg-success/15 text-success",
-              a.logoTint === "warning" && "bg-warning/15 text-warning",
-            )}
-          >
-            {a.symbol.slice(0, 3)}
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-bold">{a.name}</p>
-            <p className="text-xs text-muted-foreground tabular-nums">
-              {formatCompact(a.balance, 2)} {a.symbol}
-            </p>
-          </div>
-          <Sparkline
-            series={[1, 1.2, 0.9, 1.4, 1.3, 1.6].map((v) => v * (1 + a.change24h / 100))}
-            positive={a.change24h >= 0}
-            className="hidden sm:block"
-          />
-          <div className="text-right">
-            <p className="text-sm font-bold tabular-nums">{formatUsd(a.usdValue)}</p>
-            <p
-              className={cn(
-                "text-xs tabular-nums",
-                a.change24h >= 0 ? "text-success" : "text-destructive",
-              )}
-            >
-              {formatPercent(a.change24h)}
-            </p>
-          </div>
-        </div>
-      ))}
-
-      <div className="px-4 py-4 sm:px-5">
-        <SectionTitle>Transactions</SectionTitle>
-      </div>
-      {data.transactions.map((t) => (
-        <div
-          key={t.id}
-          className="flex items-center gap-3 border-b border-border px-4 py-3 sm:px-5"
-        >
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold capitalize">
-              {t.kind} · {t.asset}
-            </p>
-            <p className="truncate text-xs text-muted-foreground">
-              {t.counterparty} · {formatRelativeTime(t.at)}
-            </p>
-          </div>
-          <div className="text-right">
-            <p
-              className={cn(
-                "text-sm font-bold tabular-nums",
-                t.amount >= 0 ? "text-success" : "text-destructive",
-              )}
-            >
-              {t.amount >= 0 ? "+" : ""}
-              {formatCompact(t.amount, 2)} {t.asset}
-            </p>
-            <p className="text-xs capitalize text-muted-foreground">{t.status}</p>
-          </div>
-        </div>
-      ))}
-
-      <TransferDialog
-        action={action}
-        onClose={() => setAction(null)}
-        symbols={data.assets.map((a) => a.symbol)}
-      />
-    </div>
+    <RequireAuth title="Wallet">
+      <WalletPage />
+    </RequireAuth>
   );
 }
 
-function TransferDialog({
-  action,
-  onClose,
-  symbols,
-}: {
-  action: Action | null;
-  onClose: () => void;
-  symbols: string[];
-}) {
-  const queryClient = useQueryClient();
-  const [amount, setAmount] = useState("");
-  const [asset, setAsset] = useState(symbols[0] ?? "USDC");
-  const [destination, setDestination] = useState("");
-  const [pending, setPending] = useState(false);
+function WalletPage() {
+  const wallet = useWallet();
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
 
-  const submit = async () => {
-    if (!action) return;
-    setPending(true);
+  const network = wallet.network ?? wallet.preferred;
+  const onWrongChain = Boolean(
+    wallet.address && wallet.chainId !== null && !networkByChainId(wallet.chainId),
+  );
+
+  const copy = async () => {
+    if (!wallet.address) return;
+    await navigator.clipboard.writeText(wallet.address);
+    toast.success("Address copied");
+  };
+
+  const switchTo = async (next: ArcNetwork) => {
     try {
-      const res = await submitTransfer({
-        kind: action,
-        asset,
-        amount: Number(amount),
-        destination,
-      });
-      toast.success(`${action} confirmed · ${res.hash.slice(0, 10)}`);
-      void queryClient.invalidateQueries({ queryKey: ["wallet"] });
-      setAmount("");
-      setDestination("");
-      onClose();
+      await wallet.switchNetwork(next);
+      toast.success(`Switched to ${next.chainName}`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "That transfer failed.");
-    } finally {
-      setPending(false);
+      toast.error(error instanceof Error ? error.message : "Could not switch network");
     }
   };
 
   return (
-    <Dialog open={action !== null} onOpenChange={(v) => (v ? null : onClose())}>
+    <div>
+      <ColumnHeader
+        title="Wallet"
+        action={
+          wallet.address ? (
+            <Button variant="outline" size="sm" onClick={() => wallet.disconnect()}>
+              Disconnect
+            </Button>
+          ) : (
+            <Button variant="gradient" size="sm" onClick={() => setPickerOpen(true)}>
+              Connect
+            </Button>
+          )
+        }
+      />
+
+      <div className="px-4 py-4 sm:px-5">
+        <div className="flex flex-wrap gap-2">
+          {ARC_NETWORKS.map((net) => {
+            const active = wallet.preferred.key === net.key;
+            return (
+              <button
+                key={net.key}
+                onClick={() => void switchTo(net)}
+                className={cn(
+                  "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                  active
+                    ? "border-primary bg-primary/15 text-foreground"
+                    : "border-border text-muted-foreground hover:bg-elevated",
+                )}
+              >
+                {net.chainName}
+                {!net.live ? " · soon" : ""}
+              </button>
+            );
+          })}
+        </div>
+
+        {!wallet.address ? (
+          <div className="mt-4 rounded-2xl border border-border bg-elevated/40 p-6 text-center">
+            <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-elevated text-muted-foreground">
+              <WalletIcon className="size-5" />
+            </span>
+            <h2 className="mt-4 text-lg font-bold">Connect a wallet</h2>
+            <p className="mx-auto mt-2 max-w-[340px] text-sm text-muted-foreground">
+              Pulse uses the Arc network, where USDC is the native gas token. Connect to check your
+              balance and send transfers.
+            </p>
+            <Button className="mt-5" variant="gradient" onClick={() => setPickerOpen(true)}>
+              Connect wallet
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="mt-4 rounded-2xl border border-border bg-elevated/40 p-5">
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">{wallet.walletName ?? "Wallet"}</Badge>
+                <Badge variant={onWrongChain ? "destructive" : "outline"}>
+                  {onWrongChain ? "Unsupported network" : network.chainName}
+                </Badge>
+              </div>
+              <p className="mt-4 text-3xl font-bold tracking-tight">
+                {wallet.balance === null ? "—" : wallet.balance.toFixed(4)}{" "}
+                <span className="text-base font-semibold text-muted-foreground">USDC</span>
+              </p>
+              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="font-mono">{truncateAddress(wallet.address)}</span>
+                <button onClick={() => void copy()} aria-label="Copy address">
+                  <Copy className="size-3.5" />
+                </button>
+                <a
+                  href={explorerAddressUrl(network, wallet.address)}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="View on explorer"
+                >
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button variant="gradient" size="sm" onClick={() => setSendOpen(true)}>
+                  <ArrowUpRight className="size-4" /> Send
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={wallet.refreshing}
+                  onClick={() => void wallet.refreshBalance()}
+                >
+                  <RefreshCw className={cn("size-4", wallet.refreshing && "animate-spin")} />
+                  Refresh
+                </Button>
+                {network.faucetUrl ? (
+                  <Button variant="outline" size="sm" asChild>
+                    <a href={network.faucetUrl} target="_blank" rel="noreferrer">
+                      <Droplets className="size-4" /> Get test USDC
+                    </a>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+
+            <Separator className="my-5" />
+
+            <SectionTitle>Transfers</SectionTitle>
+            {wallet.transactions.length === 0 ? (
+              <EmptyState
+                icon={ArrowUpRight}
+                title="No transfers yet"
+                body="Transfers you sign from this device show up here with their explorer link."
+              />
+            ) : (
+              <ul className="mt-2 divide-y divide-border">
+                {wallet.transactions.map((tx) => {
+                  const txNetwork = networkByChainId(tx.chainId) ?? network;
+                  return (
+                    <li key={tx.hash} className="flex items-center gap-3 py-3">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-elevated">
+                        <ArrowUpRight className="size-4" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold">
+                          Sent {tx.amount} USDC to {truncateAddress(tx.to)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatRelativeTime(tx.at)} · {txNetwork.chainName}
+                        </p>
+                      </div>
+                      <a
+                        href={explorerTxUrl(txNetwork, tx.hash)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs font-semibold text-primary"
+                      >
+                        View
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </>
+        )}
+      </div>
+
+      <ConnectWalletDialog open={pickerOpen} onOpenChange={setPickerOpen} />
+      <SendDialog open={sendOpen} onOpenChange={setSendOpen} />
+    </div>
+  );
+}
+
+function SendDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const wallet = useWallet();
+  const [to, setTo] = useState("");
+  const [amount, setAmount] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    if (!isAddress(to)) {
+      toast.error("Enter a valid 0x wallet address.");
+      return;
+    }
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+      toast.error("Enter an amount above zero.");
+      return;
+    }
+    if (wallet.balance !== null && value > wallet.balance) {
+      toast.error("That is more than your balance.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const hash = await wallet.send({ to, amount });
+      toast.success(`Transfer submitted · ${truncateAddress(hash)}`);
+      setTo("");
+      setAmount("");
+      onOpenChange(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "The transfer failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[420px]">
-        <DialogTitle className="capitalize">{action ?? "Transfer"}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>Send USDC</DialogTitle>
+        </DialogHeader>
         <div className="space-y-3">
-          <Select value={asset} onValueChange={setAsset}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {symbols.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input
-            value={amount}
-            inputMode="decimal"
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Amount"
-          />
-          {action !== "deposit" ? (
+          <div className="space-y-1.5">
+            <Label htmlFor="to">Recipient</Label>
             <Input
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              placeholder="Destination address or @handle"
+              id="to"
+              placeholder="0x…"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              autoComplete="off"
             />
-          ) : null}
-          <Button variant="gradient" className="w-full" onClick={submit} disabled={pending}>
-            {pending ? "Confirming" : "Confirm"}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="amount">Amount (USDC)</Label>
+            <Input
+              id="amount"
+              inputMode="decimal"
+              placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+            />
+            {wallet.balance !== null ? (
+              <p className="text-xs text-muted-foreground">
+                Balance {wallet.balance.toFixed(4)} USDC
+              </p>
+            ) : null}
+          </div>
+          <Button variant="gradient" className="w-full" disabled={busy} onClick={() => void submit()}>
+            {busy ? "Confirm in your wallet…" : "Send"}
           </Button>
         </div>
       </DialogContent>
