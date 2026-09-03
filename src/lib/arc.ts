@@ -28,7 +28,7 @@ export const ARC_TESTNET: ArcNetwork = {
   shortName: "Testnet",
   rpcUrls: ["https://rpc.testnet.arc.io"],
   blockExplorerUrls: ["https://testnet.arcscan.app"],
-  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 6 },
+  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
   live: true,
   faucetUrl: "https://faucet.circle.com",
 };
@@ -41,7 +41,7 @@ export const ARC_MAINNET: ArcNetwork = {
   shortName: "Mainnet",
   rpcUrls: ["https://rpc.arc.io"],
   blockExplorerUrls: ["https://arcscan.app"],
-  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 6 },
+  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
   live: false,
 };
 
@@ -149,12 +149,12 @@ export async function ensureNetwork(provider: Eip1193Provider, network: ArcNetwo
   if (!network.live) {
     throw new ArcWalletError(`${network.chainName} is not open to the public yet.`);
   }
-  try {
-    await provider.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: network.chainIdHex }],
-    });
-  } catch {
+
+  /* Already on the right chain: nothing to prompt. */
+  const current = await getChainId(provider);
+  if (current === network.chainIdDecimal) return;
+
+  const addChain = async () => {
     await provider.request({
       method: "wallet_addEthereumChain",
       params: [
@@ -167,6 +167,36 @@ export async function ensureNetwork(provider: Eip1193Provider, network: ArcNetwo
         },
       ],
     });
+  };
+
+  try {
+    await provider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: network.chainIdHex }],
+    });
+  } catch (error) {
+    const code = (error as { code?: number }).code;
+    if (code === 4001) {
+      throw new ArcWalletError(`Network switch to ${network.chainName} was rejected.`);
+    }
+    /* 4902 (and some wallets' -32603) mean the chain is unknown: add it. */
+    try {
+      await addChain();
+    } catch (addError) {
+      const addCode = (addError as { code?: number }).code;
+      if (addCode === 4001) {
+        throw new ArcWalletError(`Adding ${network.chainName} was rejected.`);
+      }
+      const message =
+        (addError as { message?: string }).message ??
+        (error as { message?: string }).message ??
+        "";
+      throw new ArcWalletError(
+        message
+          ? `Could not switch to ${network.chainName}: ${message}`
+          : `Could not switch to ${network.chainName}. Add it manually with chain ID ${network.chainIdDecimal}.`,
+      );
+    }
   }
 }
 
@@ -186,7 +216,7 @@ export function toBaseUnitsHex(amount: string, decimals: number): string {
 export async function getBalance(
   provider: Eip1193Provider,
   address: string,
-  decimals = 6,
+  decimals = 18,
 ): Promise<number> {
   const hex = (await provider.request({
     method: "eth_getBalance",
@@ -216,7 +246,7 @@ export async function sendNative(
   input: { from: string; to: string; amount: string; decimals?: number },
 ): Promise<string> {
   if (!isAddress(input.to)) throw new ArcWalletError("Enter a valid 0x wallet address.");
-  const value = toBaseUnitsHex(input.amount, input.decimals ?? 6);
+  const value = toBaseUnitsHex(input.amount, input.decimals ?? 18);
   if (value === "0x0") throw new ArcWalletError("Enter an amount above zero.");
   const hash = (await provider.request({
     method: "eth_sendTransaction",
