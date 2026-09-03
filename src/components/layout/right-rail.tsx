@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApp } from "@/store/app-store";
-import { formatCompact, formatPercent } from "@/lib/utils";
+import { formatCompact, formatPercent, formatUsd } from "@/lib/utils";
 
 /** Persistent right column: search entry, market movers, trends and people. */
 export function RightRail() {
