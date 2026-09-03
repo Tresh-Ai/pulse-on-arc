@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppProvider } from "@/store/app-store";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
+import { WalletProvider } from "@/features/wallet/wallet-provider";
 
 function NotFoundComponent() {
   return (
@@ -137,11 +138,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <Toaster />
-        </AppProvider>
+        <WalletProvider>
+          <AppProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <Toaster />
+          </AppProvider>
+        </WalletProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
