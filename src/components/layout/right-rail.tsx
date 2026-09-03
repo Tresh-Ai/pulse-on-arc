@@ -7,15 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApp } from "@/store/app-store";
-import { cn, formatCompact, formatPercent, formatUsd } from "@/lib/utils";
-import { Sparkline } from "@/components/charts";
+import { formatCompact, formatPercent, formatUsd } from "@/lib/utils";
 
 /** Persistent right column: search entry, market movers, trends and people. */
 export function RightRail() {
   const { setSearchOpen } = useShell();
   const trending = useQuery(queries.trendingTopics());
   const suggested = useQuery(queries.suggestedUsers());
-  const token = useQuery(queries.token());
   const app = useApp();
 
   return (
@@ -27,35 +25,6 @@ export function RightRail() {
         <Search className="size-4" />
         Search Pulse
       </button>
-
-      <section className="mt-4 rounded-[20px] border border-border bg-surface/50">
-        <h2 className="px-4 pt-4 text-[17px] font-bold">Pulse token</h2>
-        {token.isPending ? (
-          <div className="space-y-2 p-4">
-            <Skeleton className="h-4 w-24 bg-elevated" />
-            <Skeleton className="h-14 w-full bg-elevated" />
-          </div>
-        ) : token.data ? (
-          <Link to="/app/token" className="block px-4 pb-4 pt-2">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold tabular-nums">{formatUsd(token.data.price)}</span>
-              <span
-                className={cn(
-                  "text-sm font-semibold tabular-nums",
-                  token.data.change24h >= 0 ? "text-success" : "text-destructive",
-                )}
-              >
-                {formatPercent(token.data.change24h)}
-              </span>
-            </div>
-            <Sparkline
-              series={token.data.series.map((p) => p.price)}
-              positive={token.data.change24h >= 0}
-              className="mt-2 h-16 w-full"
-            />
-          </Link>
-        ) : null}
-      </section>
 
       <section className="mt-4 rounded-[20px] border border-border bg-surface/50">
         <h2 className="px-4 pt-4 text-[17px] font-bold">Trending</h2>

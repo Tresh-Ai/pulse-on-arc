@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { queries } from "@/services/queries";
-import { placePosition, type MarketSide } from "@/services/markets";
+import { listRelatedMarkets, placePosition, type MarketSide } from "@/services/markets";
+import { useWallet } from "@/features/wallet/wallet-provider";
+import { ConnectWalletDialog } from "@/features/wallet/connect-wallet-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { cn, formatUsd, timeRemaining } from "@/lib/utils";
 
@@ -38,6 +40,8 @@ function MarketDetailPage() {
 
   const [side, setSide] = useState<MarketSide>("yes");
   const [amount, setAmount] = useState("50");
+  const [connectOpen, setConnectOpen] = useState(false);
+  const wallet = useWallet();
 
   const stake = useMutation({
     mutationFn: () => placePosition({ marketId: predictionId, side, amount: Number(amount) }),
@@ -52,7 +56,8 @@ function MarketDetailPage() {
   });
 
   const related = useQuery({
-    ...queries.relatedMarkets(market.data!),
+    queryKey: ["related-markets", market.data?.id ?? "none"],
+    queryFn: () => listRelatedMarkets(market.data!),
     enabled: Boolean(market.data),
   });
 
@@ -163,6 +168,28 @@ function MarketDetailPage() {
                 Staked so far: <span className="font-semibold text-foreground">{formatUsd(myStake)}</span>
               </p>
             ) : null}
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-elevated/50 px-3 py-2 text-sm">
+              {wallet.address ? (
+                <>
+                  <span className="text-muted-foreground">
+                    {wallet.walletName ?? "Wallet"} · {wallet.address.slice(0, 6)}…
+                    {wallet.address.slice(-4)}
+                  </span>
+                  <span className="font-semibold tabular-nums">
+                    {wallet.balance === null ? "—" : formatUsd(wallet.balance)}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-muted-foreground">
+                    Connect your wallet to fund positions.
+                  </span>
+                  <Button size="sm" variant="outline" onClick={() => setConnectOpen(true)}>
+                    Connect wallet
+                  </Button>
+                </>
+              )}
+            </div>
             <div className="flex gap-2">
               {(["yes", "no"] as MarketSide[]).map((s) => (
                 <button
@@ -199,6 +226,14 @@ function MarketDetailPage() {
                     toast.error("Enter a stake greater than zero.");
                     return;
                   }
+                  if (!wallet.address) {
+                    setConnectOpen(true);
+                    return;
+                  }
+                  if (wallet.balance !== null && value > wallet.balance) {
+                    toast.error("Stake is larger than your wallet balance.");
+                    return;
+                  }
                   stake.mutate();
                 }}
               >
@@ -220,6 +255,8 @@ function MarketDetailPage() {
           {related.data.map((r) => <MarketCard key={r.id} market={r} />)}
         </div>
       ) : null}
+
+      <ConnectWalletDialog open={connectOpen} onOpenChange={setConnectOpen} />
     </div>
   );
 }

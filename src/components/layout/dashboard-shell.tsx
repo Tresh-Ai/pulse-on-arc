@@ -277,7 +277,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               </div>
 
               <nav className="flex-1 overflow-y-auto p-2" aria-label="Mobile">
-                {visibleNav([...primaryNav, ...moreNav], Boolean(session)).map((item) => (
+                {visibleNav([...primaryNav, ...moreNav], Boolean(session))
+                  .filter((item) => !bottomNav.some((b) => b.to === item.to))
+                  .map((item) => (
                   <Link
                     key={item.to}
                     to={item.to as never}

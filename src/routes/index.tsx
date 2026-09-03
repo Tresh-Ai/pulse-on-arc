@@ -5,15 +5,14 @@ import {
   ArrowRight,
   BarChart3,
   Bell,
-  Coins,
   Compass,
-  LineChart,
   MessageSquare,
   ShieldCheck,
   Sparkles,
   TrendingUp,
   Trophy,
   Users,
+  Wallet,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -82,9 +81,9 @@ const FEATURES = [
     body: "Stake weighted accuracy, not follower count, decides who ranks on the boards.",
   },
   {
-    icon: Coins,
-    title: "Wallet and token",
-    body: "Balances, transfers and Pulse token utility live next to the conversation.",
+    icon: Wallet,
+    title: "Wallet built in",
+    body: "Balances, transfers and positions live next to the conversation.",
   },
   {
     icon: BarChart3,
@@ -106,7 +105,6 @@ const STEPS = [
 ];
 
 function LandingPage() {
-  const token = useQuery(queries.token());
   const predictions = useQuery(queries.markets({ status: "open" }));
   const suggested = useQuery(queries.suggestedUsers());
 
@@ -374,9 +372,6 @@ function LandingPage() {
           </Link>
           <Link to="/app/notifications" className="flex items-center gap-1.5">
             <Bell className="size-4" /> Activity
-          </Link>
-          <Link to="/app/token" className="flex items-center gap-1.5">
-            <LineChart className="size-4" /> Token
           </Link>
           <span className="ml-auto">© 2026 Pulse Social Markets.</span>
         </div>
