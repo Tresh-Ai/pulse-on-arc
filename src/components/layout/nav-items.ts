@@ -1,16 +1,11 @@
 import {
-  BarChart3,
   Bell,
   Bookmark,
-  Coins,
   Compass,
   Home,
-  MessageSquare,
   Settings,
   TrendingUp,
-  Trophy,
   User as UserIcon,
-  Users,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
