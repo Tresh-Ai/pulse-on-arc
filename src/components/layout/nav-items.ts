@@ -36,17 +36,12 @@ export const primaryNav: NavItem[] = [
     badgeKey: "notifications",
     authOnly: true,
   },
-  { to: "/app/messages", label: "Messages", icon: MessageSquare, authOnly: true },
   { to: "/app/profile", label: "Profile", icon: UserIcon, authOnly: true },
 ];
 
 /** Revealed behind the "More" control so the sidebar stays calm by default. */
 export const moreNav: NavItem[] = [
-  { to: "/app/communities", label: "Communities", icon: Users },
-  { to: "/app/leaderboards", label: "Leaderboards", icon: Trophy },
-  { to: "/app/token", label: "Token", icon: Coins },
   { to: "/app/wallet", label: "Wallet", icon: Wallet, authOnly: true },
-  { to: "/app/creator", label: "Creator studio", icon: BarChart3, authOnly: true },
   { to: "/app/bookmarks", label: "Bookmarks", icon: Bookmark, authOnly: true },
   { to: "/app/settings", label: "Settings", icon: Settings, authOnly: true },
 ];
