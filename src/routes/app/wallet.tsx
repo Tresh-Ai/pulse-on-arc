@@ -185,7 +185,7 @@ function WalletPage() {
               <EmptyState
                 icon={ArrowUpRight}
                 title="No transfers yet"
-                body="Transfers you sign from this device show up here with their explorer link."
+                description="Transfers you sign from this device show up here with their explorer link."
               />
             ) : (
               <ul className="mt-2 divide-y divide-border">
