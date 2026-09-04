@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { RequireAuth } from "@/components/common/require-auth";
 import { ColumnHeader, SectionTitle } from "@/components/common/states";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +11,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { useApp } from "@/store/app-store";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/use-auth";
+import {
+  DEFAULT_SETTINGS,
+  changePassword,
+  getMySettings,
+  isHandleAvailable,
+  updateMySettings,
+  type UserSettings,
+} from "@/services/settings";
+import { fieldErrors, passwordSchema, profileSchema } from "@/lib/validation";
 
 export const Route = createFileRoute("/app/settings")({
   head: () => ({
@@ -19,27 +32,113 @@ export const Route = createFileRoute("/app/settings")({
       { property: "og:description", content: "Profile details, notifications and privacy." },
     ],
   }),
-  component: SettingsPage,
+  component: GuardedRoute,
 });
 
+function GuardedRoute() {
+  return (
+    <RequireAuth title="Settings" description="Sign in to manage your account.">
+      <SettingsPage />
+    </RequireAuth>
+  );
+}
+
 function SettingsPage() {
-  const app = useApp();
-  const [displayName, setDisplayName] = useState(app.user.displayName);
-  const [username, setUsername] = useState(app.user.username);
-  const [bio, setBio] = useState(app.user.bio);
-  const [prefs, setPrefs] = useState({
-    mentions: true,
-    marketResolutions: true,
-    newFollowers: true,
-    weeklyDigest: false,
-    privateProfile: false,
-    showPositions: true,
+  const { profile, updateProfile, authUser, signOut } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [form, setForm] = useState({
+    display_name: "",
+    handle: "",
+    bio: "",
+    location: "",
+    website: "",
+    avatar_url: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!profile) return;
+    setForm({
+      display_name: profile.display_name ?? "",
+      handle: profile.handle ?? "",
+      bio: profile.bio ?? "",
+      location: profile.location ?? "",
+      website: profile.website ?? "",
+      avatar_url: profile.avatar_url ?? "",
+    });
+  }, [profile]);
+
+  const settings = useQuery({ queryKey: ["my-settings"], queryFn: getMySettings });
+
+  const saveProfile = useMutation({
+    mutationFn: async () => {
+      const parsed = profileSchema.safeParse({
+        display_name: form.display_name,
+        handle: form.handle,
+        bio: form.bio,
+      });
+      if (!parsed.success) {
+        setErrors(fieldErrors(parsed.error));
+        throw new Error("Check the highlighted fields.");
+      }
+      setErrors({});
+      if (
+        profile &&
+        parsed.data.handle !== profile.handle &&
+        !(await isHandleAvailable(parsed.data.handle, profile.id))
+      ) {
+        setErrors({ handle: "That handle is taken." });
+        throw new Error("That handle is taken.");
+      }
+      await updateProfile({
+        display_name: parsed.data.display_name,
+        handle: parsed.data.handle,
+        bio: parsed.data.bio?.length ? parsed.data.bio : null,
+        location: form.location.trim() || null,
+        website: form.website.trim() || null,
+        avatar_url: form.avatar_url.trim() || null,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Profile saved");
+      void queryClient.invalidateQueries({ queryKey: ["profile"] });
+      void queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
+    onError: (error: Error) => toast.error(error.message),
   });
 
-  const save = () => {
-    app.updateProfile({ displayName, username, bio });
-    toast.success("Profile updated");
-  };
+  const savePrefs = useMutation({
+    mutationFn: (patch: Partial<UserSettings>) => updateMySettings(patch),
+    onMutate: (patch) => {
+      queryClient.setQueryData<UserSettings>(["my-settings"], (old) => ({
+        ...(old ?? DEFAULT_SETTINGS),
+        ...patch,
+      }));
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+      void queryClient.invalidateQueries({ queryKey: ["my-settings"] });
+    },
+  });
+
+  const [password, setPassword] = useState({ next: "", confirm: "" });
+  const updatePassword = useMutation({
+    mutationFn: async () => {
+      const parsed = passwordSchema.safeParse(password.next);
+      if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Password too weak.");
+      if (password.next !== password.confirm) throw new Error("Passwords do not match.");
+      await changePassword(password.next);
+    },
+    onSuccess: () => {
+      setPassword({ next: "", confirm: "" });
+      toast.success("Password updated");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const prefs = settings.data ?? DEFAULT_SETTINGS;
+  const set = (key: keyof UserSettings) => (value: boolean) => savePrefs.mutate({ [key]: value });
 
   return (
     <div>
@@ -47,31 +146,113 @@ function SettingsPage() {
 
       <div className="px-4 py-4 sm:px-5">
         <SectionTitle>Profile</SectionTitle>
-        <div className="mt-3 space-y-3">
-          <div className="space-y-1.5">
-            <Label htmlFor="displayName">Display name</Label>
+        {!profile ? (
+          <div className="mt-3 space-y-3">
+            <Skeleton className="h-10 w-full bg-elevated" />
+            <Skeleton className="h-10 w-full bg-elevated" />
+            <Skeleton className="h-20 w-full bg-elevated" />
+          </div>
+        ) : (
+          <div className="mt-3 space-y-3">
+            <Field label="Display name" error={errors["display_name"]}>
+              <Input
+                value={form.display_name}
+                onChange={(e) => setForm((f) => ({ ...f, display_name: e.target.value }))}
+              />
+            </Field>
+            <Field label="Handle" error={errors["handle"]}>
+              <Input
+                value={form.handle}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    handle: e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase(),
+                  }))
+                }
+              />
+            </Field>
+            <Field label="Bio" error={errors["bio"]}>
+              <Textarea
+                rows={3}
+                value={form.bio}
+                onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))}
+              />
+            </Field>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field label="Location">
+                <Input
+                  value={form.location}
+                  onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
+                  placeholder="City, country"
+                />
+              </Field>
+              <Field label="Website">
+                <Input
+                  value={form.website}
+                  onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
+                  placeholder="https://"
+                />
+              </Field>
+            </div>
+            <Field label="Profile photo URL">
+              <Input
+                value={form.avatar_url}
+                onChange={(e) => setForm((f) => ({ ...f, avatar_url: e.target.value }))}
+                placeholder="https://"
+              />
+            </Field>
+            <Button
+              variant="gradient"
+              disabled={saveProfile.isPending}
+              onClick={() => saveProfile.mutate()}
+            >
+              {saveProfile.isPending ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" /> Saving
+                </>
+              ) : (
+                "Save changes"
+              )}
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <Separator />
+
+      <div className="px-4 py-4 sm:px-5">
+        <SectionTitle>Account</SectionTitle>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Signed in as {authUser?.email ?? "your account"}.
+        </p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <Field label="New password">
             <Input
-              id="displayName"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              type="password"
+              autoComplete="new-password"
+              value={password.next}
+              onChange={(e) => setPassword((p) => ({ ...p, next: e.target.value }))}
             />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="username">Handle</Label>
+          </Field>
+          <Field label="Confirm password">
             <Input
-              id="username"
-              value={username}
-              onChange={(e) =>
-                setUsername(e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase())
-              }
+              type="password"
+              autoComplete="new-password"
+              value={password.confirm}
+              onChange={(e) => setPassword((p) => ({ ...p, confirm: e.target.value }))}
             />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} />
-          </div>
-          <Button variant="gradient" onClick={save}>
-            Save changes
+          </Field>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button
+            variant="secondary"
+            disabled={updatePassword.isPending || password.next.length === 0}
+            onClick={() => updatePassword.mutate()}
+          >
+            {updatePassword.isPending ? "Updating" : "Update password"}
+          </Button>
+          <Button variant="outline" onClick={() => void signOut()}>
+            Sign out
           </Button>
         </div>
       </div>
@@ -83,23 +264,23 @@ function SettingsPage() {
         <div className="mt-2 divide-y divide-border">
           <ToggleRow
             label="Mentions and replies"
-            checked={prefs.mentions}
-            onChange={(v) => setPrefs((p) => ({ ...p, mentions: v }))}
+            checked={prefs.notify_mentions}
+            onChange={set("notify_mentions")}
           />
           <ToggleRow
             label="Market resolutions"
-            checked={prefs.marketResolutions}
-            onChange={(v) => setPrefs((p) => ({ ...p, marketResolutions: v }))}
+            checked={prefs.notify_market_resolutions}
+            onChange={set("notify_market_resolutions")}
           />
           <ToggleRow
             label="New followers"
-            checked={prefs.newFollowers}
-            onChange={(v) => setPrefs((p) => ({ ...p, newFollowers: v }))}
+            checked={prefs.notify_new_followers}
+            onChange={set("notify_new_followers")}
           />
           <ToggleRow
             label="Weekly accuracy digest"
-            checked={prefs.weeklyDigest}
-            onChange={(v) => setPrefs((p) => ({ ...p, weeklyDigest: v }))}
+            checked={prefs.notify_weekly_digest}
+            onChange={set("notify_weekly_digest")}
           />
         </div>
       </div>
@@ -112,26 +293,41 @@ function SettingsPage() {
           <ToggleRow
             label="Private profile"
             hint="Only approved followers can see your posts."
-            checked={prefs.privateProfile}
-            onChange={(v) => setPrefs((p) => ({ ...p, privateProfile: v }))}
+            checked={prefs.private_profile}
+            onChange={set("private_profile")}
           />
           <ToggleRow
             label="Show my market positions"
             hint="Your stake sizes appear on market pages."
-            checked={prefs.showPositions}
-            onChange={(v) => setPrefs((p) => ({ ...p, showPositions: v }))}
+            checked={prefs.show_positions}
+            onChange={set("show_positions")}
+          />
+          <ToggleRow
+            label="Show my wallet address"
+            hint="Displayed on your profile."
+            checked={prefs.show_wallet}
+            onChange={set("show_wallet")}
           />
         </div>
       </div>
+    </div>
+  );
+}
 
-      <Separator />
-
-      <div className="px-4 py-4 sm:px-5">
-        <SectionTitle>Appearance</SectionTitle>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Pulse uses a single dark surface tuned for long chart sessions.
-        </p>
-      </div>
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string | undefined;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <Label>{label}</Label>
+      {children}
+      {error ? <p className="text-xs text-destructive">{error}</p> : null}
     </div>
   );
 }
