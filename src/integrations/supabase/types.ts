@@ -244,26 +244,32 @@ export type Database = {
       prediction_positions: {
         Row: {
           amount: number
+          chain_id: number | null
           created_at: string
           id: string
           market_id: string
           side: string
+          tx_hash: string | null
           user_id: string
         }
         Insert: {
           amount?: number
+          chain_id?: number | null
           created_at?: string
           id?: string
           market_id: string
           side: string
+          tx_hash?: string | null
           user_id: string
         }
         Update: {
           amount?: number
+          chain_id?: number | null
           created_at?: string
           id?: string
           market_id?: string
           side?: string
+          tx_hash?: string | null
           user_id?: string
         }
         Relationships: [

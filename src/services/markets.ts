@@ -154,6 +154,8 @@ export async function placePosition(input: {
   marketId: string;
   side: MarketSide;
   amount: number;
+  txHash?: string;
+  chainId?: number | null;
 }): Promise<Position> {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) throw new Error("Sign in to take a position.");
@@ -168,6 +170,8 @@ export async function placePosition(input: {
       user_id: auth.user.id,
       side: input.side,
       amount: input.amount,
+      ...(input.txHash ? { tx_hash: input.txHash } : {}),
+      ...(input.chainId ? { chain_id: input.chainId } : {}),
     })
     .select("id, market_id, side, amount, created_at")
     .single();

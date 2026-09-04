@@ -372,27 +372,29 @@ export async function getProfileByHandle(handle: string): Promise<ProfileView> {
 
 export async function listSuggestedAccounts(limit = 5): Promise<User[]> {
   const uid = await viewerId();
-  let query = supabase
-    .from("profiles")
-    .select(PROFILE_COLUMNS)
-    .order("created_at", { ascending: false })
-    .limit(limit + 1);
-  if (uid) query = query.neq("id", uid);
-  const { data, error } = await query;
-  fail("Could not load suggestions", error);
 
-  const rows = (data ?? []) as ProfileRow[];
-  let followingIds = new Set<string>();
+  let followingIds: string[] = [];
   if (uid) {
     const { data: follows } = await supabase
       .from("follows")
       .select("following_id")
       .eq("follower_id", uid);
-    followingIds = new Set((follows ?? []).map((f) => f.following_id));
+    followingIds = (follows ?? []).map((f) => f.following_id);
   }
-  return rows
-    .slice(0, limit)
-    .map((row) => profileToUser(row, { isFollowing: followingIds.has(row.id) }));
+
+  const exclude = [...new Set([...followingIds, ...(uid ? [uid] : [])])];
+
+  let query = supabase
+    .from("profiles")
+    .select(PROFILE_COLUMNS)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (exclude.length) query = query.not("id", "in", `(${exclude.join(",")})`);
+
+  const { data, error } = await query;
+  fail("Could not load suggestions", error);
+
+  return ((data ?? []) as ProfileRow[]).map((row) => profileToUser(row, { isFollowing: false }));
 }
 
 /* ----------------------------- notifications ------------------------------ */
