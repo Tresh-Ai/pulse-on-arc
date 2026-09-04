@@ -252,7 +252,7 @@ function MarketDetailPage() {
                   stake.mutate();
                 }}
               >
-                {stake.isPending ? "Placing" : "Place"}
+                {stake.isPending ? "Confirm in wallet…" : "Place"}
               </Button>
             </div>
           </div>

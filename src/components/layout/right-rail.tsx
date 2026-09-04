@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Search, TrendingUp } from "lucide-react";
 import { queries } from "@/services/queries";
+import { useToggleFollow } from "@/hooks/use-social";
 import { useShell } from "./shell-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -75,7 +76,7 @@ export function RightRail() {
                 </div>
               ))
             : suggested.data?.slice(0, 3).map((u) => {
-                const following = app.isFollowing(u);
+                const following = u.isFollowing;
                 return (
                   <div
                     key={u.id}
@@ -98,7 +99,8 @@ export function RightRail() {
                     <Button
                       size="sm"
                       variant={following ? "outline" : "default"}
-                      onClick={() => app.toggleFollow(u.id)}
+                      disabled={toggleFollow.isPending}
+                      onClick={() => toggleFollow.mutate({ userId: u.id, following })}
                     >
                       {following ? "Following" : "Follow"}
                     </Button>
