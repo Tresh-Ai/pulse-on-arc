@@ -45,6 +45,12 @@ export const ARC_MAINNET: ArcNetwork = {
   live: false,
 };
 
+/**
+ * Address that receives market stakes. Replace with your treasury/escrow
+ * address; positions are funded by a native USDC transfer to it.
+ */
+export const MARKET_ESCROW_ADDRESS = "0x000000000000000000000000000000000000dEaD";
+
 export const ARC_NETWORKS: ArcNetwork[] = [ARC_TESTNET, ARC_MAINNET];
 
 export function networkByChainId(chainId: number | null): ArcNetwork | null {

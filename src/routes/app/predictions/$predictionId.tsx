@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { queries } from "@/services/queries";
 import { listRelatedMarkets, placePosition, type MarketSide } from "@/services/markets";
+import { MARKET_ESCROW_ADDRESS } from "@/lib/arc";
 import { useWallet } from "@/features/wallet/wallet-provider";
 import { ConnectWalletDialog } from "@/features/wallet/connect-wallet-dialog";
 import { useAuth } from "@/hooks/use-auth";
@@ -44,7 +45,21 @@ function MarketDetailPage() {
   const wallet = useWallet();
 
   const stake = useMutation({
-    mutationFn: () => placePosition({ marketId: predictionId, side, amount: Number(amount) }),
+    mutationFn: async () => {
+      const value = Number(amount);
+      if (!wallet.address) throw new Error("Connect a wallet to fund this position.");
+      /* Move the stake on-chain first, then record the position with its hash. */
+      const txHash = await wallet.send({ to: MARKET_ESCROW_ADDRESS, amount: String(value) });
+      const position = await placePosition({
+        marketId: predictionId,
+        side,
+        amount: value,
+        txHash,
+        chainId: wallet.chainId,
+      });
+      await wallet.refreshBalance();
+      return position;
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["market", predictionId] });
       void queryClient.invalidateQueries({ queryKey: ["my-positions"] });
