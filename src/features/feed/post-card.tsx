@@ -68,20 +68,35 @@ export function PostCard({ post, compact = false }: { post: Post; compact?: bool
         ) : null}
 
         <div className="flex gap-3">
-          <Avatar className="size-10 shrink-0">
-            <AvatarImage src={post.author.avatar} alt="" />
-            <AvatarFallback>{post.author.displayName.slice(0, 2)}</AvatarFallback>
-          </Avatar>
+          <Link
+            to="/app/u/$handle"
+            params={{ handle: post.author.username }}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`Open ${post.author.displayName}'s profile`}
+            className="shrink-0"
+          >
+            <Avatar className="size-10 shrink-0">
+              <AvatarImage src={post.author.avatar} alt="" />
+              <AvatarFallback>{post.author.displayName.slice(0, 2)}</AvatarFallback>
+            </Avatar>
+          </Link>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="truncate text-[15px] font-bold">{post.author.displayName}</span>
-              {post.author.verified ? (
-                <BadgeCheck className="size-[15px] shrink-0 text-cyan" />
-              ) : null}
-              <span className="truncate text-[15px] text-muted-foreground">
-                @{post.author.username}
-              </span>
+              <Link
+                to="/app/u/$handle"
+                params={{ handle: post.author.username }}
+                onClick={(e) => e.stopPropagation()}
+                className="flex min-w-0 items-center gap-1.5 hover:underline"
+              >
+                <span className="truncate text-[15px] font-bold">{post.author.displayName}</span>
+                {post.author.verified ? (
+                  <BadgeCheck className="size-[15px] shrink-0 text-cyan" />
+                ) : null}
+                <span className="truncate text-[15px] text-muted-foreground">
+                  @{post.author.username}
+                </span>
+              </Link>
               <span className="text-muted-foreground" aria-hidden="true">
                 ·
               </span>

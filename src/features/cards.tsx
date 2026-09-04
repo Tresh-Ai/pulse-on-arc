@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/store/app-store";
+import { useToggleFollow } from "@/hooks/use-social";
 import { cn, formatCompact, formatUsd, timeRemaining } from "@/lib/utils";
 
 export function PredictionCard({ prediction }: { prediction: Prediction }) {
@@ -61,8 +62,8 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
 }
 
 export function UserRow({ user, showBio = true }: { user: User; showBio?: boolean }) {
-  const app = useApp();
-  const following = app.isFollowing(user);
+  const toggleFollow = useToggleFollow();
+  const following = user.isFollowing;
   return (
     <div className="flex gap-3 border-b border-border px-4 py-3 transition-colors hover:bg-elevated/25 sm:px-5">
       <Link to="/app/u/$handle" params={{ handle: user.username }}>
@@ -80,7 +81,8 @@ export function UserRow({ user, showBio = true }: { user: User; showBio?: boolea
           <Button
             size="sm"
             variant={following ? "outline" : "default"}
-            onClick={() => app.toggleFollow(user.id)}
+            disabled={toggleFollow.isPending}
+            onClick={() => toggleFollow.mutate({ userId: user.id, following })}
           >
             {following ? "Following" : "Follow"}
           </Button>
