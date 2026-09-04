@@ -7,7 +7,6 @@ import { useShell } from "./shell-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useApp } from "@/store/app-store";
 import { formatCompact, formatPercent, formatUsd } from "@/lib/utils";
 
 /** Persistent right column: search entry, market movers, trends and people. */
@@ -15,7 +14,7 @@ export function RightRail() {
   const { setSearchOpen } = useShell();
   const trending = useQuery(queries.trendingTopics());
   const suggested = useQuery(queries.suggestedUsers());
-  const app = useApp();
+  const toggleFollow = useToggleFollow();
 
   return (
     <aside className="sticky top-0 hidden h-screen w-[340px] shrink-0 overflow-y-auto py-3 pl-2 no-scrollbar lg:block">
