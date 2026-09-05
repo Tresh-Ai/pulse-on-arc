@@ -1,5 +1,5 @@
 /**
- * Deterministic identity art helpers so mock users look distinct and realistic
+ * Deterministic identity art helpers so accounts look distinct and consistent
  * without shipping binary assets.
  */
 

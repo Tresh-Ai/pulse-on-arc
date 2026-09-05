@@ -1,6 +1,5 @@
 /**
- * Domain types for the Pulse Social Markets prototype.
- * These mirror the shapes the future API layer is expected to return.
+ * Domain types shared across the Pulse app.
  */
 
 export type Interest =
@@ -27,6 +26,7 @@ export interface User {
   isFollowing: boolean;
   online: boolean;
   walletAddress: string;
+  website?: string;
 }
 
 export interface Achievement {
