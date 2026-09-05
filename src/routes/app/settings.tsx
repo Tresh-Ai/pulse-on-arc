@@ -37,7 +37,7 @@ export const Route = createFileRoute("/app/settings")({
 
 function GuardedRoute() {
   return (
-    <RequireAuth title="Settings" description="Sign in to manage your account.">
+    <RequireAuth title="Settings">
       <SettingsPage />
     </RequireAuth>
   );

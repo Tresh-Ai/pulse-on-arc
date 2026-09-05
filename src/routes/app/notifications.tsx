@@ -1,7 +1,7 @@
 import { RequireAuth } from "@/components/common/require-auth";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AtSign,
   Bell,
@@ -54,6 +54,15 @@ function NotificationsPage() {
   const [tab, setTab] = useState<Tab>("all");
   const list = useQuery(queries.notifications());
   const markRead = useMarkNotificationsRead();
+  const hasUnread = (list.data ?? []).some((n) => !n.read);
+  const marked = useRef(false);
+
+  useEffect(() => {
+    if (!hasUnread || marked.current) return;
+    marked.current = true;
+    markRead.mutate(undefined);
+  }, [hasUnread, markRead]);
+
 
   const items = (list.data ?? []).filter((n) =>
     tab === "mentions"
