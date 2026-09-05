@@ -160,7 +160,11 @@ function CommunityDetail() {
 
 function ComingSoonRoute() {
   return (
-    <ComingSoon eyebrow="Communities" title="Coming soon" description="Rooms, moderation and shared feeds are on the way so groups can trade ideas together.">
+    <ComingSoon
+      eyebrow="Communities"
+      title="Coming soon"
+      description="Rooms, moderation and shared feeds are on the way so groups can trade ideas together."
+    >
       <CommunityDetail />
     </ComingSoon>
   );

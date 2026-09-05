@@ -65,9 +65,7 @@ function toMarket(row: MarketRow): Market {
     closesAt: row.closes_at,
     createdAt: row.created_at,
     resolvedOutcome:
-      row.resolved_outcome === "yes" || row.resolved_outcome === "no"
-        ? row.resolved_outcome
-        : null,
+      row.resolved_outcome === "yes" || row.resolved_outcome === "no" ? row.resolved_outcome : null,
     yesPool,
     noPool,
     pool,
@@ -177,7 +175,13 @@ export async function placePosition(input: {
     .single();
   if (error) throw new Error(error.message);
 
-  const row = data as { id: string; market_id: string; side: string; amount: number | string; created_at: string };
+  const row = data as {
+    id: string;
+    market_id: string;
+    side: string;
+    amount: number | string;
+    created_at: string;
+  };
   return {
     id: row.id,
     marketId: row.market_id,

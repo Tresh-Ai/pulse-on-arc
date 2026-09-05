@@ -120,7 +120,11 @@ function TokenPage() {
 
 function ComingSoonRoute() {
   return (
-    <ComingSoon eyebrow="Token" title="Launch soon" description="The PLS token page goes live with the token launch. Metrics, supply and staking are ready to switch on.">
+    <ComingSoon
+      eyebrow="Token"
+      title="Launch soon"
+      description="The PLS token page goes live with the token launch. Metrics, supply and staking are ready to switch on."
+    >
       <TokenPage />
     </ComingSoon>
   );

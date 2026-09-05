@@ -194,9 +194,7 @@ export async function ensureNetwork(provider: Eip1193Provider, network: ArcNetwo
         throw new ArcWalletError(`Adding ${network.chainName} was rejected.`);
       }
       const message =
-        (addError as { message?: string }).message ??
-        (error as { message?: string }).message ??
-        "";
+        (addError as { message?: string }).message ?? (error as { message?: string }).message ?? "";
       throw new ArcWalletError(
         message
           ? `Could not switch to ${network.chainName}: ${message}`

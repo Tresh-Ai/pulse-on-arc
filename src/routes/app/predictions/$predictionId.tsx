@@ -88,10 +88,7 @@ function MarketDetailPage() {
 
   if (market.isError || !market.data) {
     return (
-      <ErrorState
-        description="This market could not be loaded."
-        onRetry={() => market.refetch()}
-      />
+      <ErrorState description="This market could not be loaded." onRetry={() => market.refetch()} />
     );
   }
 
@@ -180,7 +177,8 @@ function MarketDetailPage() {
           <div className="mt-3 space-y-3">
             {myStake > 0 ? (
               <p className="text-sm text-muted-foreground">
-                Staked so far: <span className="font-semibold text-foreground">{formatUsd(myStake)}</span>
+                Staked so far:{" "}
+                <span className="font-semibold text-foreground">{formatUsd(myStake)}</span>
               </p>
             ) : null}
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-elevated/50 px-3 py-2 text-sm">
@@ -267,7 +265,9 @@ function MarketDetailPage() {
               More in {m.category}
             </h2>
           </div>
-          {related.data.map((r) => <MarketCard key={r.id} market={r} />)}
+          {related.data.map((r) => (
+            <MarketCard key={r.id} market={r} />
+          ))}
         </div>
       ) : null}
 

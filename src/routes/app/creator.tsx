@@ -130,7 +130,11 @@ function CreatorPage() {
 
 function ComingSoonRoute() {
   return (
-    <ComingSoon eyebrow="Creator studio" title="Coming soon" description="Audience analytics, earnings and post performance open up for creators in the next release.">
+    <ComingSoon
+      eyebrow="Creator studio"
+      title="Coming soon"
+      description="Audience analytics, earnings and post performance open up for creators in the next release."
+    >
       <CreatorPage />
     </ComingSoon>
   );

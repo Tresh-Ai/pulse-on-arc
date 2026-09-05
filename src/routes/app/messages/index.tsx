@@ -101,7 +101,11 @@ function MessagesPage() {
 
 function ComingSoonRoute() {
   return (
-    <ComingSoon eyebrow="Messages" title="Coming soon" description="Direct messages are built and in final testing. You will be able to DM anyone you follow shortly.">
+    <ComingSoon
+      eyebrow="Messages"
+      title="Coming soon"
+      description="Direct messages are built and in final testing. You will be able to DM anyone you follow shortly."
+    >
       <MessagesPage />
     </ComingSoon>
   );

@@ -90,7 +90,9 @@ function ExplorePage() {
               description="Trends build from posts and tags as people share them."
             />
           ) : null}
-          {feed.data?.slice(0, 12).map((p) => <PostCard key={p.id} post={p} />)}
+          {feed.data?.slice(0, 12).map((p) => (
+            <PostCard key={p.id} post={p} />
+          ))}
         </>
       ) : null}
 

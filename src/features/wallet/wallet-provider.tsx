@@ -134,7 +134,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       const next = accounts[0] ?? null;
       setAddress(next);
       setTransactions(next ? readTx(next) : []);
-      if (next) void getBalance(provider, next).then(setBalance).catch(() => setBalance(null));
+      if (next)
+        void getBalance(provider, next)
+          .then(setBalance)
+          .catch(() => setBalance(null));
       else setBalance(null);
     };
     const onChain = (...args: unknown[]) => {

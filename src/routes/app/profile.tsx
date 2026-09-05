@@ -125,7 +125,12 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
           </Avatar>
           {own ? (
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" aria-label="Share profile" onClick={shareProfile}>
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Share profile"
+                onClick={shareProfile}
+              >
                 <Share2 className="size-4" />
               </Button>
               <Button variant="outline" asChild>
@@ -134,7 +139,12 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
             </div>
           ) : (
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" aria-label="Share profile" onClick={shareProfile}>
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Share profile"
+                onClick={shareProfile}
+              >
                 <Share2 className="size-4" />
               </Button>
               {session ? (

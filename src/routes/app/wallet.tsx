@@ -299,7 +299,12 @@ function SendDialog({
               </p>
             ) : null}
           </div>
-          <Button variant="gradient" className="w-full" disabled={busy} onClick={() => void submit()}>
+          <Button
+            variant="gradient"
+            className="w-full"
+            disabled={busy}
+            onClick={() => void submit()}
+          >
             {busy ? "Confirm in your wallet…" : "Send"}
           </Button>
         </div>
