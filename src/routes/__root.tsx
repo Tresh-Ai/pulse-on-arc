@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Social trading, creator communities, and prediction markets for the Pulse network.",
       },
-      { name: "author", content: "Lovable" },
+      { name: "author", content: "Pulse" },
       { property: "og:title", content: "Pulse Social Markets" },
       {
         property: "og:description",
@@ -96,7 +96,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      // { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

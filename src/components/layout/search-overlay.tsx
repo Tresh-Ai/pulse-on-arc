@@ -149,7 +149,8 @@ function PostRow({ post, onClick }: { post: SearchPost; onClick: () => void }) {
       <div className="min-w-0">
         <p className="line-clamp-2 text-sm">{post.body}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          @{post.author.username} · {formatRelativeTime(post.createdAt)} · {formatCompact(post.likeCount)} likes
+          @{post.author.username} · {formatRelativeTime(post.createdAt)} ·{" "}
+          {formatCompact(post.likeCount)} likes
         </p>
       </div>
     </Link>

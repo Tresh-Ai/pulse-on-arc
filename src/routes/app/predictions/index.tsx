@@ -184,7 +184,9 @@ function MarketsPage() {
               }}
             />
           ) : null}
-          {markets.data?.map((m) => <MarketCard key={m.id} market={m} />)}
+          {markets.data?.map((m) => (
+            <MarketCard key={m.id} market={m} />
+          ))}
         </>
       )}
 

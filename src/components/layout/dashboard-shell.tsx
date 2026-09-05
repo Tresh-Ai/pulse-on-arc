@@ -280,19 +280,19 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 {visibleNav([...primaryNav, ...moreNav], Boolean(session))
                   .filter((item) => !bottomNav.some((b) => b.to === item.to))
                   .map((item) => (
-                  <Link
-                    key={item.to}
-                    to={item.to as never}
-                    onClick={() => setMobileNavOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] transition-colors hover:bg-elevated/70",
-                      isActive(pathname, item.to) && "font-bold text-cyan",
-                    )}
-                  >
-                    <item.icon className="size-5 shrink-0" />
-                    {item.label}
-                  </Link>
-                ))}
+                    <Link
+                      key={item.to}
+                      to={item.to as never}
+                      onClick={() => setMobileNavOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 rounded-2xl px-3 py-3 text-[15px] transition-colors hover:bg-elevated/70",
+                        isActive(pathname, item.to) && "font-bold text-cyan",
+                      )}
+                    >
+                      <item.icon className="size-5 shrink-0" />
+                      {item.label}
+                    </Link>
+                  ))}
               </nav>
             </div>
           </SheetContent>

@@ -63,7 +63,6 @@ function NotificationsPage() {
     markRead.mutate(undefined);
   }, [hasUnread, markRead]);
 
-
   const items = (list.data ?? []).filter((n) =>
     tab === "mentions"
       ? n.kind === "mention" || n.kind === "reply"

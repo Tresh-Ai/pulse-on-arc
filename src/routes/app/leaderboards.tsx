@@ -134,7 +134,11 @@ function LeaderboardsPage() {
 
 function ComingSoonRoute() {
   return (
-    <ComingSoon eyebrow="Leaderboards" title="Coming soon" description="Ranking traders, predictors and creators needs a full season of real activity first.">
+    <ComingSoon
+      eyebrow="Leaderboards"
+      title="Coming soon"
+      description="Ranking traders, predictors and creators needs a full season of real activity first."
+    >
       <LeaderboardsPage />
     </ComingSoon>
   );

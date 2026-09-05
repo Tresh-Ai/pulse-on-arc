@@ -24,7 +24,6 @@ export interface Profile {
   wallet_chain_id: number | null;
 }
 
-
 interface AuthState {
   session: Session | null;
   authUser: AuthUser | null;
@@ -53,7 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("id, handle, display_name, bio, avatar_url, banner_url, location, website, wallet_address, wallet_chain_id")
+      .select(
+        "id, handle, display_name, bio, avatar_url, banner_url, location, website, wallet_address, wallet_chain_id",
+      )
       .eq("id", userId)
       .maybeSingle();
     setProfile((data as Profile | null) ?? null);

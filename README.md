@@ -1,29 +1,34 @@
 # Pulse Social Markets
 
-This project was built with [Lovable](https://lovable.dev).
+Social trading, creator communities, and prediction markets for the Pulse network.
 
-## Build with Lovable
+## Features
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- **Timeline & Feed**: Live discussions with inline charts, polls, and market links.
+- **Prediction Markets**: Ecosystem, macro, and culture prediction pools with transparent stats.
+- **Creator Communities**: Custom rooms with dedicated markets and research threads.
+- **Reputation & Leaderboards**: Stake-weighted accuracy scoring for top predictors and creators.
+- **Wallet Integration**: Integrated wallet management and network switching.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Development Setup
 
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Prerequisites: Node.js (v18+) or Bun.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+# Install dependencies
+bun install
+
+# Start development server
+bun run dev
+
+# Build for production
+bun run build
 ```
 
-## Built with
+## Built With
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+- [TanStack Start](https://tanstack.com/router) / [TanStack Router](https://tanstack.com/router)
+- [React](https://react.dev)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Supabase](https://supabase.com/)
