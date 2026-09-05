@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, TrendingUp, Users, Coins, Hash } from "lucide-react";
+import { Search, TrendingUp, Hash, MessageSquare } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { queries } from "@/services/queries";
 import { useShell } from "./shell-context";
-import { formatCompact, formatPercent, formatUsd } from "@/lib/utils";
+import { formatCompact, formatUsd, timeAgo } from "@/lib/utils";
 import { CardSkeleton, EmptyState } from "@/components/common/states";
+import type { SearchPost } from "@/services/search";
+import type { User } from "@/types";
 
 export function SearchOverlay() {
   const { searchOpen, setSearchOpen } = useShell();
   const [term, setTerm] = useState("");
-  const q = useQuery(queries.search(term));
+  const [debounced, setDebounced] = useState("");
+
+  useEffect(() => {
+    const id = setTimeout(() => setDebounced(term.trim()), 250);
+    return () => clearTimeout(id);
+  }, [term]);
+
+  const q = useQuery({ ...queries.search(debounced), enabled: searchOpen });
   const close = () => setSearchOpen(false);
 
   const results = q.data;
@@ -22,8 +31,8 @@ export function SearchOverlay() {
     results &&
     results.users.length === 0 &&
     results.posts.length === 0 &&
-    results.predictions.length === 0 &&
-    results.communities.length === 0;
+    results.markets.length === 0 &&
+    results.topics.length === 0;
 
   return (
     <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
@@ -35,7 +44,7 @@ export function SearchOverlay() {
             autoFocus
             value={term}
             onChange={(e) => setTerm(e.target.value)}
-            placeholder="Search Pulse"
+            placeholder="Search people, posts and markets"
             className="h-9 border-0 bg-transparent px-0 text-base focus-visible:ring-0"
           />
         </div>
@@ -44,22 +53,32 @@ export function SearchOverlay() {
           <TabsList className="mb-4 bg-elevated/60">
             <TabsTrigger value="top">Top</TabsTrigger>
             <TabsTrigger value="people">People</TabsTrigger>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
             <TabsTrigger value="markets">Markets</TabsTrigger>
-            <TabsTrigger value="communities">Communities</TabsTrigger>
-            <TabsTrigger value="tokens">Tokens</TabsTrigger>
           </TabsList>
 
           {q.isPending ? <CardSkeleton lines={2} /> : null}
+          {q.isError ? (
+            <EmptyState
+              icon={Search}
+              title="Search is unavailable"
+              description="Something went wrong reaching the network. Try again."
+            />
+          ) : null}
           {empty ? (
             <EmptyState
               icon={Search}
               title="No results"
-              description={`Nothing matched “${term}”. Try a handle, a ticker, or a market keyword.`}
+              description={
+                debounced
+                  ? `Nothing matched “${debounced}”. Try a handle or a market keyword.`
+                  : "Start typing to search people, posts and markets."
+              }
             />
           ) : null}
 
-          <TabsContent value="top" className="space-y-5">
-            {(results?.topics ?? []).slice(0, 5).map((t) => (
+          <TabsContent value="top" className="space-y-2">
+            {(results?.topics ?? []).slice(0, 4).map((t) => (
               <Link
                 key={t.id}
                 to="/app/explore"
@@ -76,6 +95,9 @@ export function SearchOverlay() {
             {(results?.users ?? []).slice(0, 3).map((u) => (
               <PersonRow key={u.id} user={u} onClick={close} />
             ))}
+            {(results?.posts ?? []).slice(0, 3).map((p) => (
+              <PostRow key={p.id} post={p} onClick={close} />
+            ))}
           </TabsContent>
 
           <TabsContent value="people" className="space-y-2">
@@ -84,8 +106,14 @@ export function SearchOverlay() {
             ))}
           </TabsContent>
 
+          <TabsContent value="posts" className="space-y-2">
+            {(results?.posts ?? []).map((p) => (
+              <PostRow key={p.id} post={p} onClick={close} />
+            ))}
+          </TabsContent>
+
           <TabsContent value="markets" className="space-y-2">
-            {(results?.predictions ?? []).map((p) => (
+            {(results?.markets ?? []).map((p) => (
               <Link
                 key={p.id}
                 to="/app/predictions/$predictionId"
@@ -103,58 +131,32 @@ export function SearchOverlay() {
               </Link>
             ))}
           </TabsContent>
-
-          <TabsContent value="communities" className="space-y-2">
-            {(results?.communities ?? []).map((c) => (
-              <Link
-                key={c.id}
-                to="/app/communities/$slug"
-                params={{ slug: c.slug }}
-                onClick={close}
-                className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
-              >
-                <Users className="size-4 shrink-0 text-cyan" />
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{c.name}</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {formatCompact(c.members)} members · {c.tagline}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="tokens" className="space-y-2">
-            {(results?.tokens ?? []).map((t) => (
-              <Link
-                key={t.symbol}
-                to="/app/token"
-                onClick={close}
-                className="flex items-center gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
-              >
-                <Coins className="size-4 shrink-0 text-cyan" />
-                <span className="text-sm font-semibold">{t.symbol}</span>
-                <span className="truncate text-xs text-muted-foreground">{t.name}</span>
-                <span className="ml-auto text-xs tabular-nums">{formatUsd(t.price)}</span>
-                <span
-                  className={
-                    t.change24h >= 0
-                      ? "text-xs font-semibold text-success"
-                      : "text-xs font-semibold text-destructive"
-                  }
-                >
-                  {formatPercent(t.change24h)}
-                </span>
-              </Link>
-            ))}
-          </TabsContent>
         </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
 
-function PersonRow({ user, onClick }: { user: import("@/types").User; onClick: () => void }) {
+function PostRow({ post, onClick }: { post: SearchPost; onClick: () => void }) {
+  return (
+    <Link
+      to="/app/post/$postId"
+      params={{ postId: post.id }}
+      onClick={onClick}
+      className="flex items-start gap-3 rounded-[14px] px-2 py-2 hover:bg-elevated/60"
+    >
+      <MessageSquare className="mt-0.5 size-4 shrink-0 text-cyan" />
+      <div className="min-w-0">
+        <p className="line-clamp-2 text-sm">{post.body}</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          @{post.author.username} · {timeAgo(post.createdAt)} · {formatCompact(post.likeCount)} likes
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+function PersonRow({ user, onClick }: { user: User; onClick: () => void }) {
   return (
     <Link
       to="/app/u/$handle"
