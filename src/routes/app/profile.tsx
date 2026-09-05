@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, Inbox, Link2, ShieldCheck } from "lucide-react";
+import { CalendarDays, Globe, Inbox, Link2, Share2, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { ColumnHeader, EmptyState, ErrorState, ListSkeleton } from "@/components/common/states";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -123,13 +124,18 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
             <AvatarFallback>{user.displayName.slice(0, 2)}</AvatarFallback>
           </Avatar>
           {own ? (
-            <Button variant="outline" asChild>
-              <Link to="/app/settings">Edit profile</Link>
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon" aria-label="Share profile" onClick={shareProfile}>
+                <Share2 className="size-4" />
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/app/settings">Edit profile</Link>
+              </Button>
+            </div>
           ) : (
             <div className="flex gap-2">
-              <Button variant="outline" asChild>
-                <Link to="/app/messages">Message</Link>
+              <Button variant="outline" size="icon" aria-label="Share profile" onClick={shareProfile}>
+                <Share2 className="size-4" />
               </Button>
               {session ? (
                 <Button
@@ -161,6 +167,16 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
           <span className="flex items-center gap-1">
             <CalendarDays className="size-3.5" /> Joined {formatDate(user.joinedAt)}
           </span>
+          {user.website ? (
+            <a
+              href={user.website.startsWith("http") ? user.website : `https://${user.website}`}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="flex items-center gap-1 text-cyan hover:underline"
+            >
+              <Globe className="size-3.5" /> {user.website.replace(/^https?:\/\//, "")}
+            </a>
+          ) : null}
           {user.walletAddress ? (
             <span className="flex items-center gap-1">
               <Link2 className="size-3.5" /> {truncateAddress(user.walletAddress)}
