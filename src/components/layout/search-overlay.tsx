@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { queries } from "@/services/queries";
 import { useShell } from "./shell-context";
-import { formatCompact, formatUsd, timeAgo } from "@/lib/utils";
+import { formatCompact, formatUsd, formatRelativeTime } from "@/lib/utils";
 import { CardSkeleton, EmptyState } from "@/components/common/states";
 import type { SearchPost } from "@/services/search";
 import type { User } from "@/types";
@@ -149,7 +149,7 @@ function PostRow({ post, onClick }: { post: SearchPost; onClick: () => void }) {
       <div className="min-w-0">
         <p className="line-clamp-2 text-sm">{post.body}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          @{post.author.username} · {timeAgo(post.createdAt)} · {formatCompact(post.likeCount)} likes
+          @{post.author.username} · {formatRelativeTime(post.createdAt)} · {formatCompact(post.likeCount)} likes
         </p>
       </div>
     </Link>
