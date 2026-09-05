@@ -4,6 +4,7 @@ import * as api from "./api";
 import * as social from "./social";
 import * as markets from "./markets";
 import { listTrendingTags } from "./discovery";
+import { searchEverything } from "./search";
 
 export const queries = {
   /* Social graph — stored in the backend. */
@@ -55,7 +56,7 @@ export const queries = {
   messages: (id: string) =>
     queryOptions({ queryKey: ["messages", id], queryFn: () => api.getMessages(id) }),
   search: (term: string) =>
-    queryOptions({ queryKey: ["search", term], queryFn: () => api.search(term) }),
+    queryOptions({ queryKey: ["search", term], queryFn: () => searchEverything(term) }),
   trendingTopics: () =>
     queryOptions({ queryKey: ["trending-topics"], queryFn: () => listTrendingTags() }),
   wallet: () => queryOptions({ queryKey: ["wallet"], queryFn: api.getWallet }),

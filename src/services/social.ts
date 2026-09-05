@@ -16,10 +16,12 @@ export interface ProfileRow {
   bio: string | null;
   avatar_url: string | null;
   wallet_address: string | null;
+  website?: string | null;
   created_at: string;
 }
 
-const PROFILE_COLUMNS = "id, handle, display_name, bio, avatar_url, wallet_address, created_at";
+const PROFILE_COLUMNS =
+  "id, handle, display_name, bio, avatar_url, wallet_address, website, created_at";
 const POST_COLUMNS =
   "id, author_id, parent_id, kind, body, image_url, chart_symbol, community_id, prediction_id, tags, like_count, reply_count, view_count, created_at";
 
@@ -72,6 +74,7 @@ export function profileToUser(
     isFollowing: stats?.isFollowing ?? false,
     online: true,
     walletAddress: row.wallet_address ?? "",
+    website: row.website ?? "",
   };
 }
 

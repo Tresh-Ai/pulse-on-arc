@@ -1,5 +1,5 @@
 /**
- * Mock service layer. Every screen reads through these functions so the swap to
+ * Legacy in-memory service layer kept for screens still being migrated.
  * a real API later touches only this folder. Latency and failure are simulated
  * so loading and error states are genuinely exercised.
  */
@@ -18,7 +18,7 @@ export class MockApiError extends Error {
   }
 }
 
-/** Used by demo controls that need to show the error state on purpose. */
+/** Used by internal tooling that needs to surface the error state on purpose. */
 export async function failWith(message: string, ms = BASE_LATENCY): Promise<never> {
   await new Promise((resolve) => setTimeout(resolve, ms));
   throw new MockApiError(message);
