@@ -87,6 +87,26 @@ export function ProfileHeader({ user, own = false }: { user: User; own?: boolean
   const { session } = useAuth();
   const follow = useToggleFollow();
 
+  const shareProfile = async () => {
+    const url =
+      typeof window === "undefined" ? "" : `${window.location.origin}/app/u/${user.username}`;
+    const shareData = {
+      title: user.displayName,
+      text: `@${user.username} on Pulse`,
+      url,
+    };
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast.success("Profile link copied");
+    } catch {
+      /* the member dismissed the share sheet */
+    }
+  };
+
   return (
     <div className="border-b border-border">
       <img
