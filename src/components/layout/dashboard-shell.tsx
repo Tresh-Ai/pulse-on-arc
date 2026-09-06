@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import {
   Menu,
-  Search,
   Feather,
   ChevronDown,
   LogOut,
@@ -98,23 +97,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <div className="app-noise" aria-hidden="true" />
 
         {/* Mobile top bar */}
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-xl md:hidden">
+        <header className="sticky top-0 z-30 flex h-14 items-center border-b border-border bg-background/80 px-4 backdrop-blur-xl md:hidden">
           <button
             onClick={() => setMobileNavOpen(true)}
             aria-label="Open menu"
             className="-ml-1 grid size-9 place-items-center rounded-full hover:bg-elevated"
           >
             <Menu className="size-5" />
-          </button>
-          <Link to="/app" className="mx-auto flex items-center gap-2" aria-label="Pulse home">
-            <BrandMark className="size-8" />
-          </Link>
-          <button
-            onClick={() => setSearchOpen(true)}
-            aria-label="Search"
-            className="grid size-9 place-items-center rounded-full hover:bg-elevated"
-          >
-            <Search className="size-5" />
           </button>
         </header>
 

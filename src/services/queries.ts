@@ -5,6 +5,7 @@ import * as social from "./social";
 import * as markets from "./markets";
 import { listTrendingTags } from "./discovery";
 import { searchEverything } from "./search";
+import * as settlement from "./settlement";
 
 export const queries = {
   /* Social graph — stored in the backend. */
@@ -59,6 +60,14 @@ export const queries = {
     queryOptions({ queryKey: ["search", term], queryFn: () => searchEverything(term) }),
   trendingTopics: () =>
     queryOptions({ queryKey: ["trending-topics"], queryFn: () => listTrendingTags() }),
+  myPayouts: () =>
+    queryOptions({ queryKey: ["my-payouts"], queryFn: settlement.listMyPayouts }),
+  payoutQueue: (status: settlement.PayoutStatus | "all") =>
+    queryOptions({
+      queryKey: ["payout-queue", status],
+      queryFn: () => settlement.listPayoutQueue(status),
+    }),
+  isAdmin: () => queryOptions({ queryKey: ["is-admin"], queryFn: settlement.isAdmin }),
   wallet: () => queryOptions({ queryKey: ["wallet"], queryFn: api.getWallet }),
   token: () => queryOptions({ queryKey: ["token"], queryFn: api.getToken }),
   creatorStats: () => queryOptions({ queryKey: ["creator-stats"], queryFn: api.getCreatorStats }),

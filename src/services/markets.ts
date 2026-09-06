@@ -16,6 +16,9 @@ export interface Market {
   noPool: number;
   pool: number;
   yesPercent: number;
+  feeBps: number;
+  resolutionSource: string;
+  resolvedAt: string | null;
 }
 
 export interface Position {
@@ -47,10 +50,13 @@ interface MarketRow {
   resolved_outcome: string | null;
   yes_pool: number | string;
   no_pool: number | string;
+  fee_bps: number | null;
+  resolution_source: string | null;
+  resolved_at: string | null;
 }
 
 const COLUMNS =
-  "id, title, description, category, status, closes_at, created_at, resolved_outcome, yes_pool, no_pool";
+  "id, title, description, category, status, closes_at, created_at, resolved_outcome, yes_pool, no_pool, fee_bps, resolution_source, resolved_at";
 
 function toMarket(row: MarketRow): Market {
   const yesPool = Number(row.yes_pool) || 0;
@@ -70,6 +76,9 @@ function toMarket(row: MarketRow): Market {
     noPool,
     pool,
     yesPercent: pool > 0 ? Math.round((yesPool / pool) * 100) : 50,
+    feeBps: row.fee_bps ?? 200,
+    resolutionSource: row.resolution_source ?? "",
+    resolvedAt: row.resolved_at,
   };
 }
 
