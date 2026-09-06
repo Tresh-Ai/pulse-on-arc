@@ -122,11 +122,7 @@ export function RightRail() {
         <MarketMini />
       </section>
 
-      <nav className="flex flex-wrap gap-x-3 gap-y-1 px-4 py-5 text-xs text-muted-foreground">
-        <Link to="/">Landing</Link>
-        <Link to="/app/settings">Settings</Link>
-        <span>© 2026 Pulse</span>
-      </nav>
+      <p className="px-4 py-5 text-xs text-muted-foreground">© 2026 Pulse</p>
     </aside>
   );
 }
