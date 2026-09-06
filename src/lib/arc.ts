@@ -49,7 +49,13 @@ export const ARC_MAINNET: ArcNetwork = {
  * Address that receives market stakes. Replace with your treasury/escrow
  * address; positions are funded by a native USDC transfer to it.
  */
-export const MARKET_ESCROW_ADDRESS = "0x000000000000000000000000000000000000dEaD";
+/**
+ * Treasury address that holds every market stake until settlement. Set
+ * VITE_MARKET_ESCROW_ADDRESS to the real treasury wallet before going live.
+ */
+export const MARKET_ESCROW_ADDRESS =
+  (import.meta.env['VITE_MARKET_ESCROW_ADDRESS'] as string | undefined) ??
+  "0x000000000000000000000000000000000000dEaD";
 
 export const ARC_NETWORKS: ArcNetwork[] = [ARC_TESTNET, ARC_MAINNET];
 

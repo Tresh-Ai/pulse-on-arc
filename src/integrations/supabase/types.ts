@@ -35,6 +35,59 @@ export type Database = {
         }
         Relationships: []
       }
+      market_payouts: {
+        Row: {
+          amount: number
+          chain_id: number | null
+          created_at: string
+          id: string
+          kind: string
+          market_id: string
+          paid_at: string | null
+          staked: number
+          status: string
+          tx_hash: string | null
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          amount?: number
+          chain_id?: number | null
+          created_at?: string
+          id?: string
+          kind?: string
+          market_id: string
+          paid_at?: string | null
+          staked?: number
+          status?: string
+          tx_hash?: string | null
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          amount?: number
+          chain_id?: number | null
+          created_at?: string
+          id?: string
+          kind?: string
+          market_id?: string
+          paid_at?: string | null
+          staked?: number
+          status?: string
+          tx_hash?: string | null
+          user_id?: string
+          wallet_address?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_payouts_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           actor_id: string | null
@@ -203,8 +256,13 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
+          escrow_address: string | null
+          fee_bps: number
           id: string
           no_pool: number
+          resolution_note: string | null
+          resolution_source: string | null
+          resolved_at: string | null
           resolved_outcome: string | null
           status: string
           title: string
@@ -217,8 +275,13 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          escrow_address?: string | null
+          fee_bps?: number
           id?: string
           no_pool?: number
+          resolution_note?: string | null
+          resolution_source?: string | null
+          resolved_at?: string | null
           resolved_outcome?: string | null
           status?: string
           title: string
@@ -231,8 +294,13 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          escrow_address?: string | null
+          fee_bps?: number
           id?: string
           no_pool?: number
+          resolution_note?: string | null
+          resolution_source?: string | null
+          resolved_at?: string | null
           resolved_outcome?: string | null
           status?: string
           title?: string
@@ -327,6 +395,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_settings: {
         Row: {
           created_at: string
@@ -368,13 +457,64 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      payout_queue: {
+        Row: {
+          amount: number | null
+          chain_id: number | null
+          created_at: string | null
+          destination: string | null
+          display_name: string | null
+          handle: string | null
+          id: string | null
+          kind: string | null
+          market_id: string | null
+          market_title: string | null
+          paid_at: string | null
+          resolved_outcome: string | null
+          staked: number | null
+          status: string | null
+          tx_hash: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_payouts_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "prediction_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      mark_payout_paid: {
+        Args: {
+          _chain_id: number
+          _payout_id: string
+          _tx_hash: string
+          _wallet_address?: string
+        }
+        Returns: undefined
+      }
+      resolve_market: {
+        Args: { _market_id: string; _note?: string; _outcome: string }
+        Returns: {
+          distributed: number
+          fee: number
+          payouts: number
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -501,6 +641,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
