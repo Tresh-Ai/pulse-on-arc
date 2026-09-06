@@ -120,7 +120,7 @@ export async function resolveMarket(input: {
   const { data, error } = await supabase.rpc("resolve_market", {
     _market_id: input.marketId,
     _outcome: input.outcome,
-    _note: input.note ?? null,
+    _note: input.note ?? undefined,
   });
   if (error) throw new Error(error.message);
   const row = (data as unknown as { payouts: number; distributed: number; fee: number }[] | null)?.[0];
@@ -140,8 +140,8 @@ export async function markPayoutPaid(input: {
   const { error } = await supabase.rpc("mark_payout_paid", {
     _payout_id: input.payoutId,
     _tx_hash: input.txHash,
-    _chain_id: input.chainId,
-    _wallet_address: input.walletAddress ?? null,
+    _chain_id: input.chainId ?? undefined,
+    _wallet_address: input.walletAddress ?? undefined,
   });
   if (error) throw new Error(error.message);
 }
